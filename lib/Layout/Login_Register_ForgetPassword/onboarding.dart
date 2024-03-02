@@ -48,7 +48,7 @@ class _OnboardingState extends State<Onboarding> {
                   totalRepeatCount: 1,
                   animatedTexts: [
                     RotateAnimatedText(
-                      "Hello to learning...",
+                      "Hello to Elearning...",
                       rotateOut: false,
                     ),
                   ],
