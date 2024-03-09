@@ -257,7 +257,7 @@ class _SignUpState extends State<SignUp> {
                           suffixIcon: IconButton(
                             icon: Icon(
                               obscureText1 ? Icons.visibility_off : Icons.visibility,
-                              color: Colors.black,
+                              color: darkMode?Colors.white:Colors.grey,
                             ),
                             onPressed: () {
                               setState(() {
@@ -294,7 +294,7 @@ class _SignUpState extends State<SignUp> {
                           suffixIcon: IconButton(
                             icon: Icon(
                               obscureText2 ? Icons.visibility_off : Icons.visibility,
-                              color: Colors.black,
+                              color: darkMode?Colors.white:Colors.grey,
                             ),
                             onPressed: () {
                               setState(() {

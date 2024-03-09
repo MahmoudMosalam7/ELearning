@@ -2,19 +2,105 @@ import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:learning/shared/constant.dart';
 
 import '../../../../../Layout/Login_Register_ForgetPassword/DropDownList/dropDownList.dart';
+import '../../../../../apis/upload_course/http_service_basic_information.dart';
+import '../../../../../network/local/cache_helper.dart';
 import 'advanced_information.dart';
 
-class BasicInformation extends StatelessWidget {
+class BasicInformation extends StatefulWidget {
+  @override
+  State<BasicInformation> createState() => _BasicInformationState();
+}
+
+class _BasicInformationState extends State<BasicInformation> {
   final _titleContoller = TextEditingController();
+
   final _subTitleContoller = TextEditingController();
+
   final _categoryContoller = TextEditingController();
+
   final _languageContoller = TextEditingController();
+
   final _levelContoller = TextEditingController();
-  final _courseDurationContoller = TextEditingController();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  HttpServiceBasicInformation basicInformation = HttpServiceBasicInformation();
+
+  String errorMessage = '';
+  bool isLoading = false;
+
+  void _basicInformation() async {
+    // Reset error message and loading state
+    setState(() {
+      errorMessage = '';
+      isLoading = true;
+    });
+
+    try {
+      // Add your login logic here, e.g., make API call
+      await basicInformation.baicInformation(
+        _titleContoller.text,
+        _subTitleContoller.text,
+        '65cd21eb87bb347d80d0910f',
+        "Arabic",
+        "beginner",
+        CacheHelper.getData(key: 'token'),
+          getData!['data']['_id']
+      );
+
+      // Login successful, you can navigate to another screen or show a success message
+      // ...
+
+      // Fetch data and wait for it to complete
+     
+
+      // Now navigate to the appropriate screen based on the fetched data
+     
+      print('courseId successful!');
+      Get.to(AdvancedInformationScreen());
+    } catch (e) {
+      // Handle validation errors or network errors
+      setState(() {
+        errorMessage = 'Error: $e';
+        if (errorMessage.contains('422')) {
+          // Your code here
+          errorMessage ="Valdition Error!";
+        }
+        else if (errorMessage.contains('401')) {
+          // Your code here
+          errorMessage =" unauthorized access !";
+        }
+        else if (errorMessage.contains('500')) {
+          // Your code here
+          errorMessage =" Server Not Available Now !";
+        }
+        else{
+          errorMessage ="Unexpected Error!";
+        }
+        Fluttertoast.showToast(
+          msg: "create course Field!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+
+      });
+    } finally {
+      // Update loading state
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,27 +204,8 @@ class BasicInformation extends StatelessWidget {
                   hint: 'Level',
                   isDataSelected: true,
                 ),
-                SizedBox(height: 15.h,),
-                TextFormField(
-                  keyboardType: TextInputType.visiblePassword,
-                  obscureText: false,
-                  controller: _courseDurationContoller,
-                  decoration: InputDecoration(
-                      labelText: "Course Duration",
-                      border: OutlineInputBorder(
-                          borderRadius:BorderRadius.all(Radius.circular(20.0.r) )
-                      )
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Course Duration is required';
-                    }
-                    return null;
-                  },
+                SizedBox(height: 30.h,),
 
-
-                ),
-                SizedBox(height: 15.h,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -158,8 +225,9 @@ class BasicInformation extends StatelessWidget {
                         )  ,
 
                         onPressed: (){
+                          print('token = ${CacheHelper.getData(key: 'token')}');
                           if (_formKey.currentState!.validate()) {
-                             Get.to(AdvancedInformationScreen());
+                            _basicInformation();
                           }
                           //Get.to(Payment());
                         },),
