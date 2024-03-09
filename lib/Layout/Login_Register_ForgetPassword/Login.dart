@@ -225,12 +225,14 @@ class _LoginState extends State<Login> {
                                 obscureText
                                     ? Icons.visibility_off
                                     : Icons.visibility,
-                                color: Colors.black,
+                                color: darkMode?Colors.white:Colors.grey,
                               ),
                               onPressed: () {
                                 setState(() {
                                   obscureText = !obscureText;
-                                });
+                                }
+
+                                );
                               },
                             ),
                             border: OutlineInputBorder(),
