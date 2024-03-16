@@ -6,9 +6,11 @@ import 'package:learning/provider/dark_theme_provider.dart';
 
 import 'Layout/splashScreen.dart';
 import 'network/local/cache_helper.dart';
+import 'network/notifications/notifications.dart';
 
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
+  notificationInitialization();
   await CacheHelper.init();
   runApp( ProviderScope(child: MyApp()));
 }

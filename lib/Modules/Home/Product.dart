@@ -2,7 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'listView_Courses.dart';
+import '../../models/listView_Courses.dart';
 
 class ProductListItem extends StatelessWidget {
   final Product product;

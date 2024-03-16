@@ -5,9 +5,12 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../../../../apis/upload_course/section/http_service_create_section.dart';
 import '../../../../../../models/file_and_video_of_section_model.dart';
+import '../../../../../../network/local/cache_helper.dart';
 import '../../../../../../shared/constant.dart';
 import 'file_and_video_container.dart';
 
@@ -22,23 +25,89 @@ class PickFileAndVideo extends StatefulWidget {
 class _PickFileAndVideoState extends State<PickFileAndVideo> {
   int containerCount = 0; // Set an initial number of containers
   String videoName = 'Videos';
-  late VideoPlayerController _videoController;
-  File? _videoFile;
-
+  VideoPlayerController? _videoController;
+  FilePickerResult? _videoFile;
+ // _pickVideo
   TextEditingController _videoNameControllers = TextEditingController();
+  HttpServiceSection httpServiceSection = HttpServiceSection();
+
+  bool isLoading = false;
+
+  String errorMessage = '';
+  void _updateSection() async {
+    // Reset error message and loading state
+    setState(() {
+      errorMessage = '';
+      isLoading = true;
+    });
+
+    try {
+
+      // Add your login logic here, e.g., make API call
+      String sectionId = await httpServiceSection.updateSection(
+          sections[widget.index].sectionId,
+          _videoFile!.files.single.path!,
+          CacheHelper.getData(key: 'token')
+      );
+
+      // Login successful, you can navigate to another screen or show a success message
+      //Get.to(const HomeLayout());
+      errorMessage = "";
+      Fluttertoast.showToast(
+        msg: "create success",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 5,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+      if(sectionId != 'error')
+
+      print(' create section successful!');
+    } catch (e) {
+      // Handle validation errors or network errors
+      setState(() {
+        errorMessage = 'Error: $e';
+        if (errorMessage.contains('404')) {
+          // Your code here
+          errorMessage ="Email Not Found!";
+        }else{
+          errorMessage ="Unexpected Error!";
+        }
+
+        Fluttertoast.showToast(
+          msg: errorMessage,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+
+      });
+    } finally {
+      // Update loading state
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     // Initialize containerCount in initState
     containerCount = 0;
     _videoController = VideoPlayerController.asset('assets/placeholder_video.mp4');
-    _videoController.addListener(() {
-      if (!_videoController.value.isPlaying &&
-          _videoController.value.isInitialized &&
-          (_videoController.value.position == _videoController.value.duration)) {
+    _videoController!.addListener(() {
+      if (!_videoController!.value.isPlaying &&
+          _videoController!.value.isInitialized &&
+          (_videoController!.value.position == _videoController!.value.duration)) {
         // Video has reached the end, pause and seek to the beginning
-        _videoController.pause();
-        _videoController.seekTo(Duration.zero);
+        _videoController!.pause();
+        _videoController!.seekTo(Duration.zero);
       }
 
     });
@@ -126,10 +195,10 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
     });
   }
 
-  void _addVideo(int index) {
+  void _addVideo(int index ) {
     // Implement logic to add a video
     setState(() {
-      _showBottomSheet(context,index);
+      _showBottomSheet(context,index );
     });
     print("inside dynamic video index = $index");
     print("inside dynamic section index = ${widget.index}");
@@ -174,7 +243,7 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
       },
     );
   }
-  void _showBottomSheet(BuildContext context,int index) {
+  void _showBottomSheet(BuildContext context,int index ) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -213,6 +282,7 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
                   // Handle delete action
                   // _pickImageFromGallery();
                   setState(() {
+                   //zzzz
                     _pickVideo(index);
                   });
                   Navigator.pop(context); // Close the bottom sheet
@@ -227,22 +297,23 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
 
   Future<void> _pickVideo(int index) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.video,
-      allowMultiple: false,
     );
 
     if (result != null && result.files.isNotEmpty) {
-      File videoFile = File(result.files.first.path!!!);
+
       setState(() {
-        _videoFile = videoFile;
-        _videoController = VideoPlayerController.file(_videoFile!);
+        _videoFile = result;
+        _updateSection();
+        _videoController = VideoPlayerController.file(File(
+            result.files.first.path!!!));
         if(sections[widget.index].videos[index].pdfFilePath != null){
           sections[widget.index].videos[index].pdfFilePath = null;
           sections[widget.index].videos[index].pdfViewer = null;
         }
-        sections[widget.index].videos[index].addFile(videoFile);
-        _videoController.initialize().then((_) {
-          _videoController.pause();
+        sections[widget.index].videos[index].addFile(File(
+            result.files.first.path!!!));
+        _videoController!.initialize().then((_) {
+          _videoController!.pause();
         });
       });
     }
@@ -271,8 +342,8 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
     setState(() {
       _videoFile = null;
 //      _controller = VideoPlayerController.asset('assets/placeholder_video.mp4');
-      _videoController.initialize().then((_) {
-        _videoController.pause();
+      _videoController!.initialize().then((_) {
+        _videoController!.pause();
       });
     });
   }
