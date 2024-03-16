@@ -10,7 +10,7 @@ import '../../network/local/cache_helper.dart';
 import '../../shared/constant.dart';
 import 'InformationOFCourses/CourseInformation.dart';
 import 'Product.dart';
-import 'listView_Courses.dart';
+import '../../models/listView_Courses.dart';
 import 'listView_category.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -75,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
       name: 'Learn AI from Zero To Hero [2022]',
       isFavorite: false,
       price: 29.99,
-      rating: 3.8,
+      rating: 2.8,
     ),
     // Add more products...
   ];

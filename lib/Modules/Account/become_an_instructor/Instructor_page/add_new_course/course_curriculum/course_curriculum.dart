@@ -4,11 +4,14 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:learning/Modules/Account/become_an_instructor/Instructor_page/add_new_course/course_curriculum/pick_file_and_video.dart';
 
+import '../../../../../../apis/upload_course/section/http_service_create_section.dart';
 import '../../../../../../models/file_and_video_of_section_model.dart';
 import '../../../../../../models/section_model.dart';
+import '../../../../../../network/local/cache_helper.dart';
 import '../../../../../../shared/constant.dart';
 
 class CourseCurriculum extends StatefulWidget {
@@ -19,7 +22,70 @@ class CourseCurriculum extends StatefulWidget {
 class _CourseCurriculumState extends State<CourseCurriculum> {
   final ImagePicker _imagePicker = ImagePicker();
   TextEditingController _sectionNameControllers = TextEditingController();
-  TextEditingController _videoNameControllers = TextEditingController();
+  HttpServiceSection httpServiceSection = HttpServiceSection();
+
+  bool isLoading = false;
+
+  String errorMessage = '';
+  void _createSection() async {
+    // Reset error message and loading state
+    setState(() {
+      errorMessage = '';
+      isLoading = true;
+    });
+
+    try {
+
+      // Add your login logic here, e.g., make API call
+      String sectionId = await httpServiceSection.createSection(
+        CacheHelper.getData(key: 'courseId'),
+        CacheHelper.getData(key: 'token')
+      );
+
+      // Login successful, you can navigate to another screen or show a success message
+      //Get.to(const HomeLayout());
+      errorMessage = "";
+      Fluttertoast.showToast(
+        msg: "create success",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 5,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+      if(sectionId != 'error')
+        _addSection(sectionId);
+      print(' create section successful!');
+    } catch (e) {
+      // Handle validation errors or network errors
+      setState(() {
+        errorMessage = 'Error: $e';
+        if (errorMessage.contains('404')) {
+          // Your code here
+          errorMessage ="Email Not Found!";
+        }else{
+          errorMessage ="Unexpected Error!";
+        }
+
+        Fluttertoast.showToast(
+          msg: errorMessage,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+
+      });
+    } finally {
+      // Update loading state
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
   @override
   void dispose() {
     for (var course in sections) {
@@ -79,7 +145,8 @@ class _CourseCurriculumState extends State<CourseCurriculum> {
                         ),
                       ),
                       onPressed: () {
-                        _addSection();
+                        _createSection();
+
                       },
                     ),
                   ),
@@ -280,10 +347,11 @@ class _CourseCurriculumState extends State<CourseCurriculum> {
     });
   }
 
-  void _addSection() {
+  void _addSection(String sectionId) {
     setState(() {
       Section duplicatedCourse = Section(
         sectionName: 'Section ${sections.length + 1}',
+        sectionId: sectionId,
         videos: [],
       );
       sections.add(duplicatedCourse);

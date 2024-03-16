@@ -10,23 +10,8 @@ class HttpServiceBasicInformation {
   Future<void> baicInformation( String title, String subTitle,String category,
       String language, String level,String token,String instructorId
       ) async {
-    print('from basicApi');
-    print('from title = ${title}');
-    print('from subTitle = ${subTitle}');
-    print('from category = ${category}');
-    print('from language = ${language}');
-    print('from level = ${level}');
-    print('from token = ${token}');
-    print('from instructorId = ${instructorId}');
     try {
 
-      print('from title2 = ${title}');
-      print('from subTitle2 = ${subTitle}');
-      print('from category2 = ${category}');
-      print('from language = ${language}');
-      print('from level = ${level}');
-      print('from token = ${token}');
-      print('from instructorId = ${instructorId}');
       final response = await _dio.post(
         '/v1/course/',
         data: { 'title': title,'subTitle': subTitle,'category':
@@ -40,6 +25,7 @@ class HttpServiceBasicInformation {
         // Login successful
         try{
           print(response.data['data']['token']);
+          print(response.data['data']['_id']);
           await CacheHelper.saveData(key:'courseId',
               value:response.data['data']['_id']);
           print('save courseId is done ');

@@ -7,7 +7,7 @@ class FileAndVideoContainer extends StatefulWidget {
   final int index;
   final int sectionIndex;
   final Function(int) onEdit;
-  final Function(int) onAdd;
+  final Function(int ) onAdd;
   final Function(int) onDelete;
   final Function() onDuplicate;
 
