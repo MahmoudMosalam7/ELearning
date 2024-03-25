@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:learning/Layout/Login_Register_ForgetPassword/Login.dart';
+import 'package:learning/Modules/Account/admin/admin_home.dart';
 import 'package:learning/Modules/Account/setting/setting.dart';
 import 'package:learning/Modules/Account/videoPlay.dart';
 import 'package:learning/TColors.dart';
 import 'package:learning/shared/constant.dart';
 
+import '../../apis/user/http_service_logout.dart';
 import '../../network/local/cache_helper.dart';
-import 'accountsecurity.dart';
 import 'become_an_instructor/Instructor_page/instructor_home_page.dart';
 import 'become_an_instructor/onboarding_instructor/on_bording_instructor_screen.dart';
 import 'download_option.dart';
@@ -23,6 +25,84 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
+  HttpServiceLogout httpServiceLogout = HttpServiceLogout();
+  bool isLoading = false;
+  String errorMessage = '';
+  void _logout() async {
+    // Reset error message and loading state
+    setState(() {
+      errorMessage = '';
+      isLoading = true;
+    });
+
+    try {
+
+
+      // Check if _profileImage is not null before calling updateMe
+
+      print(']]]]]]]]]]]]]]]]]]]]]from logout ');
+      await httpServiceLogout.logoutUser(
+        CacheHelper.getData(key: 'token'),
+      );
+
+
+      errorMessage = "";
+      Fluttertoast.showToast(
+        msg: "logout Success",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 5,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0.sp,
+      );
+      try{
+        bool? token =  await CacheHelper.removeData(key: 'token');
+        if(token){
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => Login()));
+        }
+      }catch(e){
+        print('error when sign out = ]]]]]]]]]]]]]$e');
+      }
+      print(' successful!');
+    } catch (e) {
+      // Handle validation errors or network errors
+      setState(() {
+        errorMessage = 'Error: $e';
+        if (errorMessage.contains('422')) {
+          // Your code here
+          errorMessage ="Valdition Error!";
+        }
+        else if (errorMessage.contains('401')) {
+          // Your code here
+          errorMessage =" unauthorized access !";
+        }
+        else if (errorMessage.contains('500')) {
+          // Your code here
+          errorMessage =" Server Not Available Now !";
+        }
+        else{
+          errorMessage ="Unexpected Error!";
+        }
+
+        Fluttertoast.showToast(
+          msg: errorMessage,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      });
+    } finally {
+      // Update loading state
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return     Scaffold(
@@ -198,27 +278,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       ),
 
                     ),
-                    MaterialButton(
-                      onPressed: (){
-                        Get.to(Acount_Security());
-                      },
-                      child:
-                      Container(
-                        width: double.infinity,
-                        child: Row(
-                          children: [
-                            Text("acount security"
-                              ,style: TextStyle(
-                                  fontSize: 17.0
-                              ),
-                            ),
-                            Spacer(flex: 1,),
-                            Icon(Icons.keyboard_arrow_right),
-                          ],
-                        ),
-                      ),
 
-                    ),
                     SizedBox(height: 1.0,),
                     MaterialButton(
                       onPressed: (){},
@@ -359,17 +419,32 @@ class _AccountScreenState extends State<AccountScreen> {
                       ),
 
                     ),
+                    SizedBox(height: 5,),
+                    MaterialButton(
+                      onPressed: (){
+                        Get.to(AdminHome());
+                      },
+                      child:
+                      Container(
+                        width: double.infinity,
+                        child: Row(
+
+                          children: [
+                            Text("Admin"
+                              ,style: TextStyle(
+                                  fontSize: 17.0
+                              ),),
+                            Spacer(flex: 1,),
+                            Icon(Icons.keyboard_arrow_right),
+                          ],
+                        ),
+                      ),
+
+                    ),
                   ],
                 ),
                 TextButton(onPressed: ()async{
-                  try{
-                   bool? token =  await CacheHelper.removeData(key: 'token');
-                   if(token){
-                     Navigator.of(context).push(MaterialPageRoute(builder: (context) => Login()));
-                   }
-                  }catch(e){
-                    print('error when sign out = ]]]]]]]]]]]]]$e');
-                  }
+                  _logout();
                 },
                     child:
                     Text(

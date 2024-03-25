@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import '../../../network/local/cache_helper.dart';
 import '../../../provider/dark_theme_provider.dart';
+import 'accountsecurity.dart';
 
 class Setting extends ConsumerStatefulWidget {
   @override
@@ -62,6 +65,27 @@ class _Setting extends ConsumerState<Setting> {
                 ),
               ),
               SizedBox(height: 5.0),
+              MaterialButton(
+                onPressed: (){
+                  Get.to(Acount_Security());
+                },
+                child:
+                Container(
+                  width: double.infinity,
+                  child: Row(
+                    children: [
+                      Text("update password"
+                        ,style: TextStyle(
+                            fontSize: 17.0
+                        ),
+                      ),
+                      Spacer(flex: 1,),
+                      Icon(Icons.keyboard_arrow_right),
+                    ],
+                  ),
+                ),
+
+              ),
             ],
           ),
         ),

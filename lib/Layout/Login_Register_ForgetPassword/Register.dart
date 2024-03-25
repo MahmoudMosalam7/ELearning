@@ -4,7 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../TColors.dart';
-import '../../apis/http_service_regstration.dart';
+import '../../apis/user/http_service_regstration.dart';
 import '../../network/local/cache_helper.dart';
 import '../MainBottomNavigationBar.dart';
 import 'DropDownList/dropDownList.dart';

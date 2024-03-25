@@ -7,11 +7,12 @@ import 'package:url_launcher/url_launcher.dart';
 class PickFile {
   String fileName;
   File? file;
+  int? id;
   VideoPlayerController? videoController;
   SfPdfViewer? pdfViewer;
   String? pdfFilePath; // Added variable to store the PDF file path
 
-  PickFile({required this.fileName, this.file});
+  PickFile({required this.fileName, this.file,this.id});
 
   Future<void> pickAndAddFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(

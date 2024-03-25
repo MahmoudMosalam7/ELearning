@@ -1,7 +1,7 @@
 // lib/http_service.dart
 import 'package:dio/dio.dart';
 
-import '../shared/constant.dart';
+import '../../shared/constant.dart';
 
 class HttpServiceRegstration {
 

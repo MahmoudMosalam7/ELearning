@@ -1,7 +1,7 @@
 // lib/http_service.dart
 import 'package:dio/dio.dart';
-import '../network/local/cache_helper.dart';
-import '../shared/constant.dart';
+import '../../network/local/cache_helper.dart';
+import '../../shared/constant.dart';
 class HttpServiceGetData {
 
   final Dio _dio = Dio(BaseOptions(baseUrl: baseUrl));

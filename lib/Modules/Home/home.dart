@@ -1,11 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:learning/TColors.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import '../../apis/http_service_get_user_data.dart';
+import '../../apis/courseInformation/courseInformation.dart';
+import '../../apis/user/http_service_get_user_data.dart';
 import '../../network/local/cache_helper.dart';
 import '../../shared/constant.dart';
 import 'InformationOFCourses/CourseInformation.dart';
@@ -21,6 +23,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final HttpServiceGetData httpServiceGetData = HttpServiceGetData();
   var im ;
+  void initState(){
+    fetchData();
+    _allCourses();
+    super.initState();
+  }
   Future<void> fetchData() async {
     try {
       String? token = CacheHelper.getData(key:'token');
@@ -60,25 +67,73 @@ class _HomeScreenState extends State<HomeScreen> {
     CategoryData(text: 'Physices', color: Colors.white),
     // Add more button data with text and color
   ];
+  HttpServiceCourse httpServiceCourse = HttpServiceCourse();
+   late Map<String,dynamic> serverData ;
+  String errorMessage = '';
+  bool isLoading = false;
 
-  Color _borderColor = Colors.grey;
-  List<Product> products = [
-    Product(
-      imageURL: 'https://th.bing.com/th/id/OIP.ysp1ApXWE38vAgTymEFbvgHaEK?rs=1&pid=ImgDetMain',
-      name: 'Flutter & Dart Complete Development [2023] ',
-      isFavorite: true,
-      price: 10.99,
-      rating: 4.5,
-    ),
-    Product(
-      imageURL: 'https://online.crbtech.in/wp-content/uploads/2020/06/Online-AI-Machine-Learning-Course.jpg',
-      name: 'Learn AI from Zero To Hero [2022]',
-      isFavorite: false,
-      price: 29.99,
-      rating: 2.8,
-    ),
-    // Add more products...
-  ];
+  List<Product> products = [];
+  void _allCourses() async {
+    // Reset error message and loading state
+    setState(() {
+      errorMessage = '';
+      isLoading = true;
+    });
+
+    try {
+      // Add your login logic here, e.g., make API call
+      serverData = await httpServiceCourse.allCourses(
+          CacheHelper.getData(key: 'token')
+      );
+
+      print('get all course successful! $serverData');
+
+      if (serverData != null) {
+       print('serverdata = ${Product.parseProductsFromServer(serverData)}');
+       products = Product.parseProductsFromServer(serverData);
+       print('Products: $products');
+      } else {
+        throw Exception('Server data is null');
+      }
+    } catch (e) {
+      // Handle validation errors or network errors
+      setState(() {
+        errorMessage = 'Error: $e';
+        if (errorMessage.contains('422')) {
+          // Your code here
+          errorMessage ="Valdition Error!";
+        }
+        else if (errorMessage.contains('401')) {
+          // Your code here
+          errorMessage =" unauthorized access !";
+        }
+        else if (errorMessage.contains('500')) {
+          // Your code here
+          errorMessage =" Server Not Available Now !";
+        }
+        else{
+          errorMessage ="Unexpected Error!";
+        }
+        Fluttertoast.showToast(
+          msg: "$errorMessage",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+
+      });
+    } finally {
+      // Update loading state
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  //List<Product> products = []; //products = Product.parseProductsFromServer(serverData!);
  String name = getData?['data']['name'];
   @override
   Widget build(BuildContext context) {
@@ -258,8 +313,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                             onPressed: () {
-                              setState(() {
-                                _borderColor = Colors.green; // Change color on click
+                              setState(() { // Change color on click
                               });
                             },
                           child: Text(buttonData.text,
@@ -290,7 +344,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 SizedBox(height: 20.0,),
           Container(
-            height: 650,
             child: ListView.separated(
               scrollDirection: Axis.vertical,
               physics: NeverScrollableScrollPhysics(),
@@ -301,7 +354,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 return InkWell(
                   onTap: () {
                     // Handle the tap event here
-                    Get.to(const CourseInformation());
+                    Get.to(CourseInformation(courseId:  products[index].id));
                   },
                   child: ProductListItem(product: product),
                 );
