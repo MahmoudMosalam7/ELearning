@@ -54,9 +54,70 @@ class _CourseCurriculumState extends State<CourseCurriculum> {
         textColor: Colors.white,
         fontSize: 16.0,
       );
-      if(sectionId != 'error')
+      if(sectionId != 'error'){
+        CacheHelper.saveData(key: 'fileId', value: 0);
         _addSection(sectionId);
+      }
       print(' create section successful!');
+    } catch (e) {
+      // Handle validation errors or network errors
+      setState(() {
+        errorMessage = 'Error: $e';
+        if (errorMessage.contains('404')) {
+          // Your code here
+          errorMessage ="Email Not Found!";
+        }else{
+          errorMessage ="Unexpected Error!";
+        }
+
+        Fluttertoast.showToast(
+          msg: errorMessage,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+
+      });
+    } finally {
+      // Update loading state
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+  void _deleteSectionFromServer(int index) async {
+    // Reset error message and loading state
+    setState(() {
+      errorMessage = '';
+      isLoading = true;
+    });
+
+    try {
+
+      // Add your login logic here, e.g., make API call
+     await httpServiceSection.deleteSection(
+         sections[index].sectionId,
+          CacheHelper.getData(key: 'token')
+      );
+
+      // Login successful, you can navigate to another screen or show a success message
+      //Get.to(const HomeLayout());
+      errorMessage = "";
+      Fluttertoast.showToast(
+        msg: "delete section success",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 5,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+
+     sections.removeAt(index);
+     print(' create section successful!');
     } catch (e) {
       // Handle validation errors or network errors
       setState(() {
@@ -343,7 +404,8 @@ class _CourseCurriculumState extends State<CourseCurriculum> {
 
   void _deleteSection(int index) {
     setState(() {
-      sections.removeAt(index);
+      _deleteSectionFromServer(index);
+
     });
   }
 

@@ -16,16 +16,17 @@ class ProductListItem extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Image.network(product.imageURL),
+            Image.network(product.imageURL ,width: 300, // Desired width
+              height: 250,
+              fit: BoxFit.cover),
             Row(
               children: [
                 Expanded(
                   child: Text(
-                    product.name,
+                    product.title,
                     style: TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
-
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -38,7 +39,7 @@ class ProductListItem extends StatelessWidget {
                     backgroundColor: Colors.grey[300],
                     child: Icon(
                       Icons.favorite_border,
-                      color: product.isFavorite ? Colors.green : Colors.grey,
+                  //    color: product.isFavorite ? Colors.green : Colors.grey,
                     ),
                   ),
                 ),

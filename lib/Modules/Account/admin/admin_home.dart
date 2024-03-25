@@ -7,12 +7,9 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:learning/TColors.dart';
 
 import '../../../../apis/user/http_service_get_user_data.dart';
-import '../../../../network/local/cache_helper.dart';
-import 'add_new_course/basic_information.dart';
-import 'coursesOFInstructor.dart';
 
 
-class InstructorCourses extends StatelessWidget {
+class AdminHome extends StatelessWidget {
   final HttpServiceGetData httpService = HttpServiceGetData();
 
   @override
@@ -24,7 +21,7 @@ class InstructorCourses extends StatelessWidget {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-         /*   ElevatedButton(
+            /*   ElevatedButton(
                 onPressed:()async{
                   try {
                     // Replace 'your_token_here' with the actual token
@@ -59,7 +56,7 @@ class InstructorCourses extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: (){
-                    Get.to(BasicInformation());
+              //      Get.to(BasicInformation());
                   },
                   child: Card(
                     elevation: 5, // Add elevation for a shadow effect
@@ -83,7 +80,7 @@ class InstructorCourses extends StatelessWidget {
                           ),
                           SizedBox(height: 10.h),
                           Text(
-                            'Add New Course',
+                            'Add New Admin',
                             style: TextStyle(
                               color: Colors.white, // Customize the text color
                               fontSize: 16.sp,
@@ -98,7 +95,7 @@ class InstructorCourses extends StatelessWidget {
                 Spacer(),
                 GestureDetector(
                   onTap: (){
-                    Get.to(CoursesOfInstructor());
+               //     Get.to(CoursesOfInstructor());
                   },
                   child: Card(
                     elevation: 5, // Add elevation for a shadow effect
@@ -116,13 +113,13 @@ class InstructorCourses extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            Icons.book,
+                            Icons.delete,
                             size: 50.sp,
                             color: Colors.white, // Customize the icon color
                           ),
                           SizedBox(height: 10.h),
                           Text(
-                            'Courses',
+                            'Delete Admin',
                             style: TextStyle(
                               color: Colors.white, // Customize the text color
                               fontSize: 16.sp,
@@ -170,7 +167,7 @@ class InstructorCourses extends StatelessWidget {
                         ),
                         SizedBox(height: 10.h),
                         Text(
-                          'Students',
+                          'Users',
                           style: TextStyle(
                             color: Color(0xFFEFECEC), // Customize the text color
                             fontSize: 16.sp,

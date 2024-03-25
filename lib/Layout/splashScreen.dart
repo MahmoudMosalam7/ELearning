@@ -8,7 +8,7 @@ import 'package:learning/network/local/cache_helper.dart';
 import 'package:lottie/lottie.dart';
 
 import '../apis/edit_profile/http_service_edit_profile.dart';
-import '../apis/http_service_get_user_data.dart';
+import '../apis/user/http_service_get_user_data.dart';
 import '../shared/constant.dart';
 import 'Login_Register_ForgetPassword/Login.dart';
 
