@@ -60,6 +60,7 @@ dependencies:
   open_file: ^3.3.2
   file_picker: ^6.2.0
   permission_handler: ^11.3.0
+  accordion: ^2.6.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -93,7 +94,7 @@ flutter:
      - assets/images/onboarding_new_account/
      - assets/images/onboarding_instructor/
      - assets/images/payment_image/
-     - assets/images/profile.jpg
+     - assets/images/profile.png
      - assets/images/python.jpeg
      - assets/animation/animation_splash_screen/Animation.json
   #   - images/a_dot_ham.jpeg

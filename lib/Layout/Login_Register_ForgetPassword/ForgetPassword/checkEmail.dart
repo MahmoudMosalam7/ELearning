@@ -26,10 +26,12 @@ class _CheckEmailState extends State<CheckEmail> {
   bool isLoading = false;
 
   String errorMessage = '';
-  bool darkMode = false;
+  bool? darkMode = false;
   void initState(){
     super.initState();
     darkMode = CacheHelper.getData(key: 'darkMode');
+    if (darkMode == null)
+      darkMode = false ;
   }
   void _forgetPassword() async {
     // Reset error message and loading state
@@ -196,7 +198,7 @@ class _CheckEmailState extends State<CheckEmail> {
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
-              color: darkMode?Colors.black:Colors.white,
+              color: darkMode!?Colors.black:Colors.white,
               borderRadius: BorderRadius.circular(65.0.r,),
             ),
             child: Padding(

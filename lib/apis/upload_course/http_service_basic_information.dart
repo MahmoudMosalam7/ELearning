@@ -11,6 +11,13 @@ class HttpServiceBasicInformation {
       String language, String level,String token,String instructorId
       ) async {
     try {
+      print('id = $instructorId');
+      print('id = $title');
+      print('id = $subTitle');
+      print('id = $category');
+      print('id = $language');
+      print('id = $level');
+      print('id = $token');
 
       final response = await _dio.post(
         '/v1/course/',

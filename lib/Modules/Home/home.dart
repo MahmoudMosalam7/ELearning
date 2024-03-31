@@ -6,9 +6,11 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:learning/TColors.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import '../../apis/courseInformation/courseInformation.dart';
+import '../../apis/courseInformation/http_service_courseInformation.dart';
 import '../../apis/user/http_service_get_user_data.dart';
 import '../../network/local/cache_helper.dart';
+import '../../shared/constant.dart';
+import '../../shared/constant.dart';
 import '../../shared/constant.dart';
 import 'InformationOFCourses/CourseInformation.dart';
 import 'Product.dart';
@@ -23,10 +25,37 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final HttpServiceGetData httpServiceGetData = HttpServiceGetData();
   var im ;
+  bool? darkMode = false;
   void initState(){
     fetchData();
     _allCourses();
+    fetchDataOfUser();
+    darkMode = CacheHelper.getData(key: 'darkMode');
+    if (darkMode == null)
+      darkMode = false ;
     super.initState();
+  }
+  final HttpServiceGetData httpServiceGetDataOFUser = HttpServiceGetData();
+
+  Future<void> fetchDataOfUser() async {
+    try {
+      String? token = CacheHelper.getData(key:'token');
+      // Call getData method with the authentication token
+      Map<String, dynamic> data = await httpServiceGetDataOFUser.getData(token!);
+
+      // Update the state with the fetched data
+      setState(() {
+        getData = data;
+        im = getData?['data']['profileImage'];
+        print('im = $im');
+      });
+
+      // Print or use the fetched data as needed
+      print('Fetched Data: $getData');
+    } catch (e) {
+      // Handle errors, if any
+      print('Error fetching data: $e');
+    }
   }
   Future<void> fetchData() async {
     try {
@@ -55,18 +84,6 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   int imageIndex = 0;
-  List<CategoryData> categoryData = [
-    CategoryData(text: 'Devleopment', color: Colors.white),
-    CategoryData(text: 'Design', color: Colors.white),
-    CategoryData(text: 'Tech', color: Colors.white),
-    CategoryData(text: 'Marketing', color: Colors.white),
-    CategoryData(text: 'Business', color: Colors.white),
-    CategoryData(text: 'Sports', color: Colors.white),
-    CategoryData(text: 'IT Software', color: Colors.white),
-    CategoryData(text: 'Chemical', color: Colors.white),
-    CategoryData(text: 'Physices', color: Colors.white),
-    // Add more button data with text and color
-  ];
   HttpServiceCourse httpServiceCourse = HttpServiceCourse();
    late Map<String,dynamic> serverData ;
   String errorMessage = '';
@@ -132,22 +149,84 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
   }
+  void _allCoursesByCategory(String categoryId) async {
+    // Reset error message and loading state
+    setState(() {
+      errorMessage = '';
+      isLoading = true;
+    });
+
+    try {
+      // Add your login logic here, e.g., make API call
+      serverData = await httpServiceCourse.allCoursesByCategories(
+          CacheHelper.getData(key: 'token'),
+        categoryId
+      );
+
+      print('get all course by category successful! $serverData');
+
+      if (serverData != null) {
+        print('serverdata from category = ${Product.parseProductsFromServer(serverData)}');
+        products = Product.parseProductsFromServer(serverData);
+        print('Products: $products');
+      } else {
+        throw Exception('Server data is null');
+      }
+    } catch (e) {
+      // Handle validation errors or network errors
+      setState(() {
+        errorMessage = 'Error: $e';
+        if (errorMessage.contains('422')) {
+          // Your code here
+          errorMessage ="Valdition Error!";
+        }
+        else if (errorMessage.contains('401')) {
+          // Your code here
+          errorMessage =" unauthorized access !";
+        }
+        else if (errorMessage.contains('500')) {
+          // Your code here
+          errorMessage =" Server Not Available Now !";
+        }
+        else{
+          errorMessage ="Unexpected Error!";
+        }
+        Fluttertoast.showToast(
+          msg: "$errorMessage",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+
+      });
+    } finally {
+      // Update loading state
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   //List<Product> products = []; //products = Product.parseProductsFromServer(serverData!);
  String name = getData?['data']['name'];
   @override
   Widget build(BuildContext context) {
+    print('hooooooooooooooooooooooooooooooooooooommmmmmmmmmmm');
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
-            icon: const CircleAvatar(
+            icon:  CircleAvatar(
               radius: 15.0,
               backgroundColor: Colors.grey,
               child: Icon(
                 Icons.notification_important,
                 size: 20.0,
+                color:darkMode! ?Colors.white:Colors.black,
               ),
             ),
             onPressed: (){
@@ -155,12 +234,13 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
           IconButton(
-            icon: const CircleAvatar(
+            icon:  CircleAvatar(
               radius: 15.0,
               backgroundColor: Colors.grey,
               child: Icon(
                 Icons.favorite,
                 size: 20.0,
+                color: darkMode! ?Colors.white:Colors.black,
               ),
             ),
             onPressed: (){
@@ -175,12 +255,12 @@ class _HomeScreenState extends State<HomeScreen> {
             CircleAvatar(
               radius: 20.0,
               backgroundImage: NetworkImage(
-                getData?['data']['profileImage'] ?? 'assets/images/profile.jpg',
+                getData?['data']['profileImage'] ?? 'assets/images/profile.png',
               ),
               child: getData?['data']['profileImage'] == null
                   ? ClipOval(
                 child: Image.asset(
-                  'assets/images/profile.jpg',
+                  'assets/images/profile.png',
                   width: 40.0, // Set width to match the diameter of the CircleAvatar
                   height: 40.0, // Set height to match the diameter of the CircleAvatar
                   fit: BoxFit.cover,
@@ -301,11 +381,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         scrollDirection: Axis.horizontal,
 
                         itemBuilder: (context,index){
-                          final buttonData = this.categoryData[index];
+                          final buttonData = categoryData[index];
                           return  ElevatedButton(
 
                           style: ElevatedButton.styleFrom(
-                          backgroundColor: buttonData.color,
                             side: BorderSide(
                               color: Colors.white, // Border color
                               width: 2.0, // Border thickness
@@ -313,12 +392,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                             onPressed: () {
-                              setState(() { // Change color on click
+                              setState(() {// Change color on click
+                                print('buttonData = $buttonData , ${buttonData.id}');
+                                _allCoursesByCategory(buttonData.id);
                               });
                             },
                           child: Text(buttonData.text,
                            style:TextStyle(
-                             color: Colors.black,
+                             color: Colors.green
                            ) ,
                           ),
                           );
@@ -354,7 +435,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 return InkWell(
                   onTap: () {
                     // Handle the tap event here
-                    Get.to(CourseInformation(courseId:  products[index].id));
+
+                    Get.to(CourseInformation(courseId: products[index].id));
+
                   },
                   child: ProductListItem(product: product),
                 );

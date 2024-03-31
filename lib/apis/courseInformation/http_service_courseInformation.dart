@@ -37,6 +37,39 @@ class HttpServiceCourse {
       throw ('Error during get all course: $e');
     }
   }
+  Future< Map<String,dynamic> > allCoursesByCategories( String token,String
+      categoryId
+      ) async {
+    try {
+
+      final response = await _dio.get(
+        '/v1/course/categoriesId/$categoryId',
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+
+      print('from all courses = ${response.data}');
+      if (response.statusCode == 200) {
+
+        try{
+          print('save get all course is done ${response.data['data']['results']} ');
+        }catch(e){
+          print('error when save get all course /');
+        }
+
+        return response.data;
+      } else {
+        // Registration failed
+
+        print('from get all course error = ${response.data}');
+        throw ('get all course failed: ${response.data}');
+      }
+    } catch (e) {
+      // Handle network or other errors
+
+      print('from get all course error = ${e}');
+      throw ('Error during get all course: $e');
+    }
+  }
 
   Future< Map<String,dynamic> > getCourse( String id,String token) async {
     try {
@@ -57,6 +90,37 @@ class HttpServiceCourse {
         }
 
         return response.data;
+      } else {
+        // Registration failed
+
+        print('from get  course error = ${response.data}');
+        throw ('get  course failed: ${response.data}');
+      }
+    } catch (e) {
+      // Handle network or other errors
+
+      print('from get  course error = ${e}');
+      throw ('Error during get  course: $e');
+    }
+  }
+  Future< String > getModule( String id,String token) async {
+    try {
+        print('from getModule id = $id');
+        print('from getModule token = $token');
+      final response = await _dio.get(
+        '/v1/coursemodule/$id',
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+
+      print('from getModule = ${response.data}');
+      if (response.statusCode == 200) {
+
+        try{
+        }catch(e){
+          print('error when  getModule /');
+        }
+
+        return response.data['data']['file']['path'];
       } else {
         // Registration failed
 
