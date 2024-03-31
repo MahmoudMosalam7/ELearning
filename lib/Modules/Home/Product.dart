@@ -47,7 +47,7 @@ class ProductListItem extends StatelessWidget {
             ),
             Row(
               children: [
-                Text('\$1500'
+                Text('EGP ${product.price}'
                 ),
                 Spacer(),
                 for (int i = 0; i < product.rating.round(); i++)

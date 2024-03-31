@@ -26,10 +26,12 @@ class _LoginState extends State<Login> {
   final HttpServiceGetData httpServiceGetData = HttpServiceGetData();
 
   bool isLoading = false;
-  bool darkMode = false;
+  bool? darkMode = false;
   void initState(){
     super.initState();
     darkMode = CacheHelper.getData(key: 'darkMode');
+    if (darkMode == null)
+      darkMode = false ;
   }
   String errorMessage = '';
   void _loginUser() async {
@@ -135,7 +137,7 @@ class _LoginState extends State<Login> {
                   children: [
                     CircleAvatar(
                       radius: 65.0,
-                      backgroundColor: darkMode?Colors.black:Colors.white,
+                      backgroundColor: darkMode!?Colors.black:Colors.white,
                       child: Image(
                         image: AssetImage('assets/images/app_icon/icons.png'),
                         height: 100.0,
@@ -173,7 +175,7 @@ class _LoginState extends State<Login> {
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               decoration: BoxDecoration(
-                color: darkMode?Colors.black:Colors.white,
+                color: darkMode!?Colors.black:Colors.white,
                 borderRadius: BorderRadius.circular(65.0,),
               ),
               child: Padding(
@@ -225,7 +227,7 @@ class _LoginState extends State<Login> {
                                 obscureText
                                     ? Icons.visibility_off
                                     : Icons.visibility,
-                                color: darkMode?Colors.white:Colors.grey,
+                                color: darkMode!?Colors.white:Colors.grey,
                               ),
                               onPressed: () {
                                 setState(() {

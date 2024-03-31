@@ -5,6 +5,7 @@ class WishListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('zzzzzzzzzzzzzzzzzzzzzzzzzzzzz');
     return Scaffold(
       appBar: AppBar(
         actions: [

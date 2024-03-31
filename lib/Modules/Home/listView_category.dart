@@ -2,7 +2,7 @@ import 'dart:ui';
 
 class CategoryData {
   final String text;
-  final Color color;
+  final String id;
 
-  const CategoryData({required this.text, required this.color});
+  const CategoryData({required this.text, required this.id});
 }

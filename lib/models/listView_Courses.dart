@@ -22,7 +22,7 @@ class Product {
     if (results != null && results is List) {
       print('parseProductsFromServer2');
       return results.map<Product>((productData) {
-        print('parseProductsFromServer3');
+        print('parseProductsFromServer3 $productData');
         return Product(
           imageURL: productData['thumbnail'],
           title: productData['title'],

@@ -9,6 +9,7 @@ import 'package:learning/Modules/Account/videoPlay.dart';
 import 'package:learning/TColors.dart';
 import 'package:learning/shared/constant.dart';
 
+import '../../apis/user/http_service_get_user_data.dart';
 import '../../apis/user/http_service_logout.dart';
 import '../../network/local/cache_helper.dart';
 import 'become_an_instructor/Instructor_page/instructor_home_page.dart';
@@ -28,6 +29,32 @@ class _AccountScreenState extends State<AccountScreen> {
   HttpServiceLogout httpServiceLogout = HttpServiceLogout();
   bool isLoading = false;
   String errorMessage = '';
+  void initState(){
+    fetchDataOfUser();
+    super.initState();
+  }
+  final HttpServiceGetData httpServiceGetDataOFUser = HttpServiceGetData();
+  late String im;
+  Future<void> fetchDataOfUser() async {
+    try {
+      String? token = CacheHelper.getData(key:'token');
+      // Call getData method with the authentication token
+      Map<String, dynamic> data = await httpServiceGetDataOFUser.getData(token!);
+
+      // Update the state with the fetched data
+      setState(() {
+        getData = data;
+        im = getData?['data']['profileImage'];
+        print('im = $im');
+      });
+
+      // Print or use the fetched data as needed
+      print('Fetched Data: $getData');
+    } catch (e) {
+      // Handle errors, if any
+      print('Error fetching data: $e');
+    }
+  }
   void _logout() async {
     // Reset error message and loading state
     setState(() {
@@ -146,11 +173,12 @@ class _AccountScreenState extends State<AccountScreen> {
                       child: CircleAvatar(
                         backgroundColor: Colors.white,
                         radius: 70.0,
-                        backgroundImage: NetworkImage( getData?['data']['profileImage'] ?? 'assets/images/profile.jpg',),
+                        backgroundImage: NetworkImage( getData?['data']['profileImage'] ?? 'assets/images/profile.jpg',
+                        ),
                         child: getData?['data']['profileImage'] == null
                             ? ClipOval(
                           child: Image.asset(
-                            'assets/images/profile.jpg',
+                            'assets/images/profile.png',
                             width: 140.0, // Set width to match the diameter of the CircleAvatar
                             height: 140.0, // Set height to match the diameter of the CircleAvatar
                             fit: BoxFit.cover,

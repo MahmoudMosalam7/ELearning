@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../../../../apis/update_instructor/http_service_courses.dart';
 import '../../../../models/listView_Courses.dart';
 import '../../../../network/local/cache_helper.dart';
+import '../../../Home/InformationOFCourses/CourseInformation.dart';
+import '../../../Home/Product.dart';
 
 class CoursesOfInstructor extends StatefulWidget {
   const CoursesOfInstructor({super.key});
@@ -85,6 +89,29 @@ class _CoursesOfInstructorState extends State<CoursesOfInstructor> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(),
+      body: SingleChildScrollView(
+        child: ListView.separated(
+          scrollDirection: Axis.vertical,
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: products.length,
+          itemBuilder: (context, index) {
+            final product = products[index];
+            return InkWell(
+              onTap: () {
+                // Handle the tap event here
+
+                Get.to(CourseInformation(courseId: products[index].id));
+
+              },
+              child: ProductListItem(product: product),
+            );
+          },
+          separatorBuilder: (context, index) => Divider(height: 15.0),
+        )
+      ),
+    );
   }
 }

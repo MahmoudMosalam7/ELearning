@@ -9,6 +9,7 @@ import 'package:learning/shared/constant.dart';
 import '../../../../../Layout/Login_Register_ForgetPassword/DropDownList/dropDownList.dart';
 import '../../../../../apis/upload_course/http_service_basic_information.dart';
 import '../../../../../network/local/cache_helper.dart';
+import '../../../../Home/listView_category.dart';
 import 'advanced_information.dart';
 
 class BasicInformation extends StatefulWidget {
@@ -34,7 +35,7 @@ class _BasicInformationState extends State<BasicInformation> {
   String errorMessage = '';
   bool isLoading = false;
 
-  void _basicInformation() async {
+  void _basicInformation(String categoryID) async {
     // Reset error message and loading state
     setState(() {
       errorMessage = '';
@@ -46,9 +47,9 @@ class _BasicInformationState extends State<BasicInformation> {
       await basicInformation.baicInformation(
         _titleContoller.text,
         _subTitleContoller.text,
-        '65cd21eb87bb347d80d0910f',
-        "Arabic",
-        "beginner",
+        categoryID,
+          _languageContoller.text,
+          _levelContoller.text,
         CacheHelper.getData(key: 'token'),
           getData!['data']['_id']
       );
@@ -162,15 +163,17 @@ class _BasicInformationState extends State<BasicInformation> {
                 SizedBox(height: 10.h,),
                 AppTextField(
                   data: [
-                    SelectedListItem(name:'Devleopment' ),
-                    SelectedListItem(name:'Design' ),
-                    SelectedListItem(name:'Tech' ),
+
+                    SelectedListItem(name:'Development'  ),
                     SelectedListItem(name:'Marketing' ),
-                    SelectedListItem(name:'Business' ),
                     SelectedListItem(name:'Sports' ),
+                    SelectedListItem(name:'Design' ),
+                    SelectedListItem(name:'Business' ),
+                    SelectedListItem(name:'Tech' ),
                     SelectedListItem(name:'IT Software' ),
                     SelectedListItem(name:'Chemical' ),
                     SelectedListItem(name:'Physices' ),
+                    SelectedListItem(name:'Computer Science(cs)' ),
                   ],
                   textEditingController: _categoryContoller,
                   title: 'Select Category',
@@ -194,10 +197,10 @@ class _BasicInformationState extends State<BasicInformation> {
                 SizedBox(height: 10.h,),
                 AppTextField(
                   data: [
-                    SelectedListItem(name:'Level 0' ),
-                    SelectedListItem(name:'Level 1' ),
-                    SelectedListItem(name:'Level 2' ),
-                    SelectedListItem(name:'Level 3' ),
+                    SelectedListItem(name:'beginner' ),
+                    SelectedListItem(name:'intermidiate' ),
+                    SelectedListItem(name:'advanced' ),
+                    SelectedListItem(name:'Proficient' ),
                   ],
                   textEditingController: _levelContoller,
                   title: 'Select Level',
@@ -226,8 +229,18 @@ class _BasicInformationState extends State<BasicInformation> {
 
                         onPressed: (){
                           print('token = ${CacheHelper.getData(key: 'token')}');
+                          print('mahmoud ${_categoryContoller.text}');
+                          CategoryData? result;
+                          for (var category in categoryData) {
+                            print('${category.text}');
+                            if (category.text == _categoryContoller.text) {
+                              result = category;
+                              break;
+                            }
+                          }
+
                           if (_formKey.currentState!.validate()) {
-                            _basicInformation();
+                             _basicInformation(result!.id);
                           }
                           //Get.to(Payment());
                         },),

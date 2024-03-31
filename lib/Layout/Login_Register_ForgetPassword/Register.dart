@@ -37,10 +37,12 @@ class _SignUpState extends State<SignUp> {
   bool isLoading = false;
 
   String errorMessage = '';
-  bool darkMode = false;
+  bool? darkMode = false;
   void initState(){
     super.initState();
     darkMode = CacheHelper.getData(key: 'darkMode');
+    if (darkMode == null)
+      darkMode = false ;
   }
   void _registerUser() async {
     // Reset error message and loading state
@@ -152,7 +154,7 @@ class _SignUpState extends State<SignUp> {
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
-              color: darkMode?Colors.black:Colors.white,
+              color: darkMode!?Colors.black:Colors.white,
               borderRadius: BorderRadius.circular(65.0,),
             ),
             child: Padding(
@@ -257,7 +259,7 @@ class _SignUpState extends State<SignUp> {
                           suffixIcon: IconButton(
                             icon: Icon(
                               obscureText1 ? Icons.visibility_off : Icons.visibility,
-                              color: darkMode?Colors.white:Colors.grey,
+                              color: darkMode!?Colors.white:Colors.grey,
                             ),
                             onPressed: () {
                               setState(() {
@@ -294,7 +296,7 @@ class _SignUpState extends State<SignUp> {
                           suffixIcon: IconButton(
                             icon: Icon(
                               obscureText2 ? Icons.visibility_off : Icons.visibility,
-                              color: darkMode?Colors.white:Colors.grey,
+                              color: darkMode!?Colors.white:Colors.grey,
                             ),
                             onPressed: () {
                               setState(() {

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -28,14 +29,16 @@ class _EditAccountState extends State<EditAccount> {
   var phoneContoller = TextEditingController();
 
   var genderContoller = TextEditingController();
-  File? _selectedImage;
+
   XFile? _profileImage;
+
+  File? _selectedImage;
   final HttpServiceEditProfile httpService = HttpServiceEditProfile();
 
   bool isLoading = false;
 
   String errorMessage = '';
-  void _updateMe() async {
+  /*void _updateMe() async {
     // Reset error message and loading state
     setState(() {
       errorMessage = '';
@@ -54,7 +57,7 @@ class _EditAccountState extends State<EditAccount> {
           bioContoller.text,
           phoneContoller.text,
           genderContoller.text,
-          _profileImage!, // Use _profileImage directly
+          _selectedImage!.files.single.path!, // Use _profileImage directly
           CacheHelper.getData(key: 'token'),
         );
 
@@ -97,7 +100,63 @@ class _EditAccountState extends State<EditAccount> {
         isLoading = false;
       });
     }
+  }*/
+  void _updateMe() async {
+    setState(() {
+      errorMessage = '';
+      isLoading = true;
+    });
+
+    try {
+
+        // Check if the selected file is an image
+          await httpService.updateMe(
+            usernameContoller.text,
+            emailContoller.text,
+            bioContoller.text,
+            phoneContoller.text,
+            genderContoller.text,
+            _profileImage!,
+            CacheHelper.getData(key: 'token'),
+          );
+
+          Fluttertoast.showToast(
+            msg: "Update Success",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 5,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+
+          print('Update successful!');
+        }  catch (e) {
+      setState(() {
+        errorMessage = 'Error: $e';
+        if (errorMessage.contains('404')) {
+          errorMessage = "Email Not Found!";
+        } else {
+          errorMessage = "Unexpected Error!";
+        }
+
+        Fluttertoast.showToast(
+          msg: errorMessage,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
+
   final HttpServiceGetData httpServiceGetData = HttpServiceGetData();
   var im ;
   Future<void> fetchData() async {
@@ -346,7 +405,7 @@ class _EditAccountState extends State<EditAccount> {
                 title: Text('Camera'),
                 onTap: () {
                   // Handle edit action
-                  _pickImageFromCamera();
+                  //_pickImageFromCamera();
                   Navigator.pop(context); // Close the bottom sheet
                 },
               ),
@@ -367,22 +426,22 @@ class _EditAccountState extends State<EditAccount> {
   }
   Future _pickImageFromGallery() async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (image == null) return;
-      print('from pic image = $image');
+    if( image == null) return;
     setState(() {
       _profileImage = image;
       _selectedImage = File(image.path);
     });
+
   }
 
-  Future _pickImageFromCamera() async {
+ /* Future _pickImageFromCamera() async {
     final image = await ImagePicker().pickImage(source: ImageSource.camera);
     if (image == null) return;
 
     setState(() {
       _profileImage = image;
-      _selectedImage = File(image.path);
+      _selectedImage = File(image.path) ;
     });
-  }
+ */// }
 
 }
