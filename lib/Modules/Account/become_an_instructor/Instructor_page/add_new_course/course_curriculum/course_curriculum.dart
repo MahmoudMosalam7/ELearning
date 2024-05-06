@@ -1,10 +1,13 @@
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:learning/Modules/Account/become_an_instructor/Instructor_page/add_new_course/course_curriculum/pick_file_and_video.dart';
 
@@ -13,8 +16,15 @@ import '../../../../../../models/file_and_video_of_section_model.dart';
 import '../../../../../../models/section_model.dart';
 import '../../../../../../network/local/cache_helper.dart';
 import '../../../../../../shared/constant.dart';
+import '../add_price_publish.dart';
+import 'file_and_video_container.dart';
 
 class CourseCurriculum extends StatefulWidget {
+  final bool fromUpdateCourse;
+  final String courseId;
+
+  const CourseCurriculum({super.key, required this.fromUpdateCourse, required this.courseId});
+
   @override
   _CourseCurriculumState createState() => _CourseCurriculumState();
 }
@@ -35,10 +45,17 @@ class _CourseCurriculumState extends State<CourseCurriculum> {
     });
 
     try {
+       String   id = CacheHelper.getData(key: 'courseId');
+       print('widget.courseId = ${widget.courseId}');
+       if(widget.fromUpdateCourse)
+         {id = widget.courseId;
+         print('alllllllll');
+         }
+
 
       // Add your login logic here, e.g., make API call
       String sectionId = await httpServiceSection.createSection(
-        CacheHelper.getData(key: 'courseId'),
+        id,
         CacheHelper.getData(key: 'token')
       );
 
@@ -54,8 +71,10 @@ class _CourseCurriculumState extends State<CourseCurriculum> {
         textColor: Colors.white,
         fontSize: 16.0,
       );
+      print('section id = $sectionId');
       if(sectionId != 'error'){
         CacheHelper.saveData(key: 'fileId', value: 0);
+        print('section id = $sectionId');
         _addSection(sectionId);
       }
       print(' create section successful!');
@@ -115,9 +134,11 @@ class _CourseCurriculumState extends State<CourseCurriculum> {
         textColor: Colors.white,
         fontSize: 16.0,
       );
+     setState(() {
+       sections.removeAt(index); //// حذف القسم من الـ sections
 
-     sections.removeAt(index);
-     print(' create section successful!');
+     });
+      print(' remove section successful!');
     } catch (e) {
       // Handle validation errors or network errors
       setState(() {
@@ -154,11 +175,23 @@ class _CourseCurriculumState extends State<CourseCurriculum> {
         video.videoController?.dispose();
       }
     }
+
     super.dispose();
   }
+  @override
+  void initState() {
+    super.initState();
+    // Initialize _sections with the initial value of sections
+    if(widget.fromUpdateCourse){
+      sections = Section.parseSectionFromServer(data);
+      print('from course circulam = sections = ${sections}');
+    }
 
+  }
   @override
   Widget build(BuildContext context) {
+    sections = sections;
+    sections.length = sections.length;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(),
@@ -181,6 +214,7 @@ class _CourseCurriculumState extends State<CourseCurriculum> {
               Container(
                 height: 400.h, // Adjust the height as needed
                 child: ListView.builder(
+
                   shrinkWrap: true,
                   itemCount: sections.length,
                   itemBuilder: (context, index) {
@@ -233,6 +267,7 @@ class _CourseCurriculumState extends State<CourseCurriculum> {
                       ),
                       onPressed: () {
                         // Handle Save & Next button press
+                        Get.to(AddPriceAndPublish(courseId: '', fromInstructor: false,));
                       },
                     ),
                   ),
@@ -281,114 +316,22 @@ class _CourseCurriculumState extends State<CourseCurriculum> {
             ],
           ),
           SizedBox(height: 16.0),
-          PickFileAndVideo(index: index,),
+        if(widget.fromUpdateCourse)
+          PickFileAndVideo(index: index, counter: sections[index].videos.length, fromUpdataCirc: true,),
+        /*  ListView.builder(
+            shrinkWrap: true,
+            itemCount: sections[index].videos.length,
+            itemBuilder: (context, videoIndex) {
+              return Text(sections[index].videos[videoIndex].fileName);
+            },
+          ),
+
+        */
+          if(widget.fromUpdateCourse == false)
+          PickFileAndVideo(index: index, counter: 0, fromUpdataCirc: false,),
         ],
       ),
     );
-  }
-
-  Widget _buildVideoButton(int index) {
-    return Container(
-      padding: EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text('Videos ${index + 1}'),
-          Row(
-            children: [
-              IconButton(
-                icon: Icon(Icons.edit),
-                onPressed: () {
-                  _editSectionName(index);
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () async {
-                  File? videoFile = await _pickVideo();
-                  if (videoFile != null) {
-                    setState(() {
-                      sections[index].videos.add(PickFile(
-                        fileName: '',
-                      ));
-                    });
-                  }
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () {
-
-                },
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildVideoField(int sectionIndex, int videoIndex) {
-    PickFile video = sections[sectionIndex].videos[videoIndex];
-    return Row(
-      children: [
-        IconButton(
-          icon: Icon(Icons.edit),
-          onPressed: () {
-            _editVideoName(sectionIndex, videoIndex);
-          },
-        ),
-        IconButton(
-          icon: Icon(Icons.add),
-          onPressed: () async {
-            File? videoFile = await _pickVideo();
-            if (videoFile != null) {
-              setState(() {
-                sections[sectionIndex].videos.add(PickFile(
-                  fileName: '',
-                ));
-              });
-            }
-          },
-        ),
-        IconButton(
-          icon: Icon(Icons.delete),
-          onPressed: () {
-            _deleteVideo(sectionIndex, videoIndex);
-          },
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: TextField(
-              onChanged: (value) {
-                setState(() {
-                  sections[sectionIndex].videos[videoIndex].fileName = value;
-                });
-              },
-              decoration: InputDecoration(
-                hintText: 'Enter video name',
-                suffixIcon: null,
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Future<File?> _pickVideo() async {
-    final pickedFile =
-    await _imagePicker.pickVideo(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      return File(pickedFile.path);
-    } else {
-      return null;
-    }
   }
 
   void _editSectionName(int index) {
@@ -406,41 +349,20 @@ class _CourseCurriculumState extends State<CourseCurriculum> {
     setState(() {
       _deleteSectionFromServer(index);
 
+
     });
   }
-
   void _addSection(String sectionId) {
     setState(() {
-      Section duplicatedCourse = Section(
+      sections.add(Section(
         sectionName: 'Section ${sections.length + 1}',
         sectionId: sectionId,
         videos: [],
-      );
-      sections.add(duplicatedCourse);
-    });
-  }
-
-  void _deleteVideo(int sectionIndex, int videoIndex) {
-    setState(() {
-      PickFile video = sections[sectionIndex].videos[videoIndex];
-      video.videoController?.dispose();
-      sections[sectionIndex].videos.removeAt(videoIndex);
-    });
-  }
-
-  void _addVideo(int sectionIndex) {
-    setState(() {
-      sections[sectionIndex].videos.add(PickFile(
-        fileName: 'file',
       ));
     });
   }
 
-  void _editVideoName(int sectionIndex, int videoIndex) {
-    // Implement video name editing logic here
-    // For example, you can use a dialog or navigate to a new screen
-    // to allow the user to edit the video name.
-  }
+
   void showDialogg(int index){
     showDialog(
       context: context,

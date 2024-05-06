@@ -1,8 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:learning/Modules/Home/searchBar/search_bar.dart';
 import 'package:learning/TColors.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -303,20 +305,25 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // Search bar
-                Container(
-                  padding: EdgeInsets.all(5.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0,),
-                    color: Colors.grey,
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.search,
-                      ),
-                      SizedBox(width: 15.0,),
-                      Text('Search'),
-                    ],
+                GestureDetector(
+                  onTap: (){
+                    Get.to(SearchBarContainer());
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(5.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0,),
+                      color: Colors.grey,
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.search,
+                        ),
+                        SizedBox(width: 15.0,),
+                        Text('Search'),
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(height: 20.0,),
@@ -436,7 +443,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onTap: () {
                     // Handle the tap event here
 
-                    Get.to(CourseInformation(courseId: products[index].id));
+                    Get.to(CourseInformation(courseId: products[index].id,fromInstructor: false,));
 
                   },
                   child: ProductListItem(product: product),

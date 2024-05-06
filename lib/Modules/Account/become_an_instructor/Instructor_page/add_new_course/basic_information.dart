@@ -13,6 +13,10 @@ import '../../../../Home/listView_category.dart';
 import 'advanced_information.dart';
 
 class BasicInformation extends StatefulWidget {
+  final bool fromUpdateCourse;
+  final String courseId;
+
+  const BasicInformation({super.key, required this.fromUpdateCourse, required this.courseId});
   @override
   State<BasicInformation> createState() => _BasicInformationState();
 }
@@ -63,7 +67,75 @@ class _BasicInformationState extends State<BasicInformation> {
       // Now navigate to the appropriate screen based on the fetched data
      
       print('courseId successful!');
-      Get.to(AdvancedInformationScreen());
+      Get.to(AdvancedInformationScreen(courseId:'' ,fromUpdateCourse:false ,));
+    } catch (e) {
+      // Handle validation errors or network errors
+      setState(() {
+        errorMessage = 'Error: $e';
+        if (errorMessage.contains('422')) {
+          // Your code here
+          errorMessage ="Valdition Error!";
+        }
+        else if (errorMessage.contains('401')) {
+          // Your code here
+          errorMessage =" unauthorized access !";
+        }
+        else if (errorMessage.contains('500')) {
+          // Your code here
+          errorMessage =" Server Not Available Now !";
+        }
+        else{
+          errorMessage ="Unexpected Error!";
+        }
+        Fluttertoast.showToast(
+          msg: "create course Field!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+
+      });
+    } finally {
+      // Update loading state
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  void _updateBasicInformation(String categoryID) async {
+    // Reset error message and loading state
+    setState(() {
+      errorMessage = '';
+      isLoading = true;
+    });
+
+    try {
+      // Add your login logic here, e.g., make API call
+      await basicInformation.updateBaicInformation(
+          _titleContoller.text,
+          _subTitleContoller.text,
+          categoryID,
+          _languageContoller.text,
+          _levelContoller.text,
+          CacheHelper.getData(key: 'token'),
+          getData!['data']['_id'],
+         widget.courseId
+      );
+
+      // Login successful, you can navigate to another screen or show a success message
+      // ...
+
+      // Fetch data and wait for it to complete
+
+
+      // Now navigate to the appropriate screen based on the fetched data
+
+      print('update basic Info successful!');
+      Navigator.pop(context);
     } catch (e) {
       // Handle validation errors or network errors
       setState(() {
@@ -240,7 +312,11 @@ class _BasicInformationState extends State<BasicInformation> {
                           }
 
                           if (_formKey.currentState!.validate()) {
-                             _basicInformation(result!.id);
+                            if(widget.fromUpdateCourse){
+                              print('from true mosalam');
+                              _updateBasicInformation(result!.id);
+                            }
+                            else _basicInformation(result!.id);
                           }
                           //Get.to(Payment());
                         },),

@@ -2,7 +2,6 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -16,8 +15,9 @@ import 'file_and_video_container.dart';
 
 class PickFileAndVideo extends StatefulWidget {
   final int index;
-
-  const PickFileAndVideo({super.key, required this.index});
+  final int counter;
+  final bool fromUpdataCirc;
+  const PickFileAndVideo({super.key, required this.index, required this.counter, required this.fromUpdataCirc});
   @override
   _PickFileAndVideoState createState() => _PickFileAndVideoState();
 }
@@ -63,7 +63,7 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
       );
       if(fileId != -1)
        print(fileId);
-      print(' create section successful!');
+      print(' update module successful!');
     } catch (e) {
       // Handle validation errors or network errors
       setState(() {
@@ -214,7 +214,9 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
   void initState() {
     super.initState();
     // Initialize containerCount in initState
-    containerCount = 0;
+    if(widget.counter !=0)
+      containerCount = widget.counter;
+    else containerCount = 0;
     _videoController = VideoPlayerController.asset('assets/placeholder_video.mp4');
     _videoController!.addListener(() {
       if (!_videoController!.value.isPlaying &&
@@ -228,14 +230,25 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
     });
 
   }
+  @override
+  void didUpdateWidget(covariant PickFileAndVideo oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.counter != oldWidget.counter) {
+      setState(() {
+        containerCount = widget.counter;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    if(widget.counter !=0)
+      containerCount = widget.counter;
     return Column(
       children: [
         ListView.builder(
           shrinkWrap: true,
-          itemCount: containerCount,
+          itemCount: sections[widget.index].videos.length,
           itemBuilder: (context, index) {
             CacheHelper.saveData(key:'fileId',value: index);
             return Padding(
@@ -292,11 +305,16 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
 
   void _deleteFileContainer(int index) {
     setState(() {
+
       containerCount--;
       setState(() {
-        String _id = fileId['modules'][index];
+        late String? _id;
+        if(widget.fromUpdataCirc)
+          _id = sections[widget.index].videos[index].idServ;
+        else _id = fileId['modules'][index];
         print('from delte file = $_id');
-        _deleteModules(_id);
+        if(sections[widget.index].videos[index].idServ != null)
+          _deleteModules(_id!);
         sections[widget.index].videos.removeAt(index);
       });
     });
@@ -304,13 +322,30 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
 
   void _duplicateFileContainer() {
     setState(() {
-
+    /*  if(widget.counter !=0){
+        containerCount++;
+        setState(() {
+          sections[widget.index].videos.add(PickFile(
+            fileName: 'file OR Video Name $containerCount',
+          ));
+        });
+      }
+      else {
+        setState(() {
+          sections[widget.index].videos.add(PickFile(
+            fileName: 'file OR Video Name $containerCount',
+          ));
+        });
+        containerCount++;
+      }
+*/
       setState(() {
         sections[widget.index].videos.add(PickFile(
           fileName: 'file OR Video Name $containerCount',
         ));
+
+        containerCount =sections[widget.index].videos.length ;
       });
-      containerCount++;
     });
   }
 
@@ -346,7 +381,11 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
                     if(!value.isEmpty){
                       videoName = value;
                       sections[widget.index].videos[index].fileName = value;
-                      _updateModuleName(fileId['modules'][index],videoName);
+                      if(sections[widget.index].videos[index].idServ != null){
+                        String? id = sections[widget.index].videos[index].idServ;
+
+                        _updateModuleName(id!,videoName);
+                      }
                     }
 
                   });
@@ -426,13 +465,13 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
         _updateSection();
         sections[widget.index].videos[index].id = index;
         _videoController = VideoPlayerController.file(File(
-            result.files.first.path!!!));
+            result.files.first.path!));
         if(sections[widget.index].videos[index].pdfFilePath != null){
           sections[widget.index].videos[index].pdfFilePath = null;
           sections[widget.index].videos[index].pdfViewer = null;
         }
         sections[widget.index].videos[index].addFile(File(
-            result.files.first.path!!!));
+            result.files.first.path!));
         _videoController!.initialize().then((_) {
           _videoController!.pause();
         });
@@ -461,14 +500,5 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
     }
   }
 
-  void _removeVideo() {
-    setState(() {
-      _videoFile = null;
-//      _controller = VideoPlayerController.asset('assets/placeholder_video.mp4');
-      _videoController!.initialize().then((_) {
-        _videoController!.pause();
-      });
-    });
-  }
 
 }

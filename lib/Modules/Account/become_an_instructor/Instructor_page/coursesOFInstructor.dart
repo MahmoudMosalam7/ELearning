@@ -89,6 +89,7 @@ class _CoursesOfInstructorState extends State<CoursesOfInstructor> {
   }
   @override
   Widget build(BuildContext context) {
+    _allCoursesOfInstructor();
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
@@ -103,7 +104,7 @@ class _CoursesOfInstructorState extends State<CoursesOfInstructor> {
               onTap: () {
                 // Handle the tap event here
 
-                Get.to(CourseInformation(courseId: products[index].id));
+                Get.to(CourseInformation(courseId: products[index].id,fromInstructor: true,));
 
               },
               child: ProductListItem(product: product),

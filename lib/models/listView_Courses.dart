@@ -1,7 +1,7 @@
 class Product {
   String imageURL;
   String title;
-  double price;
+  Map<String,dynamic> price;
   String id;
   String instructorName;
   double rating;
@@ -26,7 +26,7 @@ class Product {
         return Product(
           imageURL: productData['thumbnail'],
           title: productData['title'],
-          price: (productData['price'] as num).toDouble(),
+          price: productData['price'] ,
           id: productData['_id'],
           instructorName: productData['instructorName'],
           rating: (productData['ratingsAverage'] as num).toDouble(),

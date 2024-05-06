@@ -348,7 +348,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     ),
                   ],
                 ),
-                Column(
+                getData?['data']['roles'] != 'Admin'? Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -416,8 +416,8 @@ class _AccountScreenState extends State<AccountScreen> {
 
                     ),
                   ],
-                ),
-                Column(
+                ):Container(),
+                (getData?['data']['roles'] == 'Admin' || getData?['data']['roles'] == 'Instructor')?Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -447,7 +447,19 @@ class _AccountScreenState extends State<AccountScreen> {
                       ),
 
                     ),
-                    SizedBox(height: 5,),
+                  ],
+                ):Container(),
+                SizedBox(height: 10.sp,),
+                getData?['data']['roles'] == 'Admin'?Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Admin",
+                      style: TextStyle(
+                          fontSize: 13.0,
+                          color: Colors.grey[600]
+                      ),),
+
                     MaterialButton(
                       onPressed: (){
                         Get.to(AdminHome());
@@ -470,7 +482,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
                     ),
                   ],
-                ),
+                ):Container(),
                 TextButton(onPressed: ()async{
                   _logout();
                 },

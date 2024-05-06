@@ -47,7 +47,7 @@ class ProductListItem extends StatelessWidget {
             ),
             Row(
               children: [
-                Text('EGP ${product.price}'
+                Text('${product.price['currency']} ${product.price['amount']}'
                 ),
                 Spacer(),
                 for (int i = 0; i < product.rating.round(); i++)

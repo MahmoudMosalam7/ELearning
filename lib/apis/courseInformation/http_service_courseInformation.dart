@@ -1,6 +1,7 @@
 // lib/http_service.dart
 import 'package:dio/dio.dart';
 
+import '../../network/local/cache_helper.dart';
 import '../../shared/constant.dart';
 class HttpServiceCourse {
 
@@ -132,6 +133,57 @@ class HttpServiceCourse {
 
       print('from get  course error = ${e}');
       throw ('Error during get  course: $e');
+    }
+  }
+
+  Future<void> paymentByMethod(imageFilePath,String userId,String CoursePrice
+      ,String phoneNumber,String courseId ,String token) async {
+
+    String imageFileName = imageFilePath.split('/').last;
+
+    FormData formData =  FormData.fromMap({
+      "paymentReceiptImage": await MultipartFile.fromFile(imageFilePath, filename: imageFileName),
+      "courseId": courseId,
+      "userId": userId,
+      "CoursePrice": CoursePrice,
+      "phoneNumber": phoneNumber,
+    });
+
+
+    try {
+      print('from make transactons image = $imageFileName');
+      print('from make transactons image = $userId');
+      print('from make transactons image = $CoursePrice');
+      print('from make transactons image = $phoneNumber');
+      print('from make transactons image = $courseId');
+      print('from make transactons image = $token');
+      final response = await _dio.post
+        ('/v1/transaction'
+        ,data: formData,
+
+
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      // ignore: use_build_context_synchronously
+       if (response.statusCode == 200) {
+        // Login successful
+        try{
+          print(response.data);
+          print('make transaction is done ');
+        }catch(e){
+          print('error when make transaction  $e /');
+        }
+
+
+        return;
+      } else {
+        // Registration failed
+
+        print('from make transaction error = ${response.data}');
+        throw ('make transaction  failed: ${response.data}');
+      }
+    } catch (e) {
+      print('from make transaction error = ${e}');
     }
   }
 }
