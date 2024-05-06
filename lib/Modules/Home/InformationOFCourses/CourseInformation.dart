@@ -3,19 +3,25 @@ import 'dart:async';
 import 'package:accordion/accordion.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:learning/Modules/Home/InformationOFCourses/payment.dart';
+import 'package:learning/Modules/Home/InformationOFCourses/select_method_of_payment.dart';
 import 'package:learning/Modules/Home/InformationOFCourses/video_preview.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../TColors.dart';
 import '../../../apis/courseInformation/http_service_courseInformation.dart';
+import '../../../apis/upload_course/add_price_compiler_delete_publish.dart';
 import '../../../models/module_model.dart';
 import '../../../network/local/cache_helper.dart';
+import '../../../shared/constant.dart';
+import '../../Account/become_an_instructor/Instructor_page/update_course_information.dart';
 
 class CourseInformation extends StatefulWidget {
-  const CourseInformation({Key? key, required this.courseId});
+  const CourseInformation({Key? key, required this.courseId, required this.fromInstructor});
   final String courseId;
+  final bool fromInstructor;
 
   @override
   State<CourseInformation> createState() => _CourseInformationState();
@@ -23,7 +29,8 @@ class CourseInformation extends StatefulWidget {
 
 class _CourseInformationState extends State<CourseInformation>  {
   HttpServiceCourse httpServiceCourse = HttpServiceCourse();
-  Map<String, dynamic>? data;
+  HttpServiceCoursePriceAndPublishAndDeleteAndCompiler httpCourse = HttpServiceCoursePriceAndPublishAndDeleteAndCompiler();
+
 
   bool _isLoading = true;
 
@@ -74,6 +81,49 @@ class _CourseInformationState extends State<CourseInformation>  {
     }
   }
 
+ String errorMessage = '';
+  Future<void> _deleteCourse() async {
+    try {
+      // Fetch course data only if not already loading
+        String id = CacheHelper.getData(key: 'courseId');
+        if(widget.fromInstructor){
+          id = widget.courseId;
+        }
+         await httpCourse.deleteCourse(CacheHelper.getData(key: 'token'),
+             id);
+        Navigator.pop(context);
+        errorMessage = "";
+        Fluttertoast.showToast(
+          msg: "Delete Course Success",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+
+    } catch (e) {
+      print('Error while delete course data: $e');
+      setState(() {
+        errorMessage = 'Error: $e';
+        if (errorMessage.contains('422')) {
+          errorMessage = "Check your Emails link !";
+        } else {
+          errorMessage = "Unexpected Error!";
+        }
+      });
+      Fluttertoast.showToast(
+        msg: errorMessage,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 5,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,12 +145,28 @@ class _CourseInformationState extends State<CourseInformation>  {
       );
     } else {
       if (data != null && data!.isNotEmpty) {
+        String videoURL = 'https://youtube.com/shorts/r9BGpTQzTjI?si=PRUUCiCHLPei7vIU' ;
+        if(data?['videoTrailer'] != null){
+          videoURL = data?['videoTrailer'];
+        }
+        int rating =  0 ;
+        if(data?['ratingsAverage'] != null){
+          rating = (data!['ratingsAverage']).round();
+        }
         List<dynamic> listSections = data!['sections'];
         print('[[[[[[[[[[[[[');
         return Scaffold(
           appBar: AppBar(
             title: const Text("Course Details"),
-            actions: [
+            actions: widget.fromInstructor?[
+              CircleAvatar(
+                backgroundColor: Colors.grey,
+                radius: 15.h,
+                child:  IconButton(icon:Icon(Icons.delete), onPressed: () {
+                  _deleteCourse();
+                },),
+              )
+            ]:[
               CircleAvatar(
                 backgroundColor: Colors.grey,
                 radius: 15.h,
@@ -123,7 +189,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        VideoTrailer(videoUrl: data?['videoTrailer'],),
+                        VideoTrailer(videoUrl: videoURL,),
                         SizedBox(height: 20.h),
                         Text('${data!['title']}',
                           style: TextStyle(
@@ -139,9 +205,9 @@ class _CourseInformationState extends State<CourseInformation>  {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            for (int i = 0; i < (data!['ratingsAverage']).round(); i++)
+                            for (int i = 0; i <rating ; i++)
                               const Icon(Icons.star, color: Colors.yellow),
-                            for (int i = (data!['ratingsAverage']).round(); i < 5; i++)
+                            for (int i = rating; i < 5; i++)
                               const Icon(Icons.star_border, color: Colors.yellow),
                             SizedBox(width: 5.w),
                             Text('${data!['ratingsAverage']}'),
@@ -263,8 +329,6 @@ class _CourseInformationState extends State<CourseInformation>  {
                             itemCount: listSections.length,
                             itemBuilder: (context, index) {
                               print('from info ${listSections.length}');
-                              List<dynamic> listOfModule = data!['sections'][index]['modules'];
-                              dynamic listmodules = data!['sections'][index];
                               return Accordion(
                                 rightIcon:  Padding(
                                   padding: EdgeInsets.all(8.0),
@@ -323,7 +387,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                                   style: TextStyle(
                                     fontSize: 15.sp,
                                   ),
-                                  maxLines: 5,
+                                  maxLines: 10,
                                   overflow: TextOverflow.ellipsis,
                                 )
                             ),
@@ -354,7 +418,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                                   style: TextStyle(
                                     fontSize: 15.sp,
                                   ),
-                                  maxLines: 5,
+                                  maxLines: 25,
                                   overflow: TextOverflow.ellipsis,
                                 )
                             ),
@@ -385,7 +449,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                                   style: TextStyle(
                                     fontSize: 15.sp,
                                   ),
-                                  maxLines: 5,
+                                  maxLines: 25,
                                   overflow: TextOverflow.ellipsis,
                                 )
                             ),
@@ -397,45 +461,100 @@ class _CourseInformationState extends State<CourseInformation>  {
                     ),
                   ),
                 ),
-                Row(
+               if(widget.fromInstructor)
+                 Row(
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "EGP ${data!['price']}",
-                          style: TextStyle(
-                              fontSize: 20.h,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        const Text(
-                          "EGP 999",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                    SizedBox(width: 15.w),
                     Container(
-                      width: 230.w,
+                      width: 150.w,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20.0.r),
                         color: TColors.secondray,
                       ),
                       child: MaterialButton(
                         child: const Text(
-                          'Enroll Now',
+                          'Update',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 20.0,
                           ),
                         ),
                         onPressed: () {
-                          Get.to(Payment());
+                          print('');
+                       Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                            return UpdateCourse(courseID:data!['_id'] ,);
+                          }));
                         },
+                      ),
+                    ),
+                    Spacer(),
+                    Container(
+                      width: 150.w,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0.r),
+                        color: TColors.secondray,
+                      ),
+                      child: MaterialButton(
+                        child: const Text(
+                          'Publish',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20.0,
+                          ),
+                        ),
+                        onPressed: () {
+                             print('from courseInfo ${data}');
+                          },
                       ),
                     )
                   ],
                 ),
+                if(widget.fromInstructor == false)
+                  Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "${data!['price']['currency']} ${data!['price']['amount']}",
+                            style: TextStyle(
+                                fontSize: 16.h,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          const Text(
+                            "EGP 999",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                      Spacer(),
+                      Container(
+                        width: 220.w,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20.0.r),
+                          color: TColors.secondray,
+                        ),
+                        child: MaterialButton(
+                          child: const Text(
+                            'Enroll Now',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20.0,
+                            ),
+                          ),
+                          onPressed: () {
+                            print('price ${ data!['price']['currency']} ${data!['price']['amount']}');
+                            /*  Get.to(SelectPayment(courseID : widget.courseId,
+                        /*${data!['price']['currency']}*/
+                            coursePrice: '${data!['price']['currency']} ${data!['price']['amount']}',));
+                        */ Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                              return SelectPayment(courseID : widget.courseId,
+                                coursePrice: ' ${data!['price']['amount']}',);
+                            }));
+                          },
+                        ),
+                      )
+                    ],
+                  ),
               ],
             ),
           ),

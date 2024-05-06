@@ -8,11 +8,12 @@ class PickFile {
   String fileName;
   File? file;
   int? id;
+  String? idServ;
   VideoPlayerController? videoController;
   SfPdfViewer? pdfViewer;
   String? pdfFilePath; // Added variable to store the PDF file path
 
-  PickFile({required this.fileName, this.file,this.id});
+  PickFile({required this.fileName, this.idServ, this.file,this.id});
 
   Future<void> pickAndAddFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(

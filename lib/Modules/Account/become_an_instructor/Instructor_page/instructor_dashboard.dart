@@ -59,7 +59,7 @@ class InstructorCourses extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: (){
-                    Get.to(BasicInformation());
+                    Get.to(BasicInformation(courseId: '',fromUpdateCourse: false,));
                   },
                   child: Card(
                     elevation: 5, // Add elevation for a shadow effect

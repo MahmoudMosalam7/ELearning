@@ -68,6 +68,64 @@ class HttpServiceAdvancedInformation {
     }
   }
 
+  Future<void> updateAdvancedInformation(imageFilePath,videoFilePath,String courseDescription
+      ,String whatWillBeTaught,String targetAudience,
+      String requirements
+      ,context ,String token,String courseId) async {
+
+    String videFileName = videoFilePath.split('/').last;
+    String imageFileName = imageFilePath.split('/').last;
+    debugPrint("File Path$videoFilePath");
+
+    FormData formData =  FormData.fromMap({
+      "thumbnail": await MultipartFile.fromFile(imageFilePath, filename: imageFileName),
+      "videoTrailer": await MultipartFile.fromFile(videoFilePath, filename: videFileName),
+      "courseDescription": courseDescription,
+      "courseDescription": courseDescription,
+      "whatWillBeTaught": whatWillBeTaught,
+      "targetAudience": targetAudience,
+      "requirements": requirements,
+    });
+
+
+    try {
+      final response = await _dio.put('/v1/course/${courseId}'
+        ,data: formData,
+
+        onSendProgress: (count, total) {
+          uploadingNotification(total, count, true);
+        },
+
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      ).whenComplete(() {
+        uploadingNotification(0, 0, false);
+      });
+      // ignore: use_build_context_synchronously
+      buildShowSnackBar(context, "file uploaded");
+      debugPrint('file : ${response.data}');
+      if (response.statusCode == 200) {
+        // Login successful
+        try{
+          print(response.data['data']['token']);
+          print('save courseId is done ');
+        }catch(e){
+          print('error when save advnced $e /');
+        }
+
+
+        return;
+      } else {
+        // Registration failed
+
+        print('from advanced error = ${response.data}');
+        throw ('courseId failed: ${response.data}');
+      }
+    } catch (e) {
+      print('from advanced error = ${e}');
+      debugPrint('exception $e');
+    }
+  }
+
  /* Future<void> baicInformation( String title, String subTitle,String category,
       String language, String level,String token,String instructorId
       ) async {

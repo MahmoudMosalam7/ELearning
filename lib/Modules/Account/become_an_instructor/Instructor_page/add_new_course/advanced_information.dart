@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:learning/shared/constant.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../../../apis/upload_course/http_service_advanced_information.dart';
@@ -14,6 +15,10 @@ import '../../../../../network/local/cache_helper.dart';
 import 'course_curriculum/course_curriculum.dart';
 
 class AdvancedInformationScreen extends StatefulWidget {
+  final bool fromUpdateCourse;
+  final String courseId;
+
+  const AdvancedInformationScreen({super.key, required this.fromUpdateCourse, required this.courseId});
   @override
   _AdvancedInformationScreenState createState() =>
       _AdvancedInformationScreenState();
@@ -28,13 +33,11 @@ class _AdvancedInformationScreenState extends State<AdvancedInformationScreen> {
   TextEditingController _courseDescriptionController = TextEditingController();
   TextEditingController _courseTeachController = TextEditingController();
   TextEditingController _targetAudienceController = TextEditingController();
-  TextEditingController _courseRequrirementsController = TextEditingController()
-  ;
+  TextEditingController _courseRequrirementsController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   HttpServiceAdvancedInformation httpAdvancedInformation =
   HttpServiceAdvancedInformation();
   bool isLoading = false;
-
   String errorMessage = '';
   void _advancedInformation() async {
     // Reset error message and loading state
@@ -44,6 +47,7 @@ class _AdvancedInformationScreenState extends State<AdvancedInformationScreen> {
     });
 
     try {
+
 
 
       // Check if _profileImage is not null before calling updateMe
@@ -78,7 +82,8 @@ class _AdvancedInformationScreenState extends State<AdvancedInformationScreen> {
       );
 
       print(' successful!');
-      Get.to(CourseCurriculum());
+      sections = [];
+      Get.to(CourseCurriculum(courseId:'null' ,fromUpdateCourse:false ,));
     } catch (e) {
       // Handle validation errors or network errors
       setState(() {
@@ -106,7 +111,78 @@ class _AdvancedInformationScreenState extends State<AdvancedInformationScreen> {
       });
     }
   }
+  void _updateAdvancedInformation() async {
+    // Reset error message and loading state
+    setState(() {
+      errorMessage = '';
+      isLoading = true;
+    });
 
+    try {
+
+
+
+      // Check if _profileImage is not null before calling updateMe
+      /* imageFilePath,videoFilePath,String courseDescription
+      ,String whatWillBeTaught,String targetAudience,
+      String requirements
+      ,context ,String token
+      */
+      print(']]]]]]]]]]]]]]]]]]]]]from edit');
+      await httpAdvancedInformation.updateAdvancedInformation(
+          _selectedImage!.files.single.path,
+          _videoFile!.files.single.path,
+          _courseDescriptionController.text,
+          _courseTeachController.text,
+          _targetAudienceController.text,
+          _courseRequrirementsController.text,
+          context,
+          // Use _profileImage directly
+          CacheHelper.getData(key: 'token'),
+        widget.courseId
+      );
+
+
+      errorMessage = "";
+      Fluttertoast.showToast(
+        msg: "Update Instructor  Success",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 5,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+
+      print(' successful!');
+      Navigator.pop(context);
+    } catch (e) {
+      // Handle validation errors or network errors
+      setState(() {
+        errorMessage = 'Error: $e';
+        if (errorMessage.contains('422')) {
+          errorMessage = "Check your Emails link !";
+        } else {
+          errorMessage = "Unexpected Error!";
+        }
+
+        Fluttertoast.showToast(
+          msg: errorMessage,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      });
+    } finally {
+      // Update loading state
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
   @override
   void initState() {
     super.initState();
@@ -137,7 +213,6 @@ class _AdvancedInformationScreenState extends State<AdvancedInformationScreen> {
       });
     });
   }
-
   Future<void> _pickVideo() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
 
@@ -152,7 +227,6 @@ class _AdvancedInformationScreenState extends State<AdvancedInformationScreen> {
       });
     }
   }
-
   void _removeVideo() {
     setState(() {
       _videoFile = null;
@@ -439,7 +513,12 @@ class _AdvancedInformationScreenState extends State<AdvancedInformationScreen> {
 
                         onPressed: (){
                           if (_formKey.currentState!.validate()) {
-                            _advancedInformation();
+                            if(widget.fromUpdateCourse){
+                              print('from true mosalam');
+                              _updateAdvancedInformation();
+                            }
+                            else _advancedInformation();
+                            ();
                           }
                           //Get.to(Payment());
                         },),
