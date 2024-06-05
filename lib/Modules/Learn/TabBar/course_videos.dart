@@ -1,18 +1,27 @@
 import 'dart:async';
 
 import 'package:accordion/accordion.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:learning/Modules/Learn/TabBar/testScreen.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../apis/courseInformation/http_service_courseInformation.dart';
+import '../../../apis/reviews/reviews.dart';
 import '../../../apis/upload_course/add_price_compiler_delete_publish.dart';
+import '../../../chat/firebase/fire_database.dart';
+import '../../../chat/home/chat_home_screen.dart';
 import '../../../models/module_model.dart';
 import '../../../network/local/cache_helper.dart';
 import '../../../shared/constant.dart';
 import 'compiler_webview.dart';
+import 'course_content_screen.dart';
+
 
 class CourseContent extends StatefulWidget {
   const CourseContent({Key? key, required this.courseId});
@@ -26,6 +35,7 @@ class CourseContent extends StatefulWidget {
 class _CourseContentState extends State<CourseContent> with SingleTickerProviderStateMixin   {
   late TabController _tabController;
   HttpServiceCourse httpServiceCourse = HttpServiceCourse();
+  HttpServiceReviews httpServiceReviews = HttpServiceReviews();
   HttpServiceCoursePriceAndPublishAndDeleteAndCompiler httpCourse = HttpServiceCoursePriceAndPublishAndDeleteAndCompiler();
 
 
@@ -35,9 +45,9 @@ class _CourseContentState extends State<CourseContent> with SingleTickerProvider
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    if (_isLoading) {
+
       _getCourse(); // Fetch course data only if _isLoading is true
-    }
+
   }
 
   Future<void> _getCourse() async {
@@ -80,6 +90,26 @@ class _CourseContentState extends State<CourseContent> with SingleTickerProvider
   }
 
   String errorMessage = '';
+
+  Future<void> _createReview(double rating ,String comment) async {
+    try {
+      // Fetch course data only if not already loading
+
+        String? token = CacheHelper.getData(key: 'token');
+         await httpServiceReviews.createReview(
+             data!['_id'], rating,comment,token!);
+        setState(() {
+
+         print('alll is dooooooooooone'); // Set _isLoading to false after data is fetched
+        });
+
+    } catch (e) {
+      print('Error create reviews data: $e');
+      setState(() {
+        _isLoading = false; // Set _isLoading to false in case of error
+      });
+    }
+  }
   @override
   void dispose() {
     _tabController.dispose();
@@ -135,11 +165,8 @@ class _CourseContentState extends State<CourseContent> with SingleTickerProvider
           body:  TabBarView(
             controller: _tabController,
             children: [
-              curriculum(listSections), // Assuming All widget is for the "All" tab
-              Container(
-                color: Colors.redAccent,
-                child: const Icon(Icons.settings),
-              ),
+              CourseContentScreen(courseId: widget.courseId,), // Assuming All widget is for the "All" tab
+              TestScreen(courseId: widget.courseId,),
 
             ],
           ),
@@ -157,6 +184,9 @@ class _CourseContentState extends State<CourseContent> with SingleTickerProvider
     }
   }
   Widget curriculum (List<dynamic> listSections){
+    if (_isLoading) {
+      return Center(child: CircularProgressIndicator());
+    } else {
     return Padding(
       padding: EdgeInsets.all(8.0.r),
       child: Column(
@@ -177,8 +207,27 @@ class _CourseContentState extends State<CourseContent> with SingleTickerProvider
                         ),
                       ),
                       SizedBox(width: 5.w),
-                      IconButton(onPressed: (){},
+                      IconButton(onPressed: (){
+                        String  email =  data!['instructor']['email'] ;
+                        print('email = $email');
+                        if(email.isNotEmpty){
+
+                         print('email =$email');
+                          Get.to(ChatHomeScreen(email:email ,));
+                        }
+
+                      },
                           icon: Icon(Icons.chat)),
+                      Spacer(),
+                      TextButton(onPressed: (){
+                       // Get.to(CompilerWebView(compilerURL: data!['compiler'],));
+                        _showRatingDialog(context);
+                      }, child: Text('Rating',
+                        style: TextStyle(
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.bold
+                        ) ,)),
+                      if(data!['compiler'] != null)
                       Spacer(),
                       if(data!['compiler'] != null)
                         TextButton(onPressed: (){
@@ -187,7 +236,8 @@ class _CourseContentState extends State<CourseContent> with SingleTickerProvider
                         style: TextStyle(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.bold
-                        ) ,))
+                        ) ,)),
+
                     ],
                   ),
                   SizedBox(height: 10.h),
@@ -242,7 +292,7 @@ class _CourseContentState extends State<CourseContent> with SingleTickerProvider
 
         ],
       ),
-    );
+    );}
   }
   Widget modules(dynamic serverData){
     List<ModuleModel> module = ModuleModel.parseModuleFromServer(serverData!);
@@ -287,6 +337,82 @@ class _CourseContentState extends State<CourseContent> with SingleTickerProvider
           )
           ;
         }
+    );
+  }
+
+  double _rating = 0;
+  String _review = '';
+
+  void _showRatingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Rate Us'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              RatingBar.builder(
+                initialRating: _rating,
+                minRating: 1,
+                direction: Axis.horizontal,
+                allowHalfRating: false,
+                itemCount: 5,
+                itemSize: 40,
+                itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                itemBuilder: (context, _) => Icon(
+                  Icons.star,
+                  color: Colors.amber,
+                ),
+                onRatingUpdate: (rating) {
+                  setState(() {
+                    _rating = rating;
+                  });
+                },
+              ),
+              SizedBox(height: 20),
+              TextField(
+                onChanged: (value) {
+                  setState(() {
+                    _review = value;
+                  });
+                },
+                decoration: InputDecoration(
+                  hintText: 'Write your review...',
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 3,
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            GestureDetector(
+              child: Text('Cancel'),
+              onTap: () {
+                setState(() {
+                  _rating = 0;
+                });
+
+                Navigator.of(context).pop();
+              },
+            ),
+            GestureDetector(
+              child: Text('Submit'),
+              onTap: () {
+
+                _createReview(_rating,_review);
+                setState(() {
+                  _rating = 0;
+                });
+                // Here you can handle the submission of rating and review
+                Navigator.of(context).pop();
+              },
+            ),
+
+          ],
+        );
+      },
     );
   }
 }

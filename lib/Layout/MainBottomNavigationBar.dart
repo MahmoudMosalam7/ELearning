@@ -22,7 +22,7 @@ class _HomeLayout extends State<HomeLayout> {
   final List<Widget> _screens = [
     HomeScreen(),
     LearnScreen(),
-    const WishListScreen(),
+     WishListScreen(),
     const AccountScreen(),
   ];
 

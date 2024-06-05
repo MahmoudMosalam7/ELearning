@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:learning/shared/constant.dart';
 
+import '../../../../chat/home/chat_home_screen.dart';
 import 'instructor_dashboard.dart';
 import 'instructors_chats.dart';
 
@@ -15,7 +17,7 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
   int _currentIndex = 0;
   final List<Widget> _instructorScreens = [
     InstructorCourses(),
-    InstructorChats()
+    ChatHomeScreen(email: getData!['data']['email'],)
   ];
   @override
   Widget build(BuildContext context) {

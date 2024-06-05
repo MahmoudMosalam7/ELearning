@@ -1,15 +1,28 @@
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart' as dio; // Import Dio and alias it as 'dio'
 import 'package:image_picker/image_picker.dart';
 
 import '../Modules/Home/listView_category.dart';
 import '../models/section_model.dart';
-//https://dp1fzm8l-3000.uks1.devtunnels.ms yassin
+//https://dp1fzm8l-3000.uks1.devtunnels.ms/ yassin
 //https://qh409mzl-3000.uks1.devtunnels.ms/ nur
 const String baseUrl = 'https://dp1fzm8l-3000.uks1.devtunnels.ms/api';
 Map<String, dynamic>? data;
-
-
+int score = 0;
+Widget buttonWidget({required String text , required VoidCallback onClicked}){
+  return ElevatedButton(onPressed: onClicked, child: Text(text,style:TextStyle(
+      fontSize: 20,
+      color: Colors.white
+  ) ,),
+    style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.blue,
+        padding: EdgeInsets.symmetric(horizontal: 32,vertical: 20)
+    ),
+  );
+}
 List<CategoryData> categoryData = [
   CategoryData(text: 'Development', id: '65ccf45dc5878a651ba20c6b'),
   CategoryData(text: 'Marketing', id: '65ccf46fc5878a651ba20c6f'),

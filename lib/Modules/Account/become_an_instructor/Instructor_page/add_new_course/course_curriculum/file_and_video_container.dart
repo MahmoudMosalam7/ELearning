@@ -9,7 +9,7 @@ class FileAndVideoContainer extends StatefulWidget {
   final Function(int) onEdit;
   final Function(int ) onAdd;
   final Function(int) onDelete;
-  final Function() onDuplicate;
+  final Function(int) onDuplicate;
 
   FileAndVideoContainer({
     required this.index,
@@ -68,9 +68,9 @@ class _FileAndVideoContainerState extends State<FileAndVideoContainer> {
                 },
               ),
               IconButton(
-                icon: Icon(Icons.copy),
+                icon: Icon(Icons.lock_open),
                 onPressed: () {
-                  widget.onDuplicate();
+                  widget.onDuplicate(widget.index);
                 },
               ),
             ],

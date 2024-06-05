@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:learning/Layout/Login_Register_ForgetPassword/Login.dart';
 import 'package:learning/Modules/Account/admin/admin_home.dart';
+import 'package:learning/Modules/Account/qualty.dart';
 import 'package:learning/Modules/Account/setting/setting.dart';
 import 'package:learning/Modules/Account/videoPlay.dart';
 import 'package:learning/TColors.dart';
@@ -86,7 +87,7 @@ class _AccountScreenState extends State<AccountScreen> {
       try{
         bool? token =  await CacheHelper.removeData(key: 'token');
         if(token){
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => Login()));
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Login()));
         }
       }catch(e){
         print('error when sign out = ]]]]]]]]]]]]]$e');
@@ -132,6 +133,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return     Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -232,7 +234,8 @@ class _AccountScreenState extends State<AccountScreen> {
                       ),),
                     MaterialButton(
                       onPressed: (){
-                        Get.to(Download_option());
+                        Navigator.push(context,
+                          MaterialPageRoute(builder: (context)=> Quality()),);
                       },
                       child:
                       Container(
@@ -251,15 +254,15 @@ class _AccountScreenState extends State<AccountScreen> {
 
                     ),
                     SizedBox(height: 1.0,),
-                    MaterialButton(
+          /*          MaterialButton(
                       onPressed: (){
-                        /**************************************** */
+                        *//**************************************** *//*
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>VideoPlay()));
                       },
                       child:
                       Container(
                         width: double.infinity,
-                        child: Row(/******************************************* */
+                        child: Row(*//******************************************* *//*
                           children: [
                             Text("video play back option"
                               ,style: TextStyle(
@@ -271,7 +274,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         ),
                       ),
 
-                    ),
+                    ),*/
                   ],
                 ),
                 Column(
@@ -308,7 +311,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     ),
 
                     SizedBox(height: 1.0,),
-                    MaterialButton(
+                   /* MaterialButton(
                       onPressed: (){},
                       child:
                       Container(
@@ -346,9 +349,9 @@ class _AccountScreenState extends State<AccountScreen> {
                       ),
 
                     ),
-                  ],
+               */   ],
                 ),
-                getData?['data']['roles'] != 'Admin'? Column(
+                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -416,7 +419,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
                     ),
                   ],
-                ):Container(),
+                ),
                 (getData?['data']['roles'] == 'Admin' || getData?['data']['roles'] == 'Instructor')?Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,

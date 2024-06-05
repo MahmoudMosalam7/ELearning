@@ -1,6 +1,7 @@
 
 import 'package:drop_down_list/drop_down_list.dart';
 import 'package:drop_down_list/model/selected_list_item.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -45,11 +46,16 @@ class _AppTextFieldState extends State<AppTextField> {
           ),
         ),
         data: widget.data ?? [],
-        selectedItems: (List<dynamic> selectedList) {
+        selectedItems: (List<dynamic> selectedList) async {
           List<String> list = [];
           for (var item in selectedList) {
             if (item is SelectedListItem) {
               list.add(item.name);
+
+                print('Arabic = ${item.name}');
+                await context.setLocale(Locale('ar'));
+                print('Arabic');
+
               // to take the name of item selected to print it in the status
               widget.textEditingController.text = item.name;
             }

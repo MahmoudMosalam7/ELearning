@@ -252,4 +252,39 @@ class HttpServiceAdmin {
       throw ('Error rejectTransaction: $e');
     }
   }
+  Future< Map<String,dynamic> > findUser(String email, String token) async {
+    try {
+     print('from findUser email = $email');
+     print('from findUser token = $token');
+      final response = await _dio.get(
+        '/v1/users/email/$email',
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+
+      print('from all user = ${response.data}');
+      if (response.statusCode == 200) {
+
+        try{
+          print('save get findUser is done ${response.data['data']['results']} ');
+        }catch(e){
+          print('error when save findUser /');
+        }
+
+        return response.data;
+      } else {
+        // Registration failed
+
+        print('from  findUser error = ${response.data}');
+        throw (' findUser failed: ${response.data}');
+      }
+    } catch (e) {
+      // Handle network or other errors
+
+      print('from  findUser error = ${e}');
+      throw ('Error during findUser: $e');
+    }
+  }
+
+
+
 }

@@ -5,7 +5,9 @@ import 'package:learning/Modules/Account/admin/admin_payment.dart';
 
 import '../../../../apis/user/http_service_get_user_data.dart';
 import 'add_users.dart';
+import 'admin_profits.dart';
 import 'allusers.dart';
+import 'find_user_by_email.dart';
 
 
 class AdminHome extends StatelessWidget {
@@ -65,7 +67,7 @@ class AdminHome extends StatelessWidget {
                 Spacer(),
                 GestureDetector(
                   onTap: (){
-               //     Get.to(CoursesOfInstructor());
+                    Get.to(FindUserByEmail());
                   },
                   child: Card(
                     elevation: 5, // Add elevation for a shadow effect
@@ -83,13 +85,13 @@ class AdminHome extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            Icons.delete,
+                            Icons.search,
                             size: 50.sp,
                             color: Colors.white, // Customize the icon color
                           ),
                           SizedBox(height: 10.h),
                           Text(
-                            'Delete User',
+                            'Find User',
                             style: TextStyle(
                               color: Colors.white, // Customize the text color
                               fontSize: 16.sp,
@@ -188,41 +190,45 @@ class AdminHome extends StatelessWidget {
             SizedBox(height: 20.h,),
             Row(
               children: [
-                Card(
-                  elevation: 5, // Add elevation for a shadow effect
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.0.r), // Adjust the radius for a square shape
-                  ),
-                  child: Container(
-                    width: 140.w,
-                    height: 140.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16.0.r),
-                      color: Color(0xffADA2FF), // Customize the background color
+                GestureDetector(
+                  onTap: (){
+                    Get.to(AdminProfites());},
+                  child: Card(
+                    elevation: 5, // Add elevation for a shadow effect
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16.0.r), // Adjust the radius for a square shape
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.leaderboard,
-                          size: 50.sp,
-                          color: Colors.white, // Customize the icon color
-                        ),
-                        SizedBox(height: 10.h),
-                        Text(
-                          'Profits',
-                          style: TextStyle(
-                            color: Colors.white, // Customize the text color
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                    child: Container(
+                      width: 140.w,
+                      height: 140.h,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16.0.r),
+                        color: Color(0xffADA2FF), // Customize the background color
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.leaderboard,
+                            size: 50.sp,
+                            color: Colors.white, // Customize the icon color
                           ),
-                        ),
-                      ],
+                          SizedBox(height: 10.h),
+                          Text(
+                            'Profits',
+                            style: TextStyle(
+                              color: Colors.white, // Customize the text color
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
                 Spacer(),
-                Card(
+               /* Card(
                   elevation: 5, // Add elevation for a shadow effect
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16.0.r), // Adjust the radius for a square shape
@@ -262,7 +268,7 @@ class AdminHome extends StatelessWidget {
                       ],
                     ),
                   ),
-                ),
+                ),*/
               ],
             ),
           ],

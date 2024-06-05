@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:learning/Modules/Account/become_an_instructor/Instructor_page/add_new_course/basic_information.dart';
 import 'package:learning/Modules/Home/InformationOFCourses/payment_by_method.dart';
 
+import 'add_new_course/add_price_publish.dart';
 import 'add_new_course/advanced_information.dart';
 import 'add_new_course/course_curriculum/course_curriculum.dart';
 
@@ -132,8 +133,7 @@ class UpdateCourse extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: GestureDetector(
                 onTap: () {
-                  // Add your functionality here
-                },
+                  Get.to(AddPriceAndPublish(fromInstructor: true,courseId:courseID));},
                 child: Container(
                   width: double.infinity,// تحديد العرض المطلوب للبطاقة
                   height: 70.h,
@@ -148,7 +148,7 @@ class UpdateCourse extends StatelessWidget {
                         children: [
                           Icon(Icons.payment), // إضافة الأيقونة في البداية
                           SizedBox(width: 10.w), // إضافة مسافة بين الأيقونة والنص
-                          Text("InstaPay",
+                          Text("Price OR Spread Sheet",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18.sp

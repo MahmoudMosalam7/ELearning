@@ -11,7 +11,7 @@ class VideoPreview extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: Center(
-        child: VideoTrailer(videoUrl:  videoUrl,),
+        child: VideoPlayerScreen(videoUrl:  videoUrl,),
       ),
     );
   }

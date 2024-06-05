@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -10,6 +11,8 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../apis/courseInformation/http_service_courseInformation.dart';
 import '../../apis/user/http_service_get_user_data.dart';
+import '../../chat/firebase/fire_auth.dart';
+import '../../chat/home/chat_home_screen.dart';
 import '../../network/local/cache_helper.dart';
 import '../../shared/constant.dart';
 import '../../shared/constant.dart';
@@ -53,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
       });
 
       // Print or use the fetched data as needed
-      print('Fetched Data: $getData');
+      print('Fetched Data1: $getData');
     } catch (e) {
       // Handle errors, if any
       print('Error fetching data: $e');
@@ -71,9 +74,19 @@ class _HomeScreenState extends State<HomeScreen> {
         im = getData?['data']['profileImage'];
         print('im = $im');
       });
-
+      await FirebaseAuth.instance.currentUser!.updateDisplayName(data['data']['name'])
+          .then((value) {
+        // تحديث اسم العرض ثم إعادة تحميل بيانات المستخدم
+        FirebaseAuth.instance.currentUser!.reload().then((_) {
+          // التحقق من تحديث اسم العرض بنجاح
+          if (FirebaseAuth.instance.currentUser!.displayName == data['data']['name']) {
+            // إنشاء ملف تعريف المستخدم
+            FireAuth.createUser();
+          }
+        });
+      });
       // Print or use the fetched data as needed
-      print('Fetched Data: $getData');
+      print('Fetched Data2: $getData');
     } catch (e) {
       // Handle errors, if any
       print('Error fetching data: $e');
@@ -226,13 +239,14 @@ class _HomeScreenState extends State<HomeScreen> {
               radius: 15.0,
               backgroundColor: Colors.grey,
               child: Icon(
-                Icons.notification_important,
+                Icons.chat,
                 size: 20.0,
                 color:darkMode! ?Colors.white:Colors.black,
               ),
             ),
             onPressed: (){
              /* print()*/
+              Get.to(ChatHomeScreen(email: getData!['data']['email'],));
             },
           ),
           IconButton(

@@ -10,6 +10,7 @@ import '../../../../apis/user/http_service_get_user_data.dart';
 import '../../../../network/local/cache_helper.dart';
 import 'add_new_course/basic_information.dart';
 import 'coursesOFInstructor.dart';
+import 'instructor_profites.dart';
 
 
 class InstructorCourses extends StatelessWidget {
@@ -225,84 +226,89 @@ class InstructorCourses extends StatelessWidget {
               ],
             ),
             SizedBox(height: 20.h,),
-            Row(
-              children: [
-                Card(
-                  elevation: 5, // Add elevation for a shadow effect
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.0.r), // Adjust the radius for a square shape
-                  ),
-                  child: Container(
-                    width: 140.w,
-                    height: 140.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16.0.r),
-                      color: Colors.blueGrey, // Customize the background color
+            GestureDetector(
+              onTap: (){
+                Get.to(InstructorProfites());
+              },
+              child: Row(
+                children: [
+                  Card(
+                    elevation: 5, // Add elevation for a shadow effect
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16.0.r), // Adjust the radius for a square shape
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.leaderboard,
-                          size: 50.sp,
-                          color: Colors.white, // Customize the icon color
-                        ),
-                        SizedBox(height: 10.h),
-                        Text(
-                          'Profits',
-                          style: TextStyle(
-                            color: Colors.white, // Customize the text color
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                    child: Container(
+                      width: 140.w,
+                      height: 140.h,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16.0.r),
+                        color: Colors.blueGrey, // Customize the background color
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.leaderboard,
+                            size: 50.sp,
+                            color: Colors.white, // Customize the icon color
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Spacer(),
-                Card(
-                  elevation: 5, // Add elevation for a shadow effect
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.0.r), // Adjust the radius for a square shape
-                  ),
-                  child: Container(
-                    width: 140.w,
-                    height: 140.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16.0.r),
-                      color: Color(0xffADA2FF), // Customize the background color
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.star,
-                          size: 50.sp,
-                          color: Colors.yellowAccent, // Customize the icon color
-                        ),
-                        SizedBox(height: 10.h),
-                        Text(
-                          '4.8',
-                          style: TextStyle(
-                            color: Colors.white, // Customize the text color
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.bold,
+                          SizedBox(height: 10.h),
+                          Text(
+                            'Profits',
+                            style: TextStyle(
+                              color: Colors.white, // Customize the text color
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 10.h),
-                        Text(
-                          'Courses Rateing',
-                          style: TextStyle(
-                            color: Color(0xFFEFECEC), // Customize the text color
-                            fontSize: 12.sp,
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  Spacer(),
+                  Card(
+                    elevation: 5, // Add elevation for a shadow effect
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16.0.r), // Adjust the radius for a square shape
+                    ),
+                    child: Container(
+                      width: 140.w,
+                      height: 140.h,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16.0.r),
+                        color: Color(0xffADA2FF), // Customize the background color
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.star,
+                            size: 50.sp,
+                            color: Colors.yellowAccent, // Customize the icon color
+                          ),
+                          SizedBox(height: 10.h),
+                          Text(
+                            '4.8',
+                            style: TextStyle(
+                              color: Colors.white, // Customize the text color
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 10.h),
+                          Text(
+                            'Courses Rateing',
+                            style: TextStyle(
+                              color: Color(0xFFEFECEC), // Customize the text color
+                              fontSize: 12.sp,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

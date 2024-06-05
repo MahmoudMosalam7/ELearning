@@ -1,22 +1,31 @@
 import 'dart:async';
 
 import 'package:accordion/accordion.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:learning/Modules/Home/InformationOFCourses/payment.dart';
+import 'package:learning/Modules/Home/InformationOFCourses/review_screen.dart';
 import 'package:learning/Modules/Home/InformationOFCourses/select_method_of_payment.dart';
 import 'package:learning/Modules/Home/InformationOFCourses/video_preview.dart';
+import 'package:learning/Modules/Home/InformationOFCourses/video_screen.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../TColors.dart';
 import '../../../apis/courseInformation/http_service_courseInformation.dart';
+import '../../../apis/update_instructor/http_service_courses.dart';
 import '../../../apis/upload_course/add_price_compiler_delete_publish.dart';
+import '../../../models/listView_Courses.dart';
 import '../../../models/module_model.dart';
+import '../../../models/review_model.dart';
 import '../../../network/local/cache_helper.dart';
 import '../../../shared/constant.dart';
 import '../../Account/become_an_instructor/Instructor_page/update_course_information.dart';
+import '../../Account/videoPlay.dart';
+import '../Product.dart';
+import 'instructor_information.dart';
 
 class CourseInformation extends StatefulWidget {
   const CourseInformation({Key? key, required this.courseId, required this.fromInstructor});
@@ -29,10 +38,187 @@ class CourseInformation extends StatefulWidget {
 
 class _CourseInformationState extends State<CourseInformation>  {
   HttpServiceCourse httpServiceCourse = HttpServiceCourse();
+  HttpServiceCoursesOfInstructor httpServiceCoursesOfInstructor =HttpServiceCoursesOfInstructor();
   HttpServiceCoursePriceAndPublishAndDeleteAndCompiler httpCourse = HttpServiceCoursePriceAndPublishAndDeleteAndCompiler();
+  Future<void> _publishCourse() async {
+    try {
+      // Fetch course data only if not already loading
+      String id = CacheHelper.getData(key: 'courseId');
+      if(widget.fromInstructor){
+        id = widget.courseId;
+        print('widget.fromInstructor id = $id');
+      }
+      print('id = $id');
+      await httpCourse.publishCourse(
+          CacheHelper.getData(key: 'token'),
+          id);
+
+      errorMessage = "";
+      Fluttertoast.showToast(
+        msg: "add publishCourse Success",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 5,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+
+    } catch (e) {
+      print('Error publishCourse : $e');
+      setState(() {
+        errorMessage = 'Error: $e';
+        if (errorMessage.contains('422')) {
+          errorMessage = "Check your Emails link !";
+        } else {
+          errorMessage = "Unexpected Error!";
+        }
+      });
+      Fluttertoast.showToast(
+        msg: errorMessage,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 5,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
+  }
 
 
   bool _isLoading = true;
+  late Map<String,dynamic> serverData ;
+  String errorMessage = '';
+
+
+  List<Product> products = [];
+  List<ReviewModel> reviews = [];
+  void _allCoursesByCategory(String categoryId) async {
+    // Reset error message and loading state
+    setState(() {
+      errorMessage = '';
+     _isLoading = false;
+    });
+
+    try {
+      // Add your login logic here, e.g., make API call
+      serverData = await httpServiceCourse.allCoursesByCategories(
+          CacheHelper.getData(key: 'token'),
+          categoryId
+      );
+      _isLoading = false;
+      print('get all course by category successful! $serverData');
+
+      if (serverData != null) {
+        print('serverdata from category = ${Product.parseProductsFromServer(serverData)}');
+        products = Product.parseProductsFromServer(serverData);
+        print('Productshello: $products');
+      } else {
+        throw Exception('Server data is null');
+      }
+    } catch (e) {
+      // Handle validation errors or network errors
+      setState(() {
+        errorMessage = 'Error: $e';
+        if (errorMessage.contains('422')) {
+          // Your code here
+          errorMessage ="Valdition Error!";
+        }
+        else if (errorMessage.contains('401')) {
+          // Your code here
+          errorMessage =" unauthorized access !";
+        }
+        else if (errorMessage.contains('500')) {
+          // Your code here
+          errorMessage =" Server Not Available Now !";
+        }
+        else{
+          errorMessage ="Unexpected Error!";
+        }
+        Fluttertoast.showToast(
+          msg: "$errorMessage",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+
+      });
+    } finally {
+      // Update loading state
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+  String codeOfCoupon = '';
+  void _makeCoupon() async {
+    // Reset error message and loading state
+    setState(() {
+      errorMessage = '';
+      _isLoading = false;
+    });
+
+    try {
+      String exp = _exContoller.text;
+      exp+='T21:00:00';
+      // Add your login logic here, e.g., make API call
+      String code = await httpServiceCoursesOfInstructor.makeCoupon(
+        exp,
+          _discountContoller.text,
+          _maximumUserContoller.text,
+        data!['_id'],
+        CacheHelper.getData(key: 'token'),
+      );
+      _isLoading = false;
+      print('make coupon successful! $code');
+      setState(() {
+        print('add cob bef = $isAddCoubon');
+        isAddCoubon = !isAddCoubon;
+        print('add cob aft = $isAddCoubon');
+        codeOfCoupon = code;
+      });
+
+    } catch (e) {
+      // Handle validation errors or network errors
+      setState(() {
+        errorMessage = 'Error: $e';
+        if (errorMessage.contains('422')) {
+          // Your code here
+          errorMessage ="Valdition Error!";
+        }
+        else if (errorMessage.contains('401')) {
+          // Your code here
+          errorMessage =" unauthorized access !";
+        }
+        else if (errorMessage.contains('500')) {
+          // Your code here
+          errorMessage =" Server Not Available Now !";
+        }
+        else{
+          errorMessage ="Unexpected Error!";
+        }
+        Fluttertoast.showToast(
+          msg: "$errorMessage",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+
+      });
+    } finally {
+      // Update loading state
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -50,11 +236,56 @@ class _CourseInformationState extends State<CourseInformation>  {
         Map<String, dynamic> courseData = await httpServiceCourse.getCourse(widget.courseId, token!);
         setState(() {
           data = courseData['data']['results'];
+          print('drrrrrrrrrrrrrrro = ${ courseData['data']['results']}');
+          reviews = ReviewModel.parseReviewsFromServer(courseData['data']['results']);
+          print('rrrrrrrrrrrrrrrrrrrrrrrviewa =$reviews ');
+
+
           _isLoading = false; // Set _isLoading to false after data is fetched
         });
-      }
+        _allCoursesByCategory(courseData['data']['results']['category']['_id']);
+         }
     } catch (e) {
       print('Error fetching course data: $e');
+      setState(() {
+        _isLoading = false; // Set _isLoading to false in case of error
+      });
+    }
+  }
+  Future<void> _addAndRemoveCourseFromWishList() async {
+    try {
+      // Fetch course data only if not already loading
+
+        String? token = CacheHelper.getData(key: 'token');
+        print('data = ${data!['_id']}');
+        Map<String, dynamic> courseData = await httpServiceCourse.addAndRemoveCourseFromWishList(data!['_id'], token!);
+        setState(() {
+
+           if(courseData['data'] !=null){
+             Fluttertoast.showToast(
+               msg: " Course add to Wishlist",
+               toastLength: Toast.LENGTH_SHORT,
+               gravity: ToastGravity.BOTTOM,
+               timeInSecForIosWeb: 5,
+               backgroundColor: Colors.green,
+               textColor: Colors.white,
+               fontSize: 16.0,
+             );
+           }else{
+             Fluttertoast.showToast(
+               msg: " Course removed from Wishlist",
+               toastLength: Toast.LENGTH_SHORT,
+               gravity: ToastGravity.BOTTOM,
+               timeInSecForIosWeb: 5,
+               backgroundColor: Colors.green,
+               textColor: Colors.white,
+               fontSize: 16.0,
+             );
+           }
+          // Set _isLoading to false after data is fetched
+        });
+    } catch (e) {
+      print('Error add or delete  course from wislist: $e');
       setState(() {
         _isLoading = false; // Set _isLoading to false in case of error
       });
@@ -81,7 +312,6 @@ class _CourseInformationState extends State<CourseInformation>  {
     }
   }
 
- String errorMessage = '';
   Future<void> _deleteCourse() async {
     try {
       // Fetch course data only if not already loading
@@ -124,16 +354,14 @@ class _CourseInformationState extends State<CourseInformation>  {
       );
     }
   }
-
+  bool isAddCoubon = false;
   @override
   Widget build(BuildContext context) {
 
     print("hellllllllllllllllllllllllllllllllo1");
     if (data == null || data!.isEmpty) {
-      _getCourse(); // Fetch course data only if data is null or empty
-    }print("hellllllllllllllllllllllllllllllllo2");
-    print("hellllllllllllllllllllllllllllllllo${data?['videoTrailer']}");
-
+      //_getCourse(); // Fetch course data only if data is null or empty
+    }
        // Ensure that super.build is called
 
     if (_isLoading) {
@@ -145,6 +373,7 @@ class _CourseInformationState extends State<CourseInformation>  {
       );
     } else {
       if (data != null && data!.isNotEmpty) {
+        List<dynamic?> reve =  data!['reviews'];
         String videoURL = 'https://youtube.com/shorts/r9BGpTQzTjI?si=PRUUCiCHLPei7vIU' ;
         if(data?['videoTrailer'] != null){
           videoURL = data?['videoTrailer'];
@@ -189,7 +418,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        VideoTrailer(videoUrl: videoURL,),
+                        VideoPlayerScreen(videoUrl: videoURL,),
                         SizedBox(height: 20.h),
                         Text('${data!['title']}',
                           style: TextStyle(
@@ -229,10 +458,15 @@ class _CourseInformationState extends State<CourseInformation>  {
                           children: [
                             SizedBox(width: 5.w),
                             const Text('Created by'),
-                            Text(' ${data!['instructor']['name']}',
+                            TextButton(
+                              child: Text(' ${data!['instructor']['name']}',
                               style: const TextStyle(
                                   color: Colors.blue
-                              ),
+                              )), onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (ctx){
+                                  return ProfilePage(id: data!['instructor']['_id'],);
+                                }));
+                            },
                             ),
                             SizedBox(width: 5.w),
                           ],
@@ -253,26 +487,56 @@ class _CourseInformationState extends State<CourseInformation>  {
                         Row(
                           children: [
                             const Spacer(),
-                            Container(
-                              width: 160,
-                              height: 40,
-                              decoration: const BoxDecoration(
-                                  color: Colors.green
+                            GestureDetector(
+                              onTap: (){
+                                print('hhhhhhhhhhhhhhhhhhelo');
+                                _addAndRemoveCourseFromWishList();
+                              },
+                              child: Container(
+                                width: 160.w,
+                                height: 40.h,
+                                decoration: const BoxDecoration(
+                                    color: Colors.green
+                                ),
+                                child: const Center(child: Text('Add to wishlist')),
                               ),
-                              child: const Center(child: Text('Add to wishlist')),
                             ),
                             SizedBox (width: 2.w,),
-                            Container(
-                              width: 160,
-                              height: 40,
-                              decoration: const BoxDecoration(
-                                  color: Colors.green
-                              ),
-                              child: const Center(child: Text('Add to cart')),
-                            ),
+                            GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            if(widget.fromInstructor){
+
+                            _showBottomSheet(context);
+                            }else{
+                              Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                                return SelectPayment(courseID : widget.courseId,
+                                  coursePrice: ' ${data!['price']['amount']}',);
+                              }));
+                            }
+                          });
+                        },
+                        child: Container(
+                          width: 160.w,
+                          height: 40.h,
+                          decoration: const BoxDecoration(
+                            color: Colors.green,
+                          ),
+                          child: widget.fromInstructor? Center(child: Text('Make Coupon')):Center(child: Text('Add Coupon')),
+                        ),
+                      ),
                             const Spacer(),
                           ],
                         ),
+                        if (isAddCoubon)
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Row(
+                              children: [
+                                       Text('your coupon is : $codeOfCoupon'),
+                              ],
+                            ),
+                          ),
                         SizedBox(height: 20.h),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -455,8 +719,172 @@ class _CourseInformationState extends State<CourseInformation>  {
                             ),
 
                           ],
+                        ), // Add other sections/widgets as needed
+                        SizedBox(height: 10.h),
+                        if(reve.isNotEmpty )
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            SizedBox(width: 5.w),
+                            Text('Reviews',
+                              style: TextStyle(
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            SizedBox(width: 5.w),
+                          ],
                         ),
-                        // Add other sections/widgets as needed
+                        if(reve.isNotEmpty)
+                        SizedBox(height: 10.h),
+                        if(reve.isNotEmpty)
+                        Container(
+                      height: reviews.length > 3 ? 360.0:200.0,
+
+                      child:ListView.separated(
+                          itemCount: reviews.length,
+                          scrollDirection: Axis.vertical,
+
+                          itemBuilder: (context,index){
+                            //Product prod = products[index];
+
+                            ReviewModel review = reviews[index];
+                            //final buttonData = categoryData[index];
+                            return  Card(
+                              margin: EdgeInsets.all(10),
+                              elevation: 5,
+                              child: Padding(
+                                padding: EdgeInsets.all(15),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Row(
+                                      children: <Widget>[
+                                        CircleAvatar(
+                                          backgroundImage: NetworkImage(review.imageUrl),
+                                          radius: 20,
+                                        ),
+                                        SizedBox(width: 10),
+                                        Text(
+                                          review.name,
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Spacer(),
+                                        for (int i = 0; i <(review.rating).round() ; i++)
+                                          const Icon(Icons.star, color: Colors.yellow),
+                                        for (int i = (review.rating).round(); i < 5; i++)
+                                          const Icon(Icons.star_border, color: Colors.yellow),
+                                        Text(
+                                          '${review.rating}',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10),
+                                    Text(
+                                      review.comment,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                            ;
+                          },
+
+                          separatorBuilder: (context,  index) =>SizedBox(
+                            width: 20.0,
+                          ),
+                        )),
+                        if(reve.isNotEmpty)
+                        SizedBox(height: 10.h),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            SizedBox(width: 5.w),
+                            Text('suggestion',
+                              style: TextStyle(
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            SizedBox(width: 5.w),
+                          ],
+                        ),
+                        SizedBox(height: 10.h),
+                        Container(
+                          height: 360.0,
+                          child: ListView.separated(
+                            itemCount: products.length,
+                            scrollDirection: Axis.horizontal,
+
+                            itemBuilder: (context,index){
+                              Product prod = products[index];
+                              //final buttonData = categoryData[index];
+                              return InkWell(
+                                onTap: () {
+                                  // Handle the tap event here
+                                  print('heloo prod = ${prod.id}');
+                                 Navigator.push(context, MaterialPageRoute(builder: (ctx){
+                                   return   CourseInformation(courseId: prod.id,fromInstructor: false,);
+                                     //Get.to(CourseInformation(courseId: prod.id,fromInstructor: false,));
+
+                                 }));
+                                },
+                                child: /*ProductListItem(product: product)*/Container(
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      mainAxisAlignment:MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Image.network(prod.imageURL,width:300 ,)
+                                       , SizedBox(height: 5.h)
+                                        ,Text(
+                                          prod.title,
+                                          style: TextStyle(
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        SizedBox(height: 5.h),
+                                        Row(
+                                          children: [
+                                            Text('${prod.price['currency']} ${prod.price['amount']}'
+                                            ),
+                                       SizedBox(width: 80.w,),
+                                       //    Spacer(),
+                                           for (int i = 0; i < prod.rating.round(); i++)
+                                              Icon(Icons.star, color: Colors.yellow),
+                                           for (int i = prod.rating.round(); i < 5; i++)
+                                              Icon(Icons.star_border, color: Colors.yellow),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+
+                            separatorBuilder: (context,  index) =>SizedBox(
+                              width: 20.0,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 50.h),
+                        /*
+                       if(data!['category']!=null)
+                         suggestion(data!['category'])*/
                       ],
                     ),
                   ),
@@ -503,6 +931,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                         ),
                         onPressed: () {
                              print('from courseInfo ${data}');
+                             _publishCourse();
                           },
                       ),
                     )
@@ -520,11 +949,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                                 fontSize: 16.h,
                                 fontWeight: FontWeight.bold),
                           ),
-                          const Text(
-                            "EGP 999",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          )
-                        ],
+                                ],
                       ),
                       Spacer(),
                       Container(
@@ -616,121 +1041,247 @@ class _CourseInformationState extends State<CourseInformation>  {
         }
     );
   }
+  Widget suggestion(String categoryId){
+    print('category id = $categoryId');
+    //_allCoursesByCategory(categoryId);
+    //print('category id = $products');
+    return Container(
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: 5,
+        itemBuilder: (context, index) {
+          final product = products[index];
+          return InkWell(
+            onTap: () {
+              // Handle the tap event here
+
+             // Get.to(CourseInformation(courseId: products[index].id,fromInstructor: false,));
+
+            },
+            child: /*ProductListItem(product: product)*/Container(
+              child: Text('mosalam'),
+            ),
+          );
+        },
+        separatorBuilder: (context, index) => Divider(),
+      ),
+    );
+  }
+
+  final _exContoller = TextEditingController();
+  final _discountContoller = TextEditingController();
+  final _maximumUserContoller = TextEditingController();
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  void _showBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          // You can customize the content of your bottom sheet here
+          padding: EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                ListTile(
+                  title: Text('Make Coupon!'
+                    ,style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onTap: () {
+                    // Handle share action
+                    Navigator.pop(context); // Close the bottom sheet
+                  },
+                ),
+                Expanded(
+                  child: TextFormField(
+                    controller: _exContoller,
+                    decoration: const InputDecoration(
+                      labelText: 'Enter Ex YYYY-mm-dd',
+                      labelStyle: TextStyle(
+                        fontSize: 25.0,
+                      ),
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(
+                        Icons.date_range,
+                      ),
+                    ),
+                    textAlign: TextAlign.start,
+                    keyboardType: TextInputType.datetime,
+                    onFieldSubmitted: (value) {},
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Expire is required';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: TextFormField(
+                    controller: _discountContoller,
+                    decoration: const InputDecoration(
+                      labelText: 'Percentage of Discount 1-100',
+                      labelStyle: TextStyle(
+                        fontSize: 25.0,
+                      ),
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(
+                        Icons.percent,
+                      ),
+                    ),
+                    textAlign: TextAlign.start,
+                    keyboardType: TextInputType.number,
+                    onFieldSubmitted: (value) {},
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Discount is required';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: TextFormField(
+                    controller: _maximumUserContoller,
+                    decoration: const InputDecoration(
+                      labelText: 'Enter Max number of users',
+                      labelStyle: TextStyle(
+                        fontSize: 25.0,
+                      ),
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(
+                        Icons.numbers,
+                      ),
+                    ),
+                    textAlign: TextAlign.start,
+                    keyboardType: TextInputType.number,
+                    onFieldSubmitted: (value) {},
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Max is required';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    if(_formKey.currentState!.validate()){
+                      _makeCoupon();
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: Container(
+                    width: 240.w,
+                    height: 40.h,
+                    decoration: const BoxDecoration(
+                      color: Colors.green,
+                    ),
+                    child: const Center(child: Text('Apply')),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 }
 
-class VideoTrailer extends StatefulWidget {
-  const VideoTrailer({Key? key, required this.videoUrl});
+class VideoPlayerScreen extends StatefulWidget {
   final String videoUrl;
 
+  const VideoPlayerScreen({Key? key, required this.videoUrl}) : super(key: key);
+
   @override
-  State<VideoTrailer> createState() => _VideoTrailerState();
+  _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
 }
 
-class _VideoTrailerState extends State<VideoTrailer> {
+class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   late VideoPlayerController _controller;
-  late Timer _timer;
-  double _progressValue = 0.0;
+  bool _isPlaying = false;
+  bool _isVertical = false;
 
   @override
   void initState() {
     super.initState();
-    _initializeController();
-  }
-
-  void _initializeController() {
-    _controller = VideoPlayerController.network(
-      widget.videoUrl.isNotEmpty
-          ? widget.videoUrl
-          : 'https://youtube.com/shorts/4Es8_jiJ9Gc?si=Xomja1pU5IFb7GRb',
-    )..initialize().then((_) {
-      setState(() {});
-    });
-
-    _controller.addListener(() {
-      if (!_controller.value.isPlaying &&
-          _controller.value.isInitialized &&
-          (_controller.value.position == _controller.value.duration)) {
-        _controller.pause();
-        _controller.seekTo(Duration.zero);
-      }
-      setState(() {
-        _progressValue = _controller.value.isInitialized
-            ? _controller.value.position.inMilliseconds /
-            _controller.value.duration.inMilliseconds
-            : 0.0;
+    _controller = VideoPlayerController.network(widget.videoUrl)
+      ..initialize().then((_) {
+        setState(() {});
       });
-    });
-
-    _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
-      setState(() {
-        _progressValue = _controller.value.isInitialized
-            ? _controller.value.position.inMilliseconds /
-            _controller.value.duration.inMilliseconds
-            : 0.0;
-      });
-    });
   }
 
   @override
   void dispose() {
     _controller.dispose();
-    _timer.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    print('from videooooooooooooooootrailer');
     return _controller.value.isInitialized
         ? Center(
-      child: SizedBox(
-        width: double.infinity,
-        height: 200,
+      child: AspectRatio(
+        aspectRatio: _controller.value.aspectRatio,
         child: Stack(
-          alignment: Alignment.center,
+          alignment: Alignment.bottomCenter,
           children: [
-            SizedBox(
-              width: double.infinity,
-              child: AspectRatio(
-                aspectRatio: 16 / 9,
-                child: VideoPlayer(_controller),
-              ),
+            RotatedBox(
+              quarterTurns: _isVertical ? 3 : 0,
+              child: VideoPlayer(_controller),
             ),
-            Positioned(
-              bottom: 10,
-              left: 0,
-              right: 0,
-              child: LinearProgressIndicator(
-                value: _progressValue,
-                valueColor:
-                const AlwaysStoppedAnimation<Color>(Colors.blue),
-                backgroundColor: Colors.grey,
-              ),
-            ),
-            Positioned.fill(
-              child: Center(
-                child: IconButton(
-                  icon: Icon(
-                    _controller.value.isPlaying
-                        ? Icons.pause
-                        : Icons.play_arrow,
-                    color: Colors.white,
-                  ),
-                  iconSize: 50,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
                   onPressed: () {
                     setState(() {
-                      _controller.value.isPlaying
-                          ? _controller.pause()
-                          : _controller.play();
+                      _isPlaying ? _controller.pause() : _controller.play();
+                      _isPlaying = !_isPlaying;
                     });
                   },
                 ),
-              ),
+                IconButton(
+                  icon: Icon(Icons.fast_rewind),
+                  onPressed: () {
+                    _controller.seekTo(_controller.value.position - Duration(seconds: 10));
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.fast_forward),
+                  onPressed: () {
+                    _controller.seekTo(_controller.value.position + Duration(seconds: 10));
+                  },
+                ),
+                IconButton(
+                  icon: Icon(_isVertical ? Icons.rotate_90_degrees_ccw : Icons.rotate_90_degrees_cw),
+                  onPressed: () {
+                    _controller.pause();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => VideoPlayFullScreenRotated(videoUrl: widget.videoUrl),
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ],
         ),
       ),
     )
-        : Container();
+        : Center(
+      child: CircularProgressIndicator(),
+    );
   }
+
 }

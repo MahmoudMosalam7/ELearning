@@ -1,4 +1,5 @@
 import 'package:drop_down_list/model/selected_list_item.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -78,6 +79,12 @@ class _SignUpState extends State<SignUp> {
         textColor: Colors.white,
         fontSize: 16.0,
       );
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emailContoller.text,
+          password:  _passwordContoller.text).then((value) => print("ok")).
+      onError((error, stackTrace) => ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(error.toString())) ));
+
       Navigator.of(context).pushReplacement(MaterialPageRoute
         (builder: (context)=>Login()));
       print('Registration successful!');

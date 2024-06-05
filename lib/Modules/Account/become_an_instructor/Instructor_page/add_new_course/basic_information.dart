@@ -205,7 +205,7 @@ class _BasicInformationState extends State<BasicInformation> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return ' Title is required';
+                      return 'Title is required';
                     }
                     return null;
                   },
@@ -257,7 +257,7 @@ class _BasicInformationState extends State<BasicInformation> {
                   data: [
                     SelectedListItem(name:'Arabic' ),
                     SelectedListItem(name:'English' ),
-                    SelectedListItem(name:'Italy' ),
+                    SelectedListItem(name:'Japan' ),
                     SelectedListItem(name:'Germany' ),
                     SelectedListItem(name:'France' ),
                   ],

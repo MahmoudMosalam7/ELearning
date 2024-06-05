@@ -208,7 +208,70 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
     }
 
   }
+  void _isModuleFreeFromServer(String id) async {
+    // Reset error message and loading state
+    setState(() {
+      errorMessage = '';
+      isLoading = true;
+    });
 
+    try {
+
+      // Add your login logic here, e.g., make API call
+    bool isFree =    await httpServiceSection.setModuleFreeOrNot(
+          id,
+          CacheHelper.getData(key: 'token')
+      );
+     if(isFree){
+       Fluttertoast.showToast(
+         msg: "This Module isFree",
+         toastLength: Toast.LENGTH_SHORT,
+         gravity: ToastGravity.BOTTOM,
+         timeInSecForIosWeb: 5,
+         backgroundColor: Colors.green,
+         textColor: Colors.white,
+         fontSize: 16.0,
+       );
+     }else{
+       Fluttertoast.showToast(
+         msg: "This Module isNotFree",
+         toastLength: Toast.LENGTH_SHORT,
+         gravity: ToastGravity.BOTTOM,
+         timeInSecForIosWeb: 5,
+         backgroundColor: Colors.green,
+         textColor: Colors.white,
+         fontSize: 16.0,
+       );
+     }
+    } catch (e) {
+      // Handle validation errors or network errors
+      setState(() {
+        errorMessage = 'Error: $e';
+        if (errorMessage.contains('404')) {
+          // Your code here
+          errorMessage ="Email Not Found!";
+        }else{
+          errorMessage ="Unexpected Error!";
+        }
+
+        Fluttertoast.showToast(
+          msg: errorMessage,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+
+      });
+    } finally {
+      // Update loading state
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -259,7 +322,7 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
                 onEdit: _editViedoName,
                 onAdd: _addVideo,
                 onDelete: _deleteFileContainer,
-                onDuplicate: _duplicateFileContainer,
+                onDuplicate: _isModuleFree,
               ),
             );
           },
@@ -346,6 +409,17 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
 
         containerCount =sections[widget.index].videos.length ;
       });
+    });
+  }
+  void _isModuleFree(int index) {
+    setState(() {
+      late String? _id;
+      if(widget.fromUpdataCirc)
+        _id = sections[widget.index].videos[index].idServ;
+      else _id = fileId['modules'][index];
+      print('from delte file = $_id');
+        _isModuleFreeFromServer(_id!);
+
     });
   }
 

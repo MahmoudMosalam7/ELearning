@@ -12,13 +12,13 @@ import '../../../apis/courseInformation/http_service_courseInformation.dart';
 import '../../../network/local/cache_helper.dart';
 
 class PaymentByMethod extends StatefulWidget {
-   PaymentByMethod({super.key,required this.courseId,required this.coursePrice,
-     required this.numberOFMethod
+   PaymentByMethod({required this.courseId,required this.coursePrice,
+     required this.numberOFMethod,this.coupon
    });
   String courseId;
   String coursePrice;
   String numberOFMethod;
-
+  String? coupon;
   @override
   State<PaymentByMethod> createState() => _PaymentByMethodState();
 }
@@ -107,134 +107,136 @@ class _PaymentByMethodState extends State<PaymentByMethod> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Price of Course : ${widget.coursePrice}'),
-            SizedBox(height: 10.h,),
-            Text('Send on This Number : ${widget.numberOFMethod}'),
-            SizedBox(height: 10.h,),
-            Text('Enter the Sender Phone : '),
-            SizedBox(height: 10.h,),
-            Form(child: Column(
-              key: _formKey,
-              children: [
-                TextFormField(
-                  controller: _phoneContoller,
-                  decoration: const InputDecoration(
-                    labelText:'Sender Phone Number',
-                    labelStyle: TextStyle(
-                      fontSize: 25.0,
-                    ),
-                    prefixIcon: Icon(
-                      Icons.phone,
-                    ),
-                    border: OutlineInputBorder(),
-                  ),
-                  textAlign: TextAlign.start,
-                  keyboardType: TextInputType.phone,
-                  onFieldSubmitted: (value){
-                  },
-
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Phone is required';
-                    }
-                    return null;
-                  },
-
-                ),
-              ],
-            )),
-            SizedBox(height: 10.h),
-            Center(
-              child: Stack(
-                alignment: AlignmentDirectional.bottomEnd,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Price of Course : ${widget.coursePrice}'),
+              SizedBox(height: 10.h,),
+              Text('Send on This Number : ${widget.numberOFMethod}'),
+              SizedBox(height: 10.h,),
+              Text('Enter the Sender Phone : '),
+              SizedBox(height: 10.h,),
+              Form(child: Column(
+                key: _formKey,
                 children: [
-                  Container(
-                    width: double.infinity.w, // Set width to be twice the radius
-                    height: 170.0.h, // Set height to be twice the radius
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.0), // Adjust the borderRadius as needed
-                      color: Colors.green,
-                    ),
-                    child: _selectedImage != null
-                        ? ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
-                      child: Image.file(
-                        File(_selectedImage!.files.single.path!) ,
-                        fit: BoxFit.cover,
+                  TextFormField(
+                    controller: _phoneContoller,
+                    decoration: const InputDecoration(
+                      labelText:'Sender Phone Number',
+                      labelStyle: TextStyle(
+                        fontSize: 25.0,
                       ),
-                    )
-                        : Center(
-                      child: Icon(
-                        Icons.image,
-                        size: 70.sp,
-                        color: Colors.white,
+                      prefixIcon: Icon(
+                        Icons.phone,
                       ),
+                      border: OutlineInputBorder(),
                     ),
-                  ),
-
-                  GestureDetector(
-                    onTap: () {
-                      _showBottomSheet(context);
-                      print("Second CircleAvatar clicked!");
+                    textAlign: TextAlign.start,
+                    keyboardType: TextInputType.phone,
+                    onFieldSubmitted: (value){
                     },
-                    child: CircleAvatar(
-                      radius: 18.0.r,
-                      backgroundColor: Colors.grey[300],
-                      child: Icon(
-                        Icons.upload,
-                        color: Colors.black,
-                      ),
-                    ),
+          
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Phone is required';
+                      }
+                      return null;
+                    },
+          
                   ),
                 ],
-              ),
-            ),
-            SizedBox(height: 10.h),
-            Text('Upload Image of Payment Receipt  ',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15.0.sp
-              ),
-            ),
-            SizedBox(height: 10.h),
-            MaterialButton(
-              child: const Text(
-                'Enroll Now',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20.0,
+              )),
+              SizedBox(height: 10.h),
+              Center(
+                child: Stack(
+                  alignment: AlignmentDirectional.bottomEnd,
+                  children: [
+                    Container(
+                      width: double.infinity.w, // Set width to be twice the radius
+                      height: 170.0.h, // Set height to be twice the radius
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0), // Adjust the borderRadius as needed
+                        color: Colors.green,
+                      ),
+                      child: _selectedImage != null
+                          ? ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: Image.file(
+                          File(_selectedImage!.files.single.path!) ,
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                          : Center(
+                        child: Icon(
+                          Icons.image,
+                          size: 70.sp,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+          
+                    GestureDetector(
+                      onTap: () {
+                        _showBottomSheet(context);
+                        print("Second CircleAvatar clicked!");
+                      },
+                      child: CircleAvatar(
+                        radius: 18.0.r,
+                        backgroundColor: Colors.grey[300],
+                        child: Icon(
+                          Icons.upload,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              onPressed: () {
-                print('payment = ${getData?['data']['_id']}');
-                print('payment = ${_phoneContoller.text}');
-                print('payment = ${widget.courseId}');
-                _paymentByMethod();
-                /*
-                if (_formKey.currentState!.validate()) {
-                  print('from payment');
-                  if (_selectedImage != null) {
-
-                  } else {
-                    // Handle case where no image is selected
-                    Fluttertoast.showToast(
-                      msg: "Please upload an image",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.BOTTOM,
-                      timeInSecForIosWeb: 5,
-                      backgroundColor: Colors.red,
-                      textColor: Colors.white,
-                      fontSize: 16.0,
-                    );
-                  }
-                }*/
-              },
-            )
-
-          ],
+              SizedBox(height: 10.h),
+              Text('Upload Image of Payment Receipt  ',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15.0.sp
+                ),
+              ),
+              SizedBox(height: 10.h),
+              MaterialButton(
+                child: const Text(
+                  'Enroll Now',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20.0,
+                  ),
+                ),
+                onPressed: () {
+                  print('payment = ${getData?['data']['_id']}');
+                  print('payment = ${_phoneContoller.text}');
+                  print('payment = ${widget.courseId}');
+                  _paymentByMethod();
+                  /*
+                  if (_formKey.currentState!.validate()) {
+                    print('from payment');
+                    if (_selectedImage != null) {
+          
+                    } else {
+                      // Handle case where no image is selected
+                      Fluttertoast.showToast(
+                        msg: "Please upload an image",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 5,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                    }
+                  }*/
+                },
+              )
+          
+            ],
+          ),
         ),
       ),
     );
