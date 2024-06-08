@@ -8,6 +8,7 @@ import 'package:easy_localization/easy_localization.dart';
 import '../../../../apis/update_instructor/http_service_update_instructor.dart';
 import '../../../../network/local/cache_helper.dart';
 import '../../../../translations/locale_keys.g.dart';
+import '../../setting/setting.dart';
 
 class InstructorInformation extends StatefulWidget {
   @override
@@ -62,7 +63,7 @@ class _InstructorInformationState extends State<InstructorInformation> {
         textColor: Colors.white,
         fontSize: 16.0,
       );
-
+      RestartWidget.restartApp(context);
       print(' successful!');
     } catch (e) {
       // Handle validation errors or network errors

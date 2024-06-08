@@ -344,5 +344,41 @@ class HttpServiceCourse {
       throw ('Error during get  course: $e');
     }
   }
+  Future<void> progress(String courseId,String moduleId ,String token)async{
+    try {
+      print('from progress courseId = $courseId');
+      print('from progress sore = $moduleId');
+      print('from progress token = $token');
+      final response = await _dio.post(
+        '/v1/progress',
+        data: {
+          'courseId':courseId,
+          'moduleId':moduleId,
+        },
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
 
+      print('from progress = ${response.data}');
+      if (response.statusCode == 200) {
+
+        try{
+          print(' progress done ${response.data['data']['results']} ');
+        }catch(e){
+          print('error when progress /');
+        }
+
+        return response.data;
+      } else {
+        // Registration failed
+
+        print('from progress error = ${response.data}');
+        throw ('get  progress failed: ${response.data}');
+      }
+    } catch (e) {
+      // Handle network or other errors
+
+      print('from   progress error = ${e}');
+      throw ('Error  progress  course: $e');
+    }
+  }
 }

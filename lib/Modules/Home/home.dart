@@ -351,21 +351,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               },
             ),
-            IconButton(
-              icon:  CircleAvatar(
-                radius: 15.0,
-                backgroundColor: Colors.grey,
-                child: Icon(
-                  Icons.favorite,
-                  size: 20.0,
-                  color: darkMode! ?Colors.white:Colors.black,
-                ),
-              ),
-              onPressed: (){
-                fetchData();
-                print('image = ${getData?['data']['profileImage']}');
-              },
-            ),
+
           ],
 
           title: Row(

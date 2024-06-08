@@ -17,6 +17,7 @@ import '../../../models/module_model.dart';
 import '../../../network/local/cache_helper.dart';
 import '../../../shared/constant.dart';
 import '../../../translations/locale_keys.g.dart';
+import '../../Home/InformationOFCourses/video_screen.dart';
 import 'compiler_webview.dart';
 import 'course_content_screen.dart';
 
