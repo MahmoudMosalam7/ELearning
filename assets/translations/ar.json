@@ -338,5 +338,11 @@
   "EnterExYYYYmmdd":"أدخل مثال YYYY-mm-dd",
   "Expireisrequired":"مطلوب تاريخ انتهاء الصلاحية",
   "PercentageofDiscount1100":"نسبة الخصم 1-100",
-  "Discountisrequired":"التخفيض مطلوب"
+  "Discountisrequired":"التخفيض مطلوب",
+  "EnterMaxnumberofusers":" أدخل الحد الأقصى لعدد المستخدمين",
+  "Maxisrequired":"الحد الأقصى مطلوب",
+  "EnterFriendEmail":"أدخل بريد الصديق",
+  "CreateChat": " إنشاء محادثة",
+  "SayAssalamuAlaikum":"السلام عليكم ورحمة الله وبركاته",
+  "Message":"رسالة"
 }

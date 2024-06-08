@@ -338,7 +338,13 @@
   "EnterExYYYYmmdd":"Geben Sie z.B. YYYY-mm-dd ein",
   "Expireisrequired":"Ablaufdatum ist erforderlich",
   "PercentageofDiscount1100": "Rabatt in Prozent 1-100",
-  "Discountisrequired":"Der Rabatt ist erforderlich"
+  "Discountisrequired":"Der Rabatt ist erforderlich",
+  "EnterMaxnumberofusers":"Geben Sie die maximale Anzahl von Benutzern ein",
+  "Maxisrequired":"Max ist erforderlich",
+  "EnterFriendEmail":"Geben Sie die E-Mail-Adresse des Freundes ein",
+  "CreateChat":"Chat erstellen",
+  "SayAssalamuAlaikum":"Peace be upon you, and God's mercy and blessings",
+  "Message":"Nachricht"
 }
 
 

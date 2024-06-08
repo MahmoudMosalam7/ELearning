@@ -10,7 +10,7 @@ import '../models/section_model.dart';
 import '../translations/locale_keys.g.dart';
 //https://dp1fzm8l-3000.uks1.devtunnels.ms/ yassin
 //https://qh409mzl-3000.uks1.devtunnels.ms/ nur
-const String baseUrl = 'https://dp1fzm8l-3000.uks1.devtunnels.ms/api';
+const String baseUrl = 'https://qh409mzl-3000.uks1.devtunnels.ms/api';
 Map<String, dynamic>? data;
 Key _key = UniqueKey();
 

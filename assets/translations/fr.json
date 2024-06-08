@@ -338,5 +338,11 @@
   "EnterExYYYYmmdd":"Entrez par ex. YYYY-mm-dd",
   "Expireisrequired":"La date d'expiration est requise",
   "PercentageofDiscount1100":" Pourcentage de remise 1-100",
-  "Discountisrequired":"La remise est requise"
+  "Discountisrequired":"La remise est requise",
+  "EnterMaxnumberofusers":"Entrez le nombre maximal d'utilisateurs",
+  "Maxisrequired":"Max est requis",
+  "EnterFriendEmail":" Entrez l'e-mail de l'ami",
+  "CreateChat":"Créer une discussion",
+  "SayAssalamuAlaikum":"Que la paix soit avec vous, et la miséricorde et les bénédictions de Dieu.",
+  "Message":"Message"
 }

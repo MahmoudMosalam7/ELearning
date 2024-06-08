@@ -338,5 +338,11 @@
   "EnterExYYYYmmdd":"例 YYYY-mm-dd を入力してください",
   "Expireisrequired":"有効期限は必須です",
   "PercentageofDiscount1100":" 割引率 1-100",
-  "Discountisrequired":"割引が必要です"
+  "Discountisrequired":"割引が必要です",
+  "EnterMaxnumberofusers":"最大ユーザー数を入力してください (said in Katakana: マックス ユーザーすう を にゅうりょく してください)",
+  "Maxisrequired":"最大は必須です (said in Katakana: マックス は ひっす です)",
+  "EnterFriendEmail":"友達のメールアドレスを入力してください (said in Katakana: トモダチ の メールアドレス を にゅうりょく してください)",
+  "CreateChat":"チャットを作成する (said in Katakana: チャット を さくせい する)",
+  "SayAssalamuAlaikum":" こんにちは、神の慈悲と祝福がありますように (said in Katakana: コンニチハ、カミノ ジヒ ト シュクフク ガ アリマス ヨウニ)",
+  "Message":"メッセージ (said in Katakana: メッセージ)"
 }

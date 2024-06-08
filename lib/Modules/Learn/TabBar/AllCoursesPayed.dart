@@ -43,8 +43,8 @@ class _AllState extends State<All> {
       print('get all course successful! $serverData');
 
       if (serverData != null) {
-        print('serverdata = ${EnrolledCourses.parseProductsFromServer(serverData)}');
-        products = EnrolledCourses.parseProductsFromServer(serverData);
+        print('datatttttttttttttt= ${serverData['data']['results']}');
+        products = EnrolledCourses.parseProductsFromServer(serverData['data']['results']);
         print('Products: $products');
       } else {
         throw Exception('Server data is null');

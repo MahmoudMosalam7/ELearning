@@ -1201,7 +1201,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                 Expanded(
                   child: TextFormField(
                     controller: _maximumUserContoller,
-                    decoration: const InputDecoration(
+                    decoration:  InputDecoration(
                       labelText: 'Enter Max number of users',
                       labelStyle: TextStyle(
                         fontSize: 25.0,

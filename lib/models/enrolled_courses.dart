@@ -13,8 +13,8 @@ class EnrolledCourses {
     required this.progress,
   });
   static List<EnrolledCourses> parseProductsFromServer(dynamic serverData) {
-    print('parseProductsFromServer ${serverData['data']?['results']}');
-    var results = serverData['data']?['resutls'];
+    print('parseProductsFromServer ${serverData}');
+    var results = serverData;
     print('parseProductsFromServer5 $results');
 
    if (results != null && results is List) {

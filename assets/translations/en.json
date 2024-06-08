@@ -338,5 +338,11 @@
   "EnterExYYYYmmdd": "Enter Ex YYYY-mm-dd",
   "Expireisrequired": "Expire is required",
   "PercentageofDiscount1100": "Percentage of Discount 1-100",
-  "Discountisrequired": "Discount is required"
+  "Discountisrequired": "Discount is required",
+  "EnterMaxnumberofusers": "Enter Max number of users",
+  "Maxisrequired": "Max is required",
+  "EnterFriendEmail":"Enter Friend Email",
+  "CreateChat": "Create Chat",
+  "SayAssalamuAlaikum":"Peace be upon you, and God's mercy and blessings",
+  "Message":"Message"
 }
