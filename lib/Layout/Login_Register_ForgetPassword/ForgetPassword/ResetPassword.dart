@@ -2,12 +2,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
 import 'package:learning/Layout/Login_Register_ForgetPassword/Login.dart';
 
+import 'package:easy_localization/easy_localization.dart';
 import '../../../TColors.dart';
 import '../../../apis/forget_password/http_service_reset_password.dart';
 import '../../../network/local/cache_helper.dart';
+import '../../../translations/locale_keys.g.dart';
 
 class ResetPassword extends StatefulWidget {
   String email;
@@ -66,8 +67,9 @@ class _ResetPasswordState extends State<ResetPassword> {
         fontSize: 16.0,
       );
 
-      Get.to(Login());
-
+      Navigator.push(context, MaterialPageRoute(builder: (context){
+        return Login();
+      }));
       print(' successful!');
     } catch (e) {
       // Handle validation errors or network errors
@@ -124,13 +126,13 @@ class _ResetPasswordState extends State<ResetPassword> {
           SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height/4.0,
-            child: const Column(
+            child:  Column(
               children: [
                 SizedBox(height: 80.0,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Reset Password',
+                    Text(LocaleKeys.ResetPasswordResetPassword.tr(),
                       style:TextStyle(
                         fontWeight: FontWeight.bold ,
                         fontSize: 40.0,
@@ -163,7 +165,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                       TextFormField(
                         controller: _passwordContoller,
                         decoration: InputDecoration(
-                          labelText:'New Password',
+                          labelText:'${LocaleKeys.ResetPasswordNewPassword.tr()}',
                           labelStyle: TextStyle(
                             fontSize: 25.0,
                           ),
@@ -189,7 +191,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                         },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'New Password is required';
+                            return '${LocaleKeys.ResetPasswordNewPasswordisrequired.tr()}';
                           }
                           return null;
                         },
@@ -201,7 +203,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                       TextFormField(
                         controller: _confirmPasswordContoller,
                         decoration:  InputDecoration(
-                          labelText:'Confirm Password',
+                          labelText:'${LocaleKeys.ResetPasswordConfirmPassword.tr()}',
                           labelStyle: TextStyle(
                             fontSize: 25.0,
                           ),
@@ -227,7 +229,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                         },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Confirm Password is required';
+                            return '${LocaleKeys.ResetPasswordConfirmPasswordisrequired.tr()}';
                           }
                           return null;
                         },
@@ -243,8 +245,8 @@ class _ResetPasswordState extends State<ResetPassword> {
                           ),
                           child: MaterialButton(
 
-                            child: const Text(
-                              'Reset',
+                            child:  Text(
+                              LocaleKeys.ResetPasswordReset.tr(),
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 20.0,

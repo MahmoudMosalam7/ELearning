@@ -1,14 +1,14 @@
 import 'dart:async';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:learning/Modules/Learn/TabBar/result.dart';
-
 import '../../../apis/courseInformation/http_service_courseInformation.dart';
 import '../../../models/test_model.dart';
 import '../../../network/local/cache_helper.dart';
 import '../../../shared/constant.dart';
+import '../../../translations/locale_keys.g.dart';
 class FlashCardView extends StatelessWidget {
   final String text;
 
@@ -88,7 +88,7 @@ class _TestScreenState extends State<TestScreen> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return Center(child: CircularProgressIndicator());
+      return Center(child: CircularProgressIndicator(color: Colors.green,));
     } else {
     return SingleChildScrollView(
       child: Center(
@@ -122,7 +122,7 @@ class _TestScreenState extends State<TestScreen> {
                     icon: Icon(Icons.chevron_left
                       ,color: Colors.cyan,
                     ),
-                    label: Text('Prev'
+                    label: Text(LocaleKeys.LearnTestScreenPrev.tr()
                       ,style: TextStyle(
                           color: Colors.cyan
                       ),
@@ -133,7 +133,7 @@ class _TestScreenState extends State<TestScreen> {
                     icon: Icon(Icons.chevron_right
                       ,color: Colors.cyan,
                     ),
-                    label: Text('Next',
+                    label: Text(LocaleKeys.LearnTestScreenNext.tr(),
                       style: TextStyle(
                           color: Colors.cyan
                       ),
@@ -203,7 +203,7 @@ class _TestScreenState extends State<TestScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Select the Correct Answer:',
+            LocaleKeys.LearnTestScreenSelecttheCorrectAnswer.tr(),
             style: TextStyle(fontSize: 18),
           ),
           SizedBox(height: 10),
@@ -430,7 +430,7 @@ class _TestScreenState extends State<TestScreen> {
 
   Widget buildButtons(){
     return buttonWidget(
-        text: 'Start Timer',
+        text: '${LocaleKeys.LearnTestScreenStartTimer.tr()}',
         onClicked: (){
           startTimer();
         }

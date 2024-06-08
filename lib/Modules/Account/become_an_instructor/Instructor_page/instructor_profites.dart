@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:learning/models/listView_Courses.dart';
 
 import '../../../../apis/update_instructor/http_service_courses.dart';
 import '../../../../network/local/cache_helper.dart';
 import '../../../../shared/constant.dart';
-import '../../../Learn/TabBar/course_videos.dart';
+import 'package:easy_localization/easy_localization.dart';
 
+import '../../../../translations/locale_keys.g.dart';
 class InstructorProfites extends StatefulWidget {
   const InstructorProfites({super.key});
 
@@ -91,7 +90,7 @@ class _InstructorProfitesState extends State<InstructorProfites> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profits'),
+        title: Text(LocaleKeys.InstructorInstructorProfitesTitle.tr()),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -99,7 +98,7 @@ class _InstructorProfitesState extends State<InstructorProfites> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("your Profits = ${getData?['data']['profits']}",style: TextStyle(
+              Text("${LocaleKeys.InstructorInstructorProfitesyourProfits.tr()} ${getData?['data']['profits']}",style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20.sp
               ),),

@@ -1,18 +1,16 @@
-
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:video_player/video_player.dart';
-
 import '../../../../../../apis/upload_course/section/http_service_create_section.dart';
 import '../../../../../../models/file_and_video_of_section_model.dart';
 import '../../../../../../network/local/cache_helper.dart';
 import '../../../../../../shared/constant.dart';
+import '../../../../../../translations/locale_keys.g.dart';
 import 'file_and_video_container.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 class PickFileAndVideo extends StatefulWidget {
   final int index;
   final int counter;
@@ -339,7 +337,7 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
               ),
               child: MaterialButton(
                 child:  Text(
-                  'Add File',
+                  LocaleKeys.InstructorPickFileAndVideoAddFile.tr(),
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 22.0.sp,
@@ -439,7 +437,7 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Edit Video OR File Name',
+            LocaleKeys.InstructorPickFileAndVideoEditVideoORFileName.tr(),
             style: TextStyle(
               fontWeight: FontWeight.bold,
             ),
@@ -466,7 +464,7 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
                   Navigator.pop(context);
                 },
                 decoration: InputDecoration(
-                  hintText: 'Enter Video Name',
+                  hintText: '${LocaleKeys.InstructorPickFileAndVideoEnterVideoName.tr()}',
                 ),
               ),
               SizedBox(height: 16.0), // Add some spacing if needed
@@ -487,7 +485,7 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                title: Text('Please Upload File OR Video!'
+                title: Text(LocaleKeys.InstructorPickFileAndVideoPleaseUploadFileORVideo.tr()
                   ,style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -500,7 +498,7 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
 
               ListTile(
                 leading: Icon(Icons.file_upload),
-                title: Text('File'),
+                title: Text(LocaleKeys.InstructorPickFileAndVideoFile.tr()),
                 onTap: () {
                   // Handle delete action
                   // _pickImageFromGallery();
@@ -510,7 +508,7 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
               ),
               ListTile(
                 leading: Icon(Icons.ondemand_video_outlined),
-                title: Text('Video'),
+                title: Text(LocaleKeys.InstructorPickFileAndVideoVideo.tr()),
                 onTap: () {
                   // Handle delete action
                   // _pickImageFromGallery();

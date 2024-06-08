@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
 import 'package:learning/Modules/Home/InformationOFCourses/payment_by_method.dart';
 
 import '../../../apis/courseInformation/http_service_courseInformation.dart';
 import '../../../network/local/cache_helper.dart';
 import '../../../shared/constant.dart';
-import 'add_coupon.dart';
+import 'package:easy_localization/easy_localization.dart';
+
+import '../../../translations/locale_keys.g.dart';
 
 class SelectPayment extends StatelessWidget {
    SelectPayment({super.key,required this.courseID,required this.coursePrice});
@@ -17,7 +18,7 @@ class SelectPayment extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Select Payment Method',style: TextStyle(
+        title: Text(LocaleKeys.SelectPaymentTitle.tr(),style: TextStyle(
           fontWeight: FontWeight.bold
         ),),
       ),
@@ -29,6 +30,10 @@ class SelectPayment extends StatelessWidget {
               child: GestureDetector(
                 onTap: () {
                   // Add your functionality here
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                    return PaymentByMethod(
+                      courseId:courseID , coursePrice: coursePrice, numberOFMethod: '01147974226',);
+                  }));
                 },
                 child: Container(
                   width: double.infinity,// تحديد العرض المطلوب للبطاقة
@@ -44,7 +49,7 @@ class SelectPayment extends StatelessWidget {
                         children: [
                           Icon(Icons.payment), // إضافة الأيقونة في البداية
                           SizedBox(width: 10.w), // إضافة مسافة بين الأيقونة والنص
-                          Text("Etisalat Cash",
+                          Text(LocaleKeys.SelectPaymentEtisalatCash.tr(),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18.sp
@@ -66,10 +71,7 @@ class SelectPayment extends StatelessWidget {
                     return PaymentByMethod(
                       courseId:courseID , coursePrice: coursePrice, numberOFMethod: '01147974226',);
                   }));
-        /*
-                  Get.to(PaymentByMethod(
-                            courseId:courseID , coursePrice: coursePrice, numberOFMethod: '01147974226',));*/
-                },
+            },
                 child: Container(
                   width: double.infinity,// تحديد العرض المطلوب للبطاقة
                   height: 70.h,
@@ -84,7 +86,7 @@ class SelectPayment extends StatelessWidget {
                         children: [
                           Icon(Icons.payment), // إضافة الأيقونة في البداية
                           SizedBox(width: 10.w), // إضافة مسافة بين الأيقونة والنص
-                          Text("Vodafone Cash",
+                          Text(LocaleKeys.SelectPaymentVodafoneCash.tr(),
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18.sp
@@ -102,6 +104,10 @@ class SelectPayment extends StatelessWidget {
               child: GestureDetector(
                 onTap: () {
                   // Add your functionality here
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                    return PaymentByMethod(
+                      courseId:courseID , coursePrice: coursePrice, numberOFMethod: '01147974226',);
+                  }));
                 },
                 child: Container(
                   width: double.infinity,// تحديد العرض المطلوب للبطاقة
@@ -117,7 +123,7 @@ class SelectPayment extends StatelessWidget {
                         children: [
                           Icon(Icons.payment), // إضافة الأيقونة في البداية
                           SizedBox(width: 10.w), // إضافة مسافة بين الأيقونة والنص
-                          Text("Orange Cash",
+                          Text(LocaleKeys.SelectPaymentOrangeCash.tr(),
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18.sp
@@ -135,6 +141,10 @@ class SelectPayment extends StatelessWidget {
               child: GestureDetector(
                 onTap: () {
                   // Add your functionality here
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                    return PaymentByMethod(
+                      courseId:courseID , coursePrice: coursePrice, numberOFMethod: '01203175750',);
+                  }));
                 },
                 child: Container(
                   width: double.infinity,// تحديد العرض المطلوب للبطاقة
@@ -150,7 +160,7 @@ class SelectPayment extends StatelessWidget {
                         children: [
                           Icon(Icons.payment), // إضافة الأيقونة في البداية
                           SizedBox(width: 10.w), // إضافة مسافة بين الأيقونة والنص
-                          Text("InstaPay",
+                          Text(LocaleKeys.SelectPaymentInstaPay.tr(),
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18.sp
@@ -185,7 +195,7 @@ class SelectPayment extends StatelessWidget {
                         children: [
                           Icon(Icons.payment), // إضافة الأيقونة في البداية
                           SizedBox(width: 10.w), // إضافة مسافة بين الأيقونة والنص
-                          Text("By Coupon",
+                          Text(LocaleKeys.SelectPaymentByCoupon.tr(),
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18.sp
@@ -217,7 +227,7 @@ class SelectPayment extends StatelessWidget {
              mainAxisSize: MainAxisSize.min,
              children: [
                ListTile(
-                 title: Text('Enter Coupon!'
+                 title: Text(LocaleKeys.SelectPaymentEnterCoupon.tr()
                    ,style: TextStyle(
                      fontWeight: FontWeight.bold,
                    ),
@@ -235,8 +245,8 @@ class SelectPayment extends StatelessWidget {
                      Expanded(
                        child: TextFormField(
                          controller: _nameContoller,
-                         decoration: const InputDecoration(
-                           labelText: 'Enter Coupon',
+                         decoration:  InputDecoration(
+                           labelText: '${LocaleKeys.SelectPaymentEnterCoupon.tr()}',
                            labelStyle: TextStyle(
                              fontSize: 25.0,
                            ),
@@ -250,7 +260,7 @@ class SelectPayment extends StatelessWidget {
                          onFieldSubmitted: (value) {},
                          validator: (value) {
                            if (value == null || value.isEmpty) {
-                             return 'Coupon is required';
+                             return '${LocaleKeys.SelectPaymentCouponisrequired.tr()}';
                            }
                            return null;
                          },
@@ -302,7 +312,7 @@ class SelectPayment extends StatelessWidget {
                    decoration: const BoxDecoration(
                      color: Colors.green,
                    ),
-                   child: const Center(child: Text('Apply')),
+                   child:  Center(child: Text(LocaleKeys.SelectPaymentApply.tr())),
                  ),
                ),
              ],

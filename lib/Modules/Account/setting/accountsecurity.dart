@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
-import '../../../TColors.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../../../apis/user/http_service_update_password.dart';
 import '../../../network/local/cache_helper.dart';
+import '../../../translations/locale_keys.g.dart';
 
 class Acount_Security extends StatefulWidget{
   @override
@@ -114,9 +114,9 @@ class _Acount_SecurityState extends State<Acount_Security> {
   @override
   Widget build(BuildContext context) {
 
-    return (Scaffold(
+    return Scaffold(
       appBar: AppBar(
-        title: Text("Acount Security"),
+        title: Text(LocaleKeys.AcountSecurityTitle.tr()),
         centerTitle: true,
       ),
       body: Padding(
@@ -129,7 +129,7 @@ class _Acount_SecurityState extends State<Acount_Security> {
                 TextFormField(
                   controller: _oldPasswordContoller,
                   decoration:  InputDecoration(
-                    labelText:'old Password',
+                    labelText:'${LocaleKeys.AcountSecurityoldPassword.tr()}',
                     labelStyle: TextStyle(
                       fontSize: 25.0,
                     ),
@@ -155,7 +155,7 @@ class _Acount_SecurityState extends State<Acount_Security> {
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Old Password is required';
+                      return '${LocaleKeys.AcountSecurityOldPasswordisrequired.tr()}';
                     }
                     return null;
                   },
@@ -166,7 +166,7 @@ class _Acount_SecurityState extends State<Acount_Security> {
                 TextFormField(
                   controller: _passwordContoller,
                   decoration:  InputDecoration(
-                    labelText:'New Password',
+                    labelText:'${LocaleKeys.AcountSecurityNewPassword.tr()}',
                     labelStyle: TextStyle(
                       fontSize: 25.0,
                     ),
@@ -192,7 +192,7 @@ class _Acount_SecurityState extends State<Acount_Security> {
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'New Password is required';
+                      return '${LocaleKeys.AcountSecurityNewPasswordisrequired.tr()}';
                     }
                     return null;
                   },
@@ -203,7 +203,7 @@ class _Acount_SecurityState extends State<Acount_Security> {
                 TextFormField(
                   controller: _confirmPasswordContoller,
                   decoration: InputDecoration(
-                    labelText:'Confirm New Password',
+                    labelText:'${LocaleKeys.AcountSecurityConfirmNewPassword.tr()}',
                     labelStyle: TextStyle(
                       fontSize: 25.0,
                     ),
@@ -230,7 +230,7 @@ class _Acount_SecurityState extends State<Acount_Security> {
 
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Confirm New Password is required';
+                      return '${LocaleKeys.AcountSecurityConfirmNewPasswordisrequired.tr()}';
                     }
                     return null;
                   },
@@ -245,9 +245,9 @@ class _Acount_SecurityState extends State<Acount_Security> {
                     ),
                     child: MaterialButton(
 
-                      child: const Text(
+                      child:  Text(
 
-                        'Update Password',
+                        '${LocaleKeys.AcountSecurityUpdatePassword.tr()}',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20.0,
@@ -269,6 +269,6 @@ class _Acount_SecurityState extends State<Acount_Security> {
         ),
       ),
     )
-    );
+    ;
   }
 }

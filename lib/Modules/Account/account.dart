@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
+
+import 'package:http/http.dart' as http;
 import 'package:learning/Layout/Login_Register_ForgetPassword/Login.dart';
 import 'package:learning/Modules/Account/admin/admin_home.dart';
 import 'package:learning/Modules/Account/qualty.dart';
@@ -9,10 +12,16 @@ import 'package:learning/Modules/Account/setting/setting.dart';
 import 'package:learning/Modules/Account/videoPlay.dart';
 import 'package:learning/TColors.dart';
 import 'package:learning/shared/constant.dart';
+import 'package:lottie/lottie.dart';
 
+import 'package:easy_localization/easy_localization.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../apis/user/http_service_get_user_data.dart';
 import '../../apis/user/http_service_logout.dart';
 import '../../network/local/cache_helper.dart';
+import '../../translations/locale_keys.g.dart';
 import 'become_an_instructor/Instructor_page/instructor_home_page.dart';
 import 'become_an_instructor/onboarding_instructor/on_bording_instructor_screen.dart';
 import 'download_option.dart';
@@ -28,7 +37,7 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   HttpServiceLogout httpServiceLogout = HttpServiceLogout();
-  bool isLoading = false;
+  bool isLoading = true;
   String errorMessage = '';
   void initState(){
     fetchDataOfUser();
@@ -47,6 +56,7 @@ class _AccountScreenState extends State<AccountScreen> {
         getData = data;
         im = getData?['data']['profileImage'];
         print('im = $im');
+        isLoading  = false;
       });
 
       // Print or use the fetched data as needed
@@ -54,13 +64,17 @@ class _AccountScreenState extends State<AccountScreen> {
     } catch (e) {
       // Handle errors, if any
       print('Error fetching data: $e');
+    }finally{
+      setState(() {
+        isLoading = false;
+      });
     }
   }
   void _logout() async {
     // Reset error message and loading state
     setState(() {
       errorMessage = '';
-      isLoading = true;
+      isLoading = false;
     });
 
     try {
@@ -130,15 +144,113 @@ class _AccountScreenState extends State<AccountScreen> {
       });
     }
   }
+  Widget buildShimmerEffect() {
+    return ListView.builder(
+      itemCount: 10,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Shimmer.fromColors(
+            baseColor: Color(0xFFE0E0E0),
+            highlightColor: Color(0xFFF5F5F5),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Colors.white, // Add a background color
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 100,
+                      color: Colors.white,
+                    ),
+                    SizedBox(width: 8.0),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 20,
+                            color: Colors.white,
+                            margin: EdgeInsets.only(bottom: 10.0),
+                          ),
+                          Row(
+                            children: [
+                              Container(
+                                width: 20,
+                                height: 20,
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 10.0),
+                              Container(
+                                width: 100,
+                                height: 20,
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 10.0),
+                              CircleAvatar(
+                                backgroundColor: Colors.yellow,
+                                minRadius: 5.0,
+                              ),
+                              SizedBox(width: 10.0),
+                              Container(
+                                width: 50,
+                                height: 20,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10.0),
+                          Row(
+                            children: [
+                              SizedBox(width: 20.0),
+                              Container(
+                                width: 100,
+                                height: 20,
+                                color: Colors.white,
+                              ),
+                              Spacer(),
+                              Container(
+                                width: 60,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: BorderRadius.circular(25.0),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    return     Scaffold(
+    if (isLoading) {
+      return Scaffold(
+        body: buildShimmerEffect(),
+      );
+    } else{
+      if (getData != null && getData!.isNotEmpty)
+      {
+    return  Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
-          "Account",
+          LocaleKeys.AccountScreenTitle.tr(),
           style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 20.0
@@ -211,11 +323,15 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
                 SizedBox(height: 15.0,),
                 TextButton(onPressed: (){
-                  Get.to(OnBordingInstructorScreen());
+
+
+                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                    return OnBordingInstructorScreen();
+                  }));
                 },
                     child:
                     Text(
-                      "Become an instructor ",
+                      LocaleKeys.AccountScreenBecomeaninstructor.tr(),
                       style: TextStyle(
 
                           color: TColors.Ternary
@@ -227,7 +343,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Video prefernce",
+                    Text(LocaleKeys.AccountScreenVideoprefernce.tr(),
                       style: TextStyle(
                           fontSize: 13.0,
                           color: Colors.grey[600]
@@ -242,11 +358,11 @@ class _AccountScreenState extends State<AccountScreen> {
                         width: double.infinity,
                         child: Row(
                           children: [
-                            Text("download option"
+                            Text(LocaleKeys.AccountScreendownloadoption.tr()
                               ,style: TextStyle(
                                   fontSize: 17.0
                               ),),
-                            Spacer(flex: 1,),
+                            Spacer(),
                             Icon(Icons.keyboard_arrow_right),
                           ],
                         ),
@@ -281,7 +397,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("account setting ",
+                    Text(LocaleKeys.AccountScreenaccountsetting.tr(),
                       style: TextStyle(
                           fontSize: 13.0,
                           color: Colors.grey[600]
@@ -297,12 +413,13 @@ class _AccountScreenState extends State<AccountScreen> {
                         width: double.infinity,
                         child: Row(
                           children: [
-                            Text("edit profile"
+
+                            Text(LocaleKeys.AccountScreeneditprofile.tr()
                               ,style: TextStyle(
                                   fontSize: 17.0
                               ),
                             ),
-                            Spacer(flex: 1,),
+                            Spacer(),
                             Icon(Icons.keyboard_arrow_right),
                           ],
                         ),
@@ -331,7 +448,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     ),
                     MaterialButton(
                       onPressed: (){
-                        Get.to(LerningReminder());
+
                       },
                       child:
                       Container(
@@ -355,7 +472,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("help and support ",
+                    Text(LocaleKeys.AccountScreenhelpandsupport.tr(),
                       style: TextStyle(
                           fontSize: 13.0,
                           color: Colors.grey[600]
@@ -367,11 +484,19 @@ class _AccountScreenState extends State<AccountScreen> {
                         width: double.infinity,
                         child: Row(
                           children: [
-                            Text("about E_Learning"
-                              ,style: TextStyle(
-                                  fontSize: 17.0
-                              ),),
-                            Spacer(flex: 1,),
+                            Expanded(
+                              child: Flexible(
+                                child: Text(
+                                  LocaleKeys.AccountScreenaboutELearning.tr(),
+                                  style: TextStyle(
+                                    fontSize: 17.0,
+                                  ),
+                                  maxLines: 1, // Limit to one line
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                            Spacer(),
                             Icon(Icons.keyboard_arrow_right),
                           ],
                         ),
@@ -380,17 +505,72 @@ class _AccountScreenState extends State<AccountScreen> {
                     ),
 
                     MaterialButton(
-                      onPressed: (){},
+                      onPressed: ()async {
+                        try {
+                          // Fetch the image URL
+                          final urlImage = 'https://res.cloudinary.com/djcwvsuw1/image/upload/v1717855988/course/user-c62c1546-f2da-4b56-8e6b-d6591a76a554-1717855985477.jpeg.jpg';
+                          final url = Uri.parse(urlImage);
+
+                          // Download the image
+                          final response = await http.get(url);
+                          if (response.statusCode == 200) {
+                            final bytes = response.bodyBytes;
+
+                            // Get the temporary directory and save the image
+                            final temp = await getTemporaryDirectory();
+                            final filePath = '${temp.path}/image.jpg';
+                            await File(filePath).writeAsBytes(bytes);
+
+                            // Share the image and text
+                            await Share.shareFiles(
+                              [filePath],
+                              text: 'Download E_learning From here https://drive.google.com/drive/folders/1MS5oJA6GG8pR9eRRReh7CLr8B0gpgvea?usp=sharing '
+                                  '#E_Learning',
+                            );
+                          } else {
+                            // Handle error while downloading the image
+                            Fluttertoast.showToast(
+                              msg: "Failed to download the image.",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 5,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0,
+                            );
+                          }
+                        } catch (e) {
+                          // Handle any errors during the process
+                          Fluttertoast.showToast(
+                            msg: "Error: $e",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 5,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0,
+                          );
+                        }
+                      },
                       child:
                       Container(
                         width: double.infinity,
                         child: Row(
                           children: [
-                            Text("share E_Learning app"
-                              ,style: TextStyle(
-                                  fontSize: 17.0
-                              ),),
-                            Spacer(flex: 1,),
+                            Expanded(
+                              child: Flexible(
+                                child: Text(
+                                  LocaleKeys.AccountScreenshareELearningapp.tr(),
+                                  style: TextStyle(
+                                    fontSize: 17.0,
+                                  ),
+                                  maxLines: 1, // Limit to one line
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+
+                            Spacer(),
                             Icon(Icons.keyboard_arrow_right),
                           ],
                         ),
@@ -399,7 +579,10 @@ class _AccountScreenState extends State<AccountScreen> {
                     ),
                     MaterialButton(
                       onPressed: (){
-                        Get.to(Setting());
+
+                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                          return Setting();
+                        }));
                       },
                       child:
                       Container(
@@ -407,11 +590,20 @@ class _AccountScreenState extends State<AccountScreen> {
 
                         child: Row(
                           children: [
-                            Text("setting"
-                              ,style: TextStyle(
-                                  fontSize: 17.0
-                              ),),
-                            Spacer(flex: 1,),
+                            Expanded(
+                              child: Flexible(
+                                child: Text(
+                                  LocaleKeys.AccountScreensetting.tr(),
+                                  style: TextStyle(
+                                    fontSize: 17.0,
+                                  ),
+                                  maxLines: 1, // Limit to one line
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+
+                            Spacer(),
                             Icon(Icons.keyboard_arrow_right),
                           ],
                         ),
@@ -424,14 +616,18 @@ class _AccountScreenState extends State<AccountScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("instructor",
+                    Text(LocaleKeys.AccountScreeninstructor.tr(),
                       style: TextStyle(
                           fontSize: 13.0,
                           color: Colors.grey[600]
                       ),),
                     MaterialButton(
                       onPressed: (){
-                        Get.to(InstructorHomeScreen());
+
+
+                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                          return InstructorHomeScreen();
+                        }));
                       },
                       child:
                       Container(
@@ -439,11 +635,11 @@ class _AccountScreenState extends State<AccountScreen> {
                         child: Row(
 
                           children: [
-                            Text("Add Course"
+                            Text(LocaleKeys.AccountScreenAddCourse.tr()
                               ,style: TextStyle(
                                   fontSize: 17.0
                               ),),
-                            Spacer(flex: 1,),
+                            Spacer(),
                             Icon(Icons.keyboard_arrow_right),
                           ],
                         ),
@@ -457,7 +653,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Admin",
+                    Text(LocaleKeys.AccountScreenAdmin.tr(),
                       style: TextStyle(
                           fontSize: 13.0,
                           color: Colors.grey[600]
@@ -465,7 +661,10 @@ class _AccountScreenState extends State<AccountScreen> {
 
                     MaterialButton(
                       onPressed: (){
-                        Get.to(AdminHome());
+
+                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                          return AdminHome();
+                        }));
                       },
                       child:
                       Container(
@@ -473,11 +672,12 @@ class _AccountScreenState extends State<AccountScreen> {
                         child: Row(
 
                           children: [
-                            Text("Admin"
+                            Text(
+                            LocaleKeys.AccountScreenAdmin.tr()
                               ,style: TextStyle(
                                   fontSize: 17.0
                               ),),
-                            Spacer(flex: 1,),
+                            Spacer(),
                             Icon(Icons.keyboard_arrow_right),
                           ],
                         ),
@@ -491,14 +691,16 @@ class _AccountScreenState extends State<AccountScreen> {
                 },
                     child:
                     Text(
-                      "sign out ",
+
+                      LocaleKeys.AccountScreensignout.tr(),
                       style: TextStyle(
                           color: TColors.Ternary
                       ),
                     )
                 ),
                 SizedBox(height: 15.0,),
-                Text("E_Learning v2.16.0",
+                Text(
+                  LocaleKeys.AccountScreenELearning.tr(),
                   style: TextStyle(
 
                       fontSize: 10.0
@@ -510,7 +712,28 @@ class _AccountScreenState extends State<AccountScreen> {
         ),
       ) ,
 
-    );
+    );}
+      else{
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(
+                LocaleKeys.AccountScreenTitle.tr()),
+          ),
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+
+              Lottie.asset('assets/animation/animation2/Animation2.json'),
+
+              Center(child: Text(
+                  LocaleKeys.CourseInformationNodataavailable.tr())),
+            ],
+          ),
+        );
+      }
+
+    }
   }
 
 

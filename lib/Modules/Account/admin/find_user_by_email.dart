@@ -4,9 +4,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:learning/Modules/Account/admin/update_user_information.dart';
 import 'package:learning/Modules/Account/admin/update_user_password.dart';
 
+import 'package:easy_localization/easy_localization.dart';
 import '../../../apis/admin/http_service_admin.dart';
 import '../../../models/usermodel.dart';
 import '../../../network/local/cache_helper.dart';
+import '../../../translations/locale_keys.g.dart';
 
 class FindUserByEmail extends StatefulWidget {
   const FindUserByEmail({super.key});
@@ -172,8 +174,8 @@ class _FindUserByEmailState extends State<FindUserByEmail> {
             children: [
               TextFormField(
                 controller: _emailContoller,
-                decoration: const InputDecoration(
-                  labelText:'Email Address',
+                decoration:  InputDecoration(
+                  labelText:'${LocaleKeys.AdminFindUserByEmailEmailAddress.tr()}',
                   labelStyle: TextStyle(
                     fontSize: 25.0,
                   ),
@@ -188,7 +190,7 @@ class _FindUserByEmailState extends State<FindUserByEmail> {
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Email is required';
+                    return '${LocaleKeys.RegisterEmailisrequired.tr()}';
                   }
                   return null;
                 },
@@ -203,9 +205,9 @@ class _FindUserByEmailState extends State<FindUserByEmail> {
                   ),
                   child: MaterialButton(
 
-                    child: const Text(
+                    child:  Text(
 
-                      'Find User',
+                      LocaleKeys.AdminFindUserByEmailFindUser.tr(),
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20.0,
@@ -334,7 +336,7 @@ class _FindUserByEmailState extends State<FindUserByEmail> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                title: Text('What You Will Updata!'
+                title: Text(LocaleKeys.AdminAllUsersWhatYouWillUpdata.tr()
                   ,style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -346,7 +348,7 @@ class _FindUserByEmailState extends State<FindUserByEmail> {
               ),
               ListTile(
                 leading: Icon(Icons.dashboard_customize_rounded),
-                title: Text('Update Information'),
+                title: Text(LocaleKeys.AdminAllUsersUpdateInformation.tr()),
                 onTap: () {
                   // Handle edit action
 
@@ -357,8 +359,8 @@ class _FindUserByEmailState extends State<FindUserByEmail> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.update),
-                title: Text('Update Password'),
+                leading: Icon(Icons.password),
+                title: Text(LocaleKeys.AdminAllUsersUpdatePassword.tr()),
                 onTap: () {
                   // Handle delete action
 

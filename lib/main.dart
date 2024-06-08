@@ -7,18 +7,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:learning/provider/dark_theme_provider.dart';
+import 'package:learning/translations/codegen_loader.g.dart';
 
 import 'Layout/splashScreen.dart';
+import 'Modules/Account/setting/setting.dart';
 import 'chat/firebase_options.dart';
-import 'chat/layout.dart';
-import 'chat/screen/auth/login_screen.dart';
-import 'chat/screen/auth/setup_profile.dart';
 import 'network/local/cache_helper.dart';
 import 'network/notifications/notifications.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await EasyLocalization.ensureInitialized();
+ await EasyLocalization.ensureInitialized();
   notificationInitialization();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -28,20 +27,21 @@ void main() async {
   );
   await CacheHelper.init();
   runApp(
-    ProviderScope(
-      child: EasyLocalization(
-        supportedLocales: [
-          Locale('en'),
-          Locale('ar'),
-          Locale('de'),
-          Locale('fr'),
-          Locale('ja'),
-        ],
-        fallbackLocale: const Locale('en'),
-        path: 'assets/translations/',
-        saveLocale: true,
+    EasyLocalization(
+      supportedLocales: [
+        Locale('en'),
+        Locale('ar'),
+        Locale('de'),
+        Locale('fr'),
+        Locale('ja'),
+      ],
+      path: 'assets/translations/',
+      assetLoader: CodegenLoader(),
+      saveLocale: true,
+      fallbackLocale: Locale('en'),
+      child: ProviderScope(
+        child:   RestartWidget(child: MyApp()),
 
-        child: MyApp(),
       ),
     ),
   );
@@ -65,7 +65,7 @@ class MyApp extends ConsumerWidget {
         supportedLocales: context.supportedLocales,
         localizationsDelegates: context.localizationDelegates,
         locale: context.locale,
-        theme: ThemeData(
+       theme: ThemeData(
           brightness: _themeDarkMode == ThemeModeEnum.light
               ? Brightness.light
               : Brightness.dark,

@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
 import 'package:learning/Layout/MainBottomNavigationBar.dart';
 import 'package:learning/TColors.dart';
 import 'package:learning/shared/constant.dart';
@@ -10,6 +11,7 @@ import '../../apis/user/http_service_login.dart';
 import '../../chat/firebase/fire_auth.dart';
 import '../../chat/firebase/fire_database.dart';
 import '../../network/local/cache_helper.dart';
+import '../../translations/locale_keys.g.dart';
 import 'ForgetPassword/ForgetPassword.dart';
 import 'Register.dart';
 import 'onboarding.dart';
@@ -56,15 +58,16 @@ class _LoginState extends State<Login> {
 
       // Fetch data and wait for it to complete
       await fetchData();
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomeLayout()));
 
       // Now navigate to the appropriate screen based on the fetched data
-      bool? onBoarding = CacheHelper.getBool(key: 'onBoarding');
-      if (onBoarding != null && onBoarding) {
+     // bool? onBoarding = CacheHelper.getBool(key: 'onBoarding');
+      /*if (onBoarding != null && onBoarding) {
         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomeLayout()));
       } else {
         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Onboarding()));
       }
-
+*/
       print('Login successful!');
     } catch (e) {
       // Handle validation errors or network errors
@@ -152,7 +155,7 @@ class _LoginState extends State<Login> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Let\'s learn',
+                          LocaleKeys.LoginLetslearn.tr(),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 40.0,
@@ -163,7 +166,7 @@ class _LoginState extends State<Login> {
                     ),
                     SizedBox(height: 10.0,),
                     Text(
-                      'Sign in to continue',
+                      LocaleKeys.LoginSignintocontinue.tr(),
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20.0,
@@ -191,8 +194,8 @@ class _LoginState extends State<Login> {
                         const SizedBox(height: 40.0,),
                         TextFormField(
                           controller: _emailContoller,
-                          decoration: const InputDecoration(
-                            labelText: 'Email Address',
+                          decoration:  InputDecoration(
+                            labelText: '${LocaleKeys.LoginEmailAddress.tr()}',
                             labelStyle: TextStyle(
                               fontSize: 25.0,
                             ),
@@ -209,7 +212,7 @@ class _LoginState extends State<Login> {
                           keyboardType: TextInputType.emailAddress,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Email is required';
+                              return '${LocaleKeys.LoginEmailisrequired.tr()}';
                             }
                             return null;
                           },
@@ -218,7 +221,7 @@ class _LoginState extends State<Login> {
                         TextFormField(
                           controller: _passwordContoller,
                           decoration: InputDecoration(
-                            labelText: 'Password',
+                            labelText: '${LocaleKeys.LoginPassword.tr()}',
                             labelStyle: TextStyle(
                               fontSize: 25.0,
                             ),
@@ -246,7 +249,7 @@ class _LoginState extends State<Login> {
                           obscureText: obscure ? obscureText : false,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Password is required';
+                              return '${LocaleKeys.RegisterPasswordisrequired.tr()}';
                             }
                             return null;
                           },
@@ -259,10 +262,13 @@ class _LoginState extends State<Login> {
                               errorMessage = "";
                               _emailContoller.text = "";
                               _passwordContoller.text = "";
-                              Get.to(ForgetPassword());
+
+                              Navigator.push(context, MaterialPageRoute(builder: (context){
+                                return ForgetPassword();
+                              }));
                             },
-                            child: const Text(
-                              'Forget Password',
+                            child:  Text(
+                              LocaleKeys.LoginForgetPassword.tr(),
                               style: TextStyle(
                                 fontSize: 15.0,
                                 color: Colors.blue,
@@ -278,8 +284,8 @@ class _LoginState extends State<Login> {
                             color: TColors.secondray,
                           ),
                           child: MaterialButton(
-                            child: const Text(
-                              'Sign in',
+                            child:  Text(
+                              LocaleKeys.LoginSignin.tr(),
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 20.0,
@@ -298,8 +304,8 @@ class _LoginState extends State<Login> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text(
-                              'Don\'t have an account? ',
+                             Text(
+                               LocaleKeys.LoginDonthaveanaccount.tr(),
                               style: TextStyle(
                                 fontSize: 15.0,
                               ),
@@ -308,11 +314,14 @@ class _LoginState extends State<Login> {
                               onTap: () {
                                 _emailContoller.text = "";
                                 _passwordContoller.text = "";
-                                Get.to(SignUp());
+
+                                Navigator.push(context, MaterialPageRoute(builder: (context){
+                                  return SignUp();
+                                }));
                                 errorMessage = "";
                               },
-                              child: const Text(
-                                'Sign Up',
+                              child:  Text(
+                                LocaleKeys.LoginSignUp.tr(),
                                 style: TextStyle(
                                   fontSize: 15.0,
                                   color: Colors.blue,

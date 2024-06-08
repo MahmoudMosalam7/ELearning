@@ -1,15 +1,12 @@
 import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-
 import '../../../Layout/Login_Register_ForgetPassword/DropDownList/dropDownList.dart';
-import '../../../Layout/Login_Register_ForgetPassword/Login.dart';
-import '../../../TColors.dart';
 import '../../../apis/admin/http_service_admin.dart';
-import '../../../apis/user/http_service_regstration.dart';
 import '../../../network/local/cache_helper.dart';
+import 'package:easy_localization/easy_localization.dart';
 
+import '../../../translations/locale_keys.g.dart';
 
 class UpdateUser extends StatefulWidget {
    final String userId ;
@@ -131,8 +128,8 @@ class _UpdateUserState extends State<UpdateUser> {
                     //this text field for name
                     TextFormField(
                       controller: _nameContoller,
-                      decoration: const InputDecoration(
-                        labelText:'Name',
+                      decoration: InputDecoration(
+                        labelText:'${LocaleKeys.AdminUpdataUserInformationName.tr()}',
                         labelStyle: TextStyle(
                           fontSize: 25.0,
                         ),
@@ -148,7 +145,7 @@ class _UpdateUserState extends State<UpdateUser> {
 
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Name is required';
+                          return '${LocaleKeys.RegisterNameisrequired.tr()}';
                         }
                         return null;
                       },
@@ -158,8 +155,8 @@ class _UpdateUserState extends State<UpdateUser> {
                     // this text field for email
                     TextFormField(
                       controller: _emailContoller,
-                      decoration: const InputDecoration(
-                        labelText:'Email Address',
+                      decoration:  InputDecoration(
+                        labelText:'${LocaleKeys.RegisterEmailAddress.tr()}',
                         labelStyle: TextStyle(
                           fontSize: 25.0,
                         ),
@@ -174,7 +171,7 @@ class _UpdateUserState extends State<UpdateUser> {
                       },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Email is required';
+                          return '${LocaleKeys.RegisterEmailisrequired.tr()}';
                         }
                         return null;
                       },
@@ -184,9 +181,9 @@ class _UpdateUserState extends State<UpdateUser> {
                     // this text field for phone number
                     AppTextField(
                       data: [
-                        SelectedListItem(name:'User' ),
-                        SelectedListItem(name:'Instructor' ),
-                        SelectedListItem(name:'Admin' ),
+                        SelectedListItem(name:'${LocaleKeys.AdminUpdataUserInformationRoles1.tr()}' ),
+                        SelectedListItem(name:'${LocaleKeys.AdminUpdataUserInformationRoles2.tr()}' ),
+                        SelectedListItem(name:'${LocaleKeys.AdminUpdataUserInformationRoles3.tr()}' ),
                       ],
                       textEditingController: _statusContoller,
                       title: 'Select Status',
@@ -202,9 +199,9 @@ class _UpdateUserState extends State<UpdateUser> {
                         ),
                         child: MaterialButton(
 
-                          child: const Text(
+                          child:  Text(
 
-                            'Update User',
+                            '${LocaleKeys.AdminUpdataUserInformationUpdateUser.tr()}',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 20.0,

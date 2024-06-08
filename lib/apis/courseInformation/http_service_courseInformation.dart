@@ -231,29 +231,32 @@ class HttpServiceCourse {
       ,String phoneNumber,String courseId ,String token,{String? coupon}) async {
     String imageFileName = '';
     FormData formData;
-    if(coupon!.length == 11){
-       print('from transaction copuon free');
-      formData =  FormData.fromMap({
+    if( coupon != null ){
+       if(coupon!.length == 11){
 
-        "courseId": courseId,
-        "userId": userId,
-        "CoursePrice": CoursePrice,
-        "phoneNumber": phoneNumber,
-        "couponCode":coupon
-      });
+         print('from transaction copuon free');
+         formData =  FormData.fromMap({
+
+           "courseId": courseId,
+           "userId": userId,
+           "CoursePrice": CoursePrice,
+           "phoneNumber": phoneNumber,
+           "couponCode":coupon
+         });
+       }else{
+         formData =  FormData.fromMap({
+           "paymentReceiptImage": await MultipartFile.fromFile(imageFilePath, filename: imageFileName),
+           "courseId": courseId,
+           "userId": userId,
+           "CoursePrice": CoursePrice,
+           "phoneNumber": phoneNumber,
+           "couponCode":coupon
+         });
+       }
     }else{
        imageFileName = imageFilePath.split('/').last;
 
-      if(coupon!= null && coupon.length < 11)
-        formData =  FormData.fromMap({
-        "paymentReceiptImage": await MultipartFile.fromFile(imageFilePath, filename: imageFileName),
-        "courseId": courseId,
-        "userId": userId,
-        "CoursePrice": CoursePrice,
-        "phoneNumber": phoneNumber,
-          "couponCode":coupon
-      });
-      else{
+
         print('last last last');
         formData =  FormData.fromMap({
           "paymentReceiptImage": await MultipartFile.fromFile(imageFilePath, filename: imageFileName),
@@ -262,7 +265,7 @@ class HttpServiceCourse {
           "CoursePrice": CoursePrice,
           "phoneNumber": phoneNumber,
         });
-      }
+
     }
 
 

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:lottie/lottie.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../apis/user/enrolled_courses.dart';
 import '../../../models/enrolled_courses.dart';
@@ -66,15 +68,6 @@ class _AllState extends State<All> {
         else{
           errorMessage ="Unexpected Error!";
         }
-        Fluttertoast.showToast(
-          msg: "$errorMessage",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 5,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
 
       });
     } finally {
@@ -88,9 +81,56 @@ class _AllState extends State<All> {
     _allCourses();
     super.initState();
   }
+
+  Widget buildShimmerEffect(){
+    return ListView.builder(
+        itemCount: 10,
+        itemBuilder: (context,index){
+          return Shimmer.fromColors(
+            baseColor: Color(0xFFE0E0E0),
+            highlightColor: Color(0xFFF5F5F5),
+            child: ListTile(
+              leading: Container(
+                width: 48,
+                height: 48,
+                color: Colors.white,
+              ),
+              title: Container(
+                height: 14,
+                color: Colors.white,
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 14,
+                    color: Colors.white,
+                    margin: EdgeInsets.only(top: 5),
+                  ),
+
+                  Container(
+                    height: 14,
+                    width: 100,
+                    color: Colors.white,
+                    margin: EdgeInsets.only(top: 5),
+                  )
+
+                ],
+              ),
+            ),
+          );
+        });
+  }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    if (isLoading) {
+      return Scaffold(
+        body:  buildShimmerEffect(),
+      );
+    } else{
+
+      if (products != null && products!.isNotEmpty)
+        {  return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
@@ -118,7 +158,23 @@ class _AllState extends State<All> {
           ],
         ),
       ),
-    );
+    );}
+      else{
+        return Scaffold(
+
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+
+              Lottie.asset('assets/animation/animation1/Animation6.json'),
+
+              Center(child: Text("No data available")),
+            ],
+          ),
+        );
+      }
+    }
   }
   Widget containerOFEnrolledCourses({required EnrolledCourses? product}){
     print('list of enrolled = $product');

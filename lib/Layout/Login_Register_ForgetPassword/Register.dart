@@ -1,16 +1,15 @@
-import 'package:drop_down_list/model/selected_list_item.dart';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
+
 
 import '../../TColors.dart';
 import '../../apis/user/http_service_regstration.dart';
 import '../../network/local/cache_helper.dart';
-import '../MainBottomNavigationBar.dart';
-import 'DropDownList/dropDownList.dart';
+import '../../translations/locale_keys.g.dart';
 import 'Login.dart';
-import 'onboarding.dart';
 
 class SignUp extends StatefulWidget {
 
@@ -139,14 +138,14 @@ class _SignUpState extends State<SignUp> {
           SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height/8.0,
-            child: const Column(
+            child:  Column(
               children: [
                 SizedBox(height: 30.0,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text('Sign Up',
+                    Text(LocaleKeys.RegisterSignUp.tr(),
                       style:TextStyle(
                         fontWeight: FontWeight.bold ,
                         fontSize: 40.0,
@@ -175,8 +174,8 @@ class _SignUpState extends State<SignUp> {
                       //this text field for name
                       TextFormField(
                         controller: _nameContoller,
-                        decoration: const InputDecoration(
-                          labelText:'Name',
+                        decoration:  InputDecoration(
+                          labelText:'${LocaleKeys.RegisterName.tr()}',
                           labelStyle: TextStyle(
                             fontSize: 25.0,
                           ),
@@ -192,7 +191,7 @@ class _SignUpState extends State<SignUp> {
 
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Name is required';
+                            return '${LocaleKeys.RegisterNameisrequired.tr()}';
                           }
                           return null;
                         },
@@ -202,8 +201,8 @@ class _SignUpState extends State<SignUp> {
                       // this text field for email
                       TextFormField(
                         controller: _emailContoller,
-                        decoration: const InputDecoration(
-                          labelText:'Email Address',
+                        decoration:  InputDecoration(
+                          labelText:'${LocaleKeys.RegisterEmailAddress.tr()}',
                           labelStyle: TextStyle(
                             fontSize: 25.0,
                           ),
@@ -218,7 +217,7 @@ class _SignUpState extends State<SignUp> {
                         },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Email is required';
+                            return '${LocaleKeys.RegisterEmailisrequired.tr()}';
                           }
                           return null;
                         },
@@ -228,8 +227,8 @@ class _SignUpState extends State<SignUp> {
                       // this text field for phone number
                       TextFormField(
                         controller: _phoneContoller,
-                        decoration: const InputDecoration(
-                          labelText:'Phone Number',
+                        decoration:  InputDecoration(
+                          labelText:'${LocaleKeys.RegisterPhoneNumber.tr()}',
                           labelStyle: TextStyle(
                             fontSize: 25.0,
                           ),
@@ -245,7 +244,7 @@ class _SignUpState extends State<SignUp> {
 
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Phone is required';
+                            return '${LocaleKeys.RegisterPhoneisrequired.tr()}';
                           }
                           return null;
                         },
@@ -256,7 +255,7 @@ class _SignUpState extends State<SignUp> {
                       TextFormField(
                         controller: _passwordContoller,
                         decoration:  InputDecoration(
-                          labelText:'Password',
+                          labelText:'${LocaleKeys.RegisterPassword.tr()}',
                           labelStyle: TextStyle(
                             fontSize: 25.0,
                           ),
@@ -282,7 +281,7 @@ class _SignUpState extends State<SignUp> {
                         },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Password is required';
+                            return '${LocaleKeys.RegisterPasswordisrequired.tr()}';
                           }
                           return null;
                         },
@@ -293,7 +292,7 @@ class _SignUpState extends State<SignUp> {
                       TextFormField(
                         controller: _confirmPasswordContoller,
                         decoration: InputDecoration(
-                          labelText:'Confirm Password',
+                          labelText:'${LocaleKeys.RegisterConfirmPassword.tr()}',
                           labelStyle: TextStyle(
                             fontSize: 25.0,
                           ),
@@ -320,7 +319,7 @@ class _SignUpState extends State<SignUp> {
 
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Confirm Password is required';
+                            return '${LocaleKeys.RegisterConfirmPasswordisrequired.tr()}';
                           }
                           return null;
                         },
@@ -335,9 +334,9 @@ class _SignUpState extends State<SignUp> {
                           ),
                           child: MaterialButton(
 
-                            child: const Text(
+                            child:  Text(
 
-                              'Sign Up',
+                              LocaleKeys.RegisterSignUp.tr(),
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 20.0,
@@ -356,15 +355,18 @@ class _SignUpState extends State<SignUp> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('Already have an account? ',style:
+                           Text(LocaleKeys.RegisterAlreadyhaveanaccount.tr(),style:
                           TextStyle(
                             fontSize: 15.0,
                           ),),
                           GestureDetector(
                             onTap: (){
-                              Get.to(Login());
+
+                              Navigator.push(context, MaterialPageRoute(builder: (context){
+                                return Login();
+                              }));
                             },
-                            child: const Text('Sign in',style:
+                            child:  Text(LocaleKeys.RegisterSignin.tr(),style:
                             TextStyle(
                                 fontSize: 15.0,
                                 color: Colors.blue

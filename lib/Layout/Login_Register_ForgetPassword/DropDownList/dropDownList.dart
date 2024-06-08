@@ -5,6 +5,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+import '../../../Modules/Account/setting/setting.dart';
 class AppTextField extends StatefulWidget {
   final TextEditingController textEditingController;
   final String title;
@@ -52,8 +54,43 @@ class _AppTextFieldState extends State<AppTextField> {
             if (item is SelectedListItem) {
               list.add(item.name);
 
-                print('Arabic = ${item.name}');
-                await context.setLocale(Locale('ar'));
+
+                if('Arabic' ==item.name){
+                  setState(() async{
+
+                    await context.setLocale(Locale('ar'));
+                    RestartWidget.restartApp(context);
+                    print('Arabic = ${item.name}');
+                  });
+                }
+                else if('English' ==item.name){
+                  setState(()async {
+
+                    await context.setLocale(Locale('en'));
+                    RestartWidget.restartApp(context);
+                    print('English = ${item.name}');
+                  });
+                }
+                else if('germany' ==item.name){
+                  setState(() async{
+
+                    await context.setLocale(Locale('de'));
+                    RestartWidget.restartApp(context);
+                    print('germany = ${item.name}');
+                  });
+                }
+                else if('france' ==item.name){
+
+                  await context.setLocale(Locale('fr'));
+                  RestartWidget.restartApp(context);
+                  print('france = ${item.name}');
+                }
+                else if('japan' ==item.name){
+
+                  await context.setLocale(Locale('ja'));
+                  RestartWidget.restartApp(context);
+                  print('japan = ${item.name}');
+                }
                 print('Arabic');
 
               // to take the name of item selected to print it in the status

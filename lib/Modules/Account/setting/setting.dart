@@ -1,12 +1,14 @@
+
 import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import '../../../Layout/Login_Register_ForgetPassword/DropDownList/dropDownList.dart';
+
 import '../../../network/local/cache_helper.dart';
 import '../../../provider/dark_theme_provider.dart';
+import '../../../translations/locale_keys.g.dart';
 import 'accountsecurity.dart';
 
 class Setting extends ConsumerStatefulWidget {
@@ -23,13 +25,16 @@ class _Setting extends ConsumerState<Setting> {
   void initState() {
     super.initState();
     isActive = CacheHelper.getBool(key: 'darkMode') ?? false;
-    //selectLanguage();
+
   }
   void selectLanguage()async{
+   if(_languageContoller.text =='Arabic'){
+     print('from get translation');
+     setState(() async{
+       await context.setLocale(const Locale('ar'));
+     });
+   }
 
-      setState(() async{
-        await context.setLocale(const Locale('ar'));
-      });
 
   }
   final _languageContoller = TextEditingController();
@@ -37,9 +42,10 @@ class _Setting extends ConsumerState<Setting> {
   @override
   Widget build(BuildContext context) {
    // String x = LocaleKeys.Arabic.tr();
+    //selectLanguage();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Setting'),
+        title:  Text(LocaleKeys.SettingTitle.tr()),
         centerTitle: true,
       ),
       body: Padding(
@@ -52,15 +58,15 @@ class _Setting extends ConsumerState<Setting> {
                 onPressed: () {},
                 child: Row(
                   children: [
-                    const Column(
+                     Column(
                       children: [
                         Text(
-                          "dark mode ",
+                          LocaleKeys.Settingdarkmode.tr(),
                           style: TextStyle(
                             fontSize: 17.5,
                             fontWeight: FontWeight.w400,
                           ),
-                        ),
+                         ),
                       ],
                     ),
                     const Spacer(flex: 1),
@@ -89,21 +95,24 @@ class _Setting extends ConsumerState<Setting> {
                 SelectedListItem(name: "japan"), // Corrected from 'Japan' to 'Japan'
               ],
               textEditingController: _languageContoller,
-              title: 'Select Language',
-              hint: 'Language',
+              title: '${LocaleKeys.InstructorBasicInformationSelectLanguage.tr()}',
+              hint: '${LocaleKeys.InstructorBasicInformationLanguage.tr()}',
               isDataSelected: true,
             ),
             SizedBox(height: 10.h),
             MaterialButton(
               onPressed: () {
-                Get.to(Acount_Security());
+                //Get.to(Acount_Security());
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return Acount_Security();
+                }));
               },
               child: SizedBox(
                 width: double.infinity,
-                child: const Row(
+                child:  Row(
                   children: [
                     Text(
-                      "update password",
+                      LocaleKeys.Settingupdatepassword.tr(),
                       style: TextStyle(
                         fontSize: 17.0,
                       ),
@@ -114,9 +123,45 @@ class _Setting extends ConsumerState<Setting> {
                 ),
               ),
             ),
-          ],
+            ],
         ),
       ),
     );
   }
+
+
+
+
 }
+class RestartWidget extends StatefulWidget {
+  final Widget child;
+
+  RestartWidget({required this.child});
+
+  static void restartApp(BuildContext context) {
+    final _RestartWidgetState? state = context.findAncestorStateOfType<_RestartWidgetState>();
+    state?.restartApp();
+  }
+
+  @override
+  _RestartWidgetState createState() => _RestartWidgetState();
+}
+
+class _RestartWidgetState extends State<RestartWidget> {
+  Key key = UniqueKey();
+
+  void restartApp() {
+    setState(() {
+      key = UniqueKey();  // تغيير المفتاح لإعادة بناء الشجرة
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return KeyedSubtree(
+      key: key,
+      child: widget.child,
+    );
+  }
+}
+

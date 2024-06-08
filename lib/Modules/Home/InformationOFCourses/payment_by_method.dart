@@ -5,11 +5,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
 import 'package:learning/shared/constant.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import '../../../apis/courseInformation/http_service_courseInformation.dart';
 import '../../../network/local/cache_helper.dart';
+import '../../../translations/locale_keys.g.dart';
 
 class PaymentByMethod extends StatefulWidget {
    PaymentByMethod({required this.courseId,required this.coursePrice,
@@ -47,7 +47,13 @@ class _PaymentByMethodState extends State<PaymentByMethod> {
 
       print(']]]]]]]]]]]]]]]]]]]]]from edit');
       print('from payment');
-      await httpServiceCourse.paymentByMethod(
+      print('f1= ${_selectedImage!.files.single.path}');
+      print('f2= ${getData?['data']['_id']}');
+      print('f3= ${pohonePrice}');
+      print('f4= ${_phoneContoller.text}');
+      print('f5= ${widget.courseId}');
+      print('f6= ${CacheHelper.getData(key: 'token')}');
+       await httpServiceCourse.paymentByMethod(
           _selectedImage!.files.single.path,
           getData?['data']['_id'],
           pohonePrice,
@@ -75,6 +81,7 @@ class _PaymentByMethodState extends State<PaymentByMethod> {
       // Handle validation errors or network errors
       setState(() {
         errorMessage = 'Error: $e';
+        print(' error! = $e');
         if (errorMessage.contains('422')) {
           errorMessage = "Check your Emails link !";
         } else {
@@ -103,7 +110,7 @@ class _PaymentByMethodState extends State<PaymentByMethod> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Buy'),
+        title: Text(LocaleKeys.PaymentByMethodBuy.tr()),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -111,19 +118,19 @@ class _PaymentByMethodState extends State<PaymentByMethod> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Price of Course : ${widget.coursePrice}'),
+              Text('${LocaleKeys.PaymentByMethodPriceofCourse.tr()} ${widget.coursePrice}'),
               SizedBox(height: 10.h,),
-              Text('Send on This Number : ${widget.numberOFMethod}'),
+              Text('${LocaleKeys.PaymentByMethodSendonThisNumber.tr()} ${widget.numberOFMethod}'),
               SizedBox(height: 10.h,),
-              Text('Enter the Sender Phone : '),
+              Text(LocaleKeys.PaymentByMethodEntertheSenderPhone.tr()),
               SizedBox(height: 10.h,),
               Form(child: Column(
                 key: _formKey,
                 children: [
                   TextFormField(
                     controller: _phoneContoller,
-                    decoration: const InputDecoration(
-                      labelText:'Sender Phone Number',
+                    decoration:  InputDecoration(
+                      labelText:'${LocaleKeys.PaymentByMethodSenderPhoneNumber.tr()}',
                       labelStyle: TextStyle(
                         fontSize: 25.0,
                       ),
@@ -139,7 +146,7 @@ class _PaymentByMethodState extends State<PaymentByMethod> {
           
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Phone is required';
+                        return '${LocaleKeys.PaymentByMethodPhoneisrequired.tr()}';
                       }
                       return null;
                     },
@@ -194,7 +201,7 @@ class _PaymentByMethodState extends State<PaymentByMethod> {
                 ),
               ),
               SizedBox(height: 10.h),
-              Text('Upload Image of Payment Receipt  ',
+              Text( LocaleKeys.PaymentByMethodUploadImageofPaymentReceipt.tr(),
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 15.0.sp
@@ -202,8 +209,8 @@ class _PaymentByMethodState extends State<PaymentByMethod> {
               ),
               SizedBox(height: 10.h),
               MaterialButton(
-                child: const Text(
-                  'Enroll Now',
+                child:  Text(
+                  LocaleKeys.PaymentByMethodEnrollNow.tr(),
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20.0,
@@ -253,7 +260,7 @@ class _PaymentByMethodState extends State<PaymentByMethod> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                title: Text('Please Upload Image!'
+                title: Text(LocaleKeys.PaymentByMethodPleaseUploadImage.tr()
                   ,style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -266,7 +273,7 @@ class _PaymentByMethodState extends State<PaymentByMethod> {
 
               ListTile(
                 leading: Icon(Icons.store),
-                title: Text('Gallery'),
+                title: Text(LocaleKeys.PaymentByMethodGallery.tr()),
                 onTap: () {
                   // Handle delete action
                   _pickImageFromGallery();

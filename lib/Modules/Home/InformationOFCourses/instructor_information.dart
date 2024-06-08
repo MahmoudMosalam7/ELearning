@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-
 import '../../../apis/update_instructor/http_service_courses.dart';
 import '../../../apis/update_instructor/http_service_update_instructor.dart';
 import '../../../models/listView_Courses.dart';
 import '../../../network/local/cache_helper.dart';
+import '../../../translations/locale_keys.g.dart';
 import '../Product.dart';
 import 'CourseInformation.dart';
 
+import 'package:easy_localization/easy_localization.dart';
 class ProfilePage extends StatefulWidget {
   final String id;
 
@@ -109,7 +108,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: Text(LocaleKeys.ProfilePageTitle.tr()),
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
@@ -148,21 +147,21 @@ class _ProfilePageState extends State<ProfilePage> {
                       children: [
                         SizedBox(height: 5.0),
                         Text(
-                          'Job Title : ${serverData['data']['results']['jobTitle']}',
+                          '${LocaleKeys.ProfilePageJobTitle.tr()} ${serverData['data']['results']['jobTitle']}',
                           style: TextStyle(
                             fontSize: 12.0,
                           ),
                         ),
                         SizedBox(height: 5.0),
                         Text(
-                          'Job Description : ${serverData['data']['results']['jobDescription']}',
+                          '${LocaleKeys.ProfilePageJobDescription.tr()} ${serverData['data']['results']['jobDescription']}',
                           style: TextStyle(
                             fontSize: 12.0,
                           ),
                         ),
                         SizedBox(height: 5.0),
                         Text(
-                          'LinkedIn: ${serverData['data']['results']['linkedinUrl']}',
+                          '${LocaleKeys.ProfilePageLinkedIn.tr()} ${serverData['data']['results']['linkedinUrl']}',
                           style: TextStyle(
                             fontSize: 12.0,
                           ),
@@ -188,7 +187,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                         Text(
-                          'Students',
+                          LocaleKeys.ProfilePageStudents.tr(),
                           style: TextStyle(
                             fontSize: 16.0,
                           ),
@@ -214,7 +213,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ],
                         ),
                         Text(
-                          'Course Ratings',
+                          LocaleKeys.ProfilePageCourseRatings.tr(),
                           style: TextStyle(
                             fontSize: 16.0,
                           ),
@@ -234,10 +233,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     final product = products[index];
                     return InkWell(
                       onTap: () {
-                        Get.to(CourseInformation(
-                          courseId: products[index].id,
-                          fromInstructor: false,
-                        ));
+                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                          return CourseInformation(
+                            courseId: products[index].id,
+                            fromInstructor: false,
+                          );
+                        }));
+
                       },
                       child: ProductListItem(product: product),
                     );

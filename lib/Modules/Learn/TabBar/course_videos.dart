@@ -1,24 +1,22 @@
 import 'dart:async';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:accordion/accordion.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:learning/Modules/Learn/TabBar/testScreen.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:video_player/video_player.dart';
-
 import '../../../apis/courseInformation/http_service_courseInformation.dart';
 import '../../../apis/reviews/reviews.dart';
 import '../../../apis/upload_course/add_price_compiler_delete_publish.dart';
-import '../../../chat/firebase/fire_database.dart';
 import '../../../chat/home/chat_home_screen.dart';
 import '../../../models/module_model.dart';
 import '../../../network/local/cache_helper.dart';
 import '../../../shared/constant.dart';
+import '../../../translations/locale_keys.g.dart';
 import 'compiler_webview.dart';
 import 'course_content_screen.dart';
 
@@ -129,9 +127,9 @@ class _CourseContentState extends State<CourseContent> with SingleTickerProvider
     if (_isLoading) {
       return Scaffold(
         appBar: AppBar(
-          title: const Text("Course Content"),
+          title:  Text(LocaleKeys.LearnCourseContentTitle.tr()),
         ),
-        body: const Center(child: CircularProgressIndicator()),
+        body: buildShimmerEffect(),
       );
     } else {
       if (data != null && data!.isNotEmpty) {
@@ -144,7 +142,7 @@ class _CourseContentState extends State<CourseContent> with SingleTickerProvider
         print('[[[[[[[[[[[[[');
         return Scaffold(
           appBar: AppBar(
-            title: const Text("Course Content"),
+            title:  Text(LocaleKeys.LearnCourseContentTitle.tr()),
               bottom: TabBar(
                 controller: _tabController,
                 indicatorColor: Colors.green,
@@ -153,10 +151,10 @@ class _CourseContentState extends State<CourseContent> with SingleTickerProvider
                 unselectedLabelColor: Colors.grey, // Set the color of unselected tabs' text to gray
                 tabs: [
                   Tab(
-                    text: 'Curriculum',
+                    text: '${LocaleKeys.LearnCourseContentCurriculum.tr()}',
                   ),
                   Tab(
-                    text: 'Test',
+                    text: '${LocaleKeys.LearnCourseContentTest.tr()}',
                   ),
                 ],
               )
@@ -174,18 +172,99 @@ class _CourseContentState extends State<CourseContent> with SingleTickerProvider
       } else {
         return Scaffold(
           appBar: AppBar(
-            title: const Text("Course Content"),
+            title:  Text(LocaleKeys.LearnCourseContentTitle.tr()),
           ),
-          body: const Center(
-            child: Text("No data available"),
+          body:  Center(
+            child: Text(LocaleKeys.LearnCourseContentNodataavailable.tr()),
           ),
         );
       }
     }
   }
+  Widget buildShimmerEffect() {
+    return Padding(
+      padding: EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 20.0),
+                  Row(
+                    children: [
+                      Container(
+                        width: 150.0,
+                        height: 20.0,
+                        color: Colors.white,
+                      ),
+                      SizedBox(width: 5.0),
+                      Container(
+                        width: 20.0,
+                        height: 20.0,
+                        color: Colors.white,
+                      ),
+                      SizedBox(width: 5.0),
+                      Container(
+                        width: 100.0,
+                        height: 20.0,
+                        color: Colors.white,
+                      ),
+                      if (true) // Placeholder for optional compiler button
+                        SizedBox(width: 5.0),
+                      if (true)
+                        Expanded(
+                          child: Container(
+                            width: 100.0,
+                            height: 20.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                      SizedBox(width: 5.0),
+                    ],
+                  ),
+                  SizedBox(height: 10.0),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: 10, // Placeholder for the number of sections
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Shimmer.fromColors(
+                          baseColor: Color(0xFFE0E0E0),
+                          highlightColor: Color(0xFFF5F5F5),
+                          child: Column(
+                            children: [
+                              Container(
+                                height: MediaQuery.of(context).size.height * 0.05,
+                                color: Colors.white,
+                                margin: EdgeInsets.only(bottom: 8.0),
+                              ),
+                              Container(
+                                height: 50.0, // Placeholder for module content
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  SizedBox(height: 10.0),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget curriculum (List<dynamic> listSections){
     if (_isLoading) {
-      return Center(child: CircularProgressIndicator());
+      return buildShimmerEffect();
     } else {
     return Padding(
       padding: EdgeInsets.all(8.0.r),
@@ -200,7 +279,7 @@ class _CourseContentState extends State<CourseContent> with SingleTickerProvider
                   Row(
                     children: [
                       SizedBox(width: 5.w),
-                      Text('Sections',
+                      Text(LocaleKeys.LearnCourseContentSections.tr(),
                         style: TextStyle(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.bold
@@ -213,7 +292,9 @@ class _CourseContentState extends State<CourseContent> with SingleTickerProvider
                         if(email.isNotEmpty){
 
                          print('email =$email');
-                          Get.to(ChatHomeScreen(email:email ,));
+                          Navigator.push(context, MaterialPageRoute(builder: (context){
+                            return ChatHomeScreen(email:email ,);
+                          }));
                         }
 
                       },
@@ -222,7 +303,7 @@ class _CourseContentState extends State<CourseContent> with SingleTickerProvider
                       TextButton(onPressed: (){
                        // Get.to(CompilerWebView(compilerURL: data!['compiler'],));
                         _showRatingDialog(context);
-                      }, child: Text('Rating',
+                      }, child: Text(LocaleKeys.LearnCourseContentRating.tr(),
                         style: TextStyle(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.bold
@@ -231,8 +312,11 @@ class _CourseContentState extends State<CourseContent> with SingleTickerProvider
                       Spacer(),
                       if(data!['compiler'] != null)
                         TextButton(onPressed: (){
-                          Get.to(CompilerWebView(compilerURL: data!['compiler'],));
-                        }, child: Text('Compiler',
+                          Navigator.push(context, MaterialPageRoute(builder: (context){
+                            return CompilerWebView(compilerURL: data!['compiler'],);
+                          }));
+
+                        }, child: Text(LocaleKeys.LearnCourseContentCompiler.tr(),
                         style: TextStyle(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.bold
@@ -325,7 +409,7 @@ class _CourseContentState extends State<CourseContent> with SingleTickerProvider
                    // VideoTrailer(videoUrl:path,) ;
                     //Get.to(VideoPreview(videoUrl:path,));
                   }
-                }, child: module[index].isFree?Text('Watch',
+                }, child: module[index].isFree?Text(LocaleKeys.LearnCourseContentScreenWatch.tr(),
                   style: TextStyle(
                       color: Colors.white
                   ),
@@ -348,7 +432,7 @@ class _CourseContentState extends State<CourseContent> with SingleTickerProvider
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Rate Us'),
+          title: Text(LocaleKeys.LearnCourseContentScreenRateUs.tr()),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -379,7 +463,7 @@ class _CourseContentState extends State<CourseContent> with SingleTickerProvider
                   });
                 },
                 decoration: InputDecoration(
-                  hintText: 'Write your review...',
+                  hintText: '${LocaleKeys.LearnCourseContentWriteyourreview.tr()}',
                   border: OutlineInputBorder(),
                 ),
                 maxLines: 3,
@@ -388,7 +472,7 @@ class _CourseContentState extends State<CourseContent> with SingleTickerProvider
           ),
           actions: <Widget>[
             GestureDetector(
-              child: Text('Cancel'),
+              child: Text(LocaleKeys.LearnCourseContentScreenCancel.tr()),
               onTap: () {
                 setState(() {
                   _rating = 0;
@@ -398,7 +482,7 @@ class _CourseContentState extends State<CourseContent> with SingleTickerProvider
               },
             ),
             GestureDetector(
-              child: Text('Submit'),
+              child: Text(LocaleKeys.LearnCourseContentScreenSubmit.tr()),
               onTap: () {
 
                 _createReview(_rating,_review);

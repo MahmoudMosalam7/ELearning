@@ -1,24 +1,16 @@
-
-import 'dart:async';
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:learning/Modules/Account/become_an_instructor/Instructor_page/add_new_course/course_curriculum/pick_file_and_video.dart';
-
 import '../../../../../../apis/upload_course/section/http_service_create_section.dart';
-import '../../../../../../models/file_and_video_of_section_model.dart';
 import '../../../../../../models/section_model.dart';
 import '../../../../../../network/local/cache_helper.dart';
 import '../../../../../../shared/constant.dart';
+import '../../../../../../translations/locale_keys.g.dart';
 import '../add_price_publish.dart';
-import 'file_and_video_container.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 class CourseCurriculum extends StatefulWidget {
   final bool fromUpdateCourse;
   final String courseId;
@@ -203,7 +195,7 @@ class _CourseCurriculumState extends State<CourseCurriculum> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Course Curriculum',
+                LocaleKeys.InstructorCourseCurriculumCourseCurriculum.tr(),
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20.0.sp,
@@ -233,7 +225,7 @@ class _CourseCurriculumState extends State<CourseCurriculum> {
                     ),
                     child: MaterialButton(
                       child: Text(
-                        'Add Section',
+                        LocaleKeys.InstructorCourseCurriculumAddSection.tr(),
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 22.0.sp,
@@ -259,7 +251,7 @@ class _CourseCurriculumState extends State<CourseCurriculum> {
                     ),
                     child: MaterialButton(
                       child: Text(
-                        'Save & Next',
+                        LocaleKeys.InstructorCourseCurriculumSaveNext.tr(),
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 22.0.sp,
@@ -267,7 +259,9 @@ class _CourseCurriculumState extends State<CourseCurriculum> {
                       ),
                       onPressed: () {
                         // Handle Save & Next button press
-                        Get.to(AddPriceAndPublish(courseId: '', fromInstructor: false,));
+                          Navigator.push(context, MaterialPageRoute(builder: (context){
+                          return AddPriceAndPublish(courseId: '', fromInstructor: false,);
+                        }));
                       },
                     ),
                   ),
@@ -369,7 +363,7 @@ class _CourseCurriculumState extends State<CourseCurriculum> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Please Change Section Name!',
+            LocaleKeys.InstructorCourseCurriculumPleaseChangeSectionName.tr(),
             style: TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.bold,
@@ -381,7 +375,7 @@ class _CourseCurriculumState extends State<CourseCurriculum> {
               TextField(
                 controller: _sectionNameControllers,
                 decoration: InputDecoration(
-                  hintText: 'Enter Section Name',
+                  hintText: '${LocaleKeys.InstructorCourseCurriculumEnterSectionName.tr()}',
                 ),
                 onSubmitted: (value) {
                   setState(() {

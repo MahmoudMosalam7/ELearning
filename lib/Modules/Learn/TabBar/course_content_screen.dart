@@ -7,22 +7,20 @@ import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:accordion/accordion.dart';
-import 'package:flip_card/flip_card.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../apis/courseInformation/http_service_courseInformation.dart';
 import '../../../apis/reviews/reviews.dart';
 import '../../../apis/upload_course/add_price_compiler_delete_publish.dart';
 import '../../../chat/home/chat_home_screen.dart';
 import '../../../models/module_model.dart';
-import '../../../models/test_model.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../../../network/local/cache_helper.dart';
 import '../../../shared/constant.dart';
+import '../../../translations/locale_keys.g.dart';
 import '../../Home/InformationOFCourses/CourseInformation.dart';
 import 'compiler_webview.dart';
 
@@ -34,36 +32,6 @@ class CourseContentScreen extends StatefulWidget {
   @override
   State<CourseContentScreen> createState() => _CourseContentScreenState();
 }
-/*
-*
-  @override
-  void initState() {
-    super.initState();
-    if (_isLoading) {
-      _getCourse(); // Fetch course data only if _isLoading is true
-    } // Fetch course data only if _isLoading is true
-
-    _checkPermissions();
-    IsolateNameServer.registerPortWithName(
-      _port.sendPort,
-      'downloader_send_port',
-    );
-    _port.listen((dynamic data) {
-      String id = data[0];
-      int status = data[1];
-      int progress = data[2];
-
-      final DownloadTaskStatus taskStatus = DownloadTaskStatus.values[status];
-
-      if (taskStatus == DownloadTaskStatus.complete) {
-        print('Download complete!');
-      } else if (taskStatus == DownloadTaskStatus.failed) {
-        print('Download failed!');
-      }
-    });
-    FlutterDownloader.registerCallback(downloadCallback);
-  }
-*/
 class _CourseContentScreenState extends State<CourseContentScreen> {
   HttpServiceCourse httpServiceCourse = HttpServiceCourse();
   bool _isLoading = true;
@@ -125,7 +93,8 @@ class _CourseContentScreenState extends State<CourseContentScreen> {
   }
 
   void _downloadVideo(String link) async {
-    final url = ' https://res.cloudinary.com/dcjrolufm/video/upload/v1711559499/modules/module-d1b87675-e9b3-441e-9c4b-1347860b7651-1711559457652.mp4';
+    //' https://res.cloudinary.com/dcjrolufm/video/upload/v1711559499/modules/module-d1b87675-e9b3-441e-9c4b-1347860b7651-1711559457652.mp4'
+    final url = link;
     if (url.isNotEmpty) {
       print('lllllllllinkkkkkkk = $url');
       final externalDir = await getExternalStorageDirectory();
@@ -207,10 +176,91 @@ class _CourseContentScreenState extends State<CourseContentScreen> {
       });
     }
   }
+  Widget buildShimmerEffect() {
+    return Padding(
+      padding: EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 20.0),
+                  Row(
+                    children: [
+                      Container(
+                        width: 150.0,
+                        height: 20.0,
+                        color: Colors.white,
+                      ),
+                      SizedBox(width: 5.0),
+                      Container(
+                        width: 20.0,
+                        height: 20.0,
+                        color: Colors.white,
+                      ),
+                      SizedBox(width: 5.0),
+                      Container(
+                        width: 100.0,
+                        height: 20.0,
+                        color: Colors.white,
+                      ),
+                      if (true) // Placeholder for optional compiler button
+                        SizedBox(width: 5.0),
+                      if (true)
+                        Expanded(
+                          child: Container(
+                            width: 100.0,
+                            height: 20.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                      SizedBox(width: 5.0),
+                    ],
+                  ),
+                  SizedBox(height: 10.0),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: 10, // Placeholder for the number of sections
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Shimmer.fromColors(
+                          baseColor: Color(0xFFE0E0E0),
+                          highlightColor: Color(0xFFF5F5F5),
+                          child: Column(
+                            children: [
+                              Container(
+                                height: MediaQuery.of(context).size.height * 0.05,
+                                color: Colors.white,
+                                margin: EdgeInsets.only(bottom: 8.0),
+                              ),
+                              Container(
+                                height: 50.0, // Placeholder for module content
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  SizedBox(height: 10.0),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return Center(child: CircularProgressIndicator());
+      return buildShimmerEffect();
     }else{
     return curriculum(listSections);}
   }
@@ -229,8 +279,7 @@ class _CourseContentScreenState extends State<CourseContentScreen> {
                     SizedBox(height: 20.h),
                     Row(
                       children: [
-                        SizedBox(width: 5.w),
-                        Text('Sections',
+                        Text(LocaleKeys.LearnCourseContentScreenSections.tr(),
                           style: TextStyle(
                               fontSize: 18.sp,
                               fontWeight: FontWeight.bold
@@ -243,30 +292,46 @@ class _CourseContentScreenState extends State<CourseContentScreen> {
                           if(email.isNotEmpty){
 
                             print('email =$email');
-                            Get.to(ChatHomeScreen(email:email ,));
+                            Navigator.push(context, MaterialPageRoute(builder: (context){
+                              return ChatHomeScreen(email:email ,);
+                            }));
                           }
 
                         },
                             icon: Icon(Icons.chat)),
-                        Spacer(),
+                        SizedBox(width: 5.w,),
                         TextButton(onPressed: (){
                           // Get.to(CompilerWebView(compilerURL: data!['compiler'],));
                           _showRatingDialog(context);
-                        }, child: Text('Rating',
+                        }, child: Text(LocaleKeys.LearnCourseContentRating.tr(),
                           style: TextStyle(
                               fontSize: 18.sp,
                               fontWeight: FontWeight.bold
                           ) ,)),
                         if(data!['compiler'] != null)
-                          Spacer(),
+                          SizedBox(width: 5.w,),
                         if(data!['compiler'] != null)
-                          TextButton(onPressed: (){
-                            Get.to(CompilerWebView(compilerURL: data!['compiler'],));
-                          }, child: Text('Compiler',
-                            style: TextStyle(
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.bold
-                            ) ,)),
+                          Expanded(
+                            child: Flexible(
+                              child: TextButton(onPressed: (){
+
+                                Navigator.push(context, MaterialPageRoute(builder: (context){
+                                  return CompilerWebView(compilerURL: data!['compiler'],);
+                                }));
+                              }, child: Text(LocaleKeys.LearnCourseContentScreenCompiler.tr(),
+                                style: TextStyle(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.bold
+                                )
+                                , maxLines: 1, // Limit to one line
+                                overflow: TextOverflow.ellipsis,
+                              )
+
+                              ),
+                            ),
+                          ),
+
+                        SizedBox(width: 5.w,),
 
                       ],
                     ),
@@ -345,6 +410,7 @@ class _CourseContentScreenState extends State<CourseContentScreen> {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
+                Spacer(),
                 TextButton(onPressed: ()async{
                   //VideoPreview
                   if(module[index].isFree){
@@ -352,10 +418,8 @@ class _CourseContentScreenState extends State<CourseContentScreen> {
                     Navigator.of(context).push(MaterialPageRoute(builder: (context){
                       return VideoPlayerScreen(videoUrl:path,) ;
                     }));
-                    // VideoTrailer(videoUrl:path,) ;
-                    //Get.to(VideoPreview(videoUrl:path,));
                   }
-                }, child: module[index].isFree?Text('Watch',
+                }, child: module[index].isFree?Text(LocaleKeys.LearnCourseContentScreenWatch.tr(),
                   style: TextStyle(
                       color: Colors.white
                   ),
@@ -392,7 +456,7 @@ class _CourseContentScreenState extends State<CourseContentScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Rate Us'),
+          title: Text(LocaleKeys.LearnCourseContentScreenRateUs.tr()),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -423,7 +487,7 @@ class _CourseContentScreenState extends State<CourseContentScreen> {
                   });
                 },
                 decoration: InputDecoration(
-                  hintText: 'Write your review...',
+                  hintText: '${LocaleKeys.LearnCourseContentWriteyourreview.tr()}',
                   border: OutlineInputBorder(),
                 ),
                 maxLines: 3,
@@ -432,7 +496,7 @@ class _CourseContentScreenState extends State<CourseContentScreen> {
           ),
           actions: <Widget>[
             GestureDetector(
-              child: Text('Cancel'),
+              child: Text('${LocaleKeys.LearnCourseContentScreenCancel.tr()}'),
               onTap: () {
                 setState(() {
                   _rating = 0;
@@ -442,7 +506,7 @@ class _CourseContentScreenState extends State<CourseContentScreen> {
               },
             ),
             GestureDetector(
-              child: Text('Submit'),
+              child: Text('${LocaleKeys.LearnCourseContentScreenSubmit.tr()}'),
               onTap: () {
 
                 _createReview(_rating,_review);

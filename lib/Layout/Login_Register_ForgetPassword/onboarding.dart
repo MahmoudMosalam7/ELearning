@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:learning/network/local/cache_helper.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
-import '../../Modules/Home/home.dart';
+import 'package:easy_localization/easy_localization.dart';
+import '../../translations/locale_keys.g.dart';
 import '../MainBottomNavigationBar.dart';
+import 'Login.dart';
 
 class Onboarding extends StatefulWidget{
   @override
   State<Onboarding> createState() => _OnboardingState();
 }
+//LocaleKeys.Settingupdatepassword.tr()
 
 class _OnboardingState extends State<Onboarding> {
   @override
@@ -48,7 +50,7 @@ class _OnboardingState extends State<Onboarding> {
                   totalRepeatCount: 1,
                   animatedTexts: [
                     RotateAnimatedText(
-                      "Hello to Elearning...",
+                      LocaleKeys.OnBoardingHellotoElearning.tr(),
                       rotateOut: false,
                     ),
                   ],
@@ -81,7 +83,7 @@ class _OnboardingState extends State<Onboarding> {
                               totalRepeatCount: 1,
                               animatedTexts: [
                                 TyperAnimatedText(
-                                  "Welcome to Learning! In this app, you will learn a lot of courses",
+                                  LocaleKeys.OnBoardingWelcometoLearningInthisapp.tr(),
                                   speed: Duration(milliseconds: 50),
                                 ),
                               ],
@@ -110,7 +112,7 @@ class _OnboardingState extends State<Onboarding> {
                         totalRepeatCount: 1,
                         animatedTexts: [
                           WavyAnimatedText(
-                            "Let's Go...",
+                            LocaleKeys.OnBoardingLetsGo.tr(),
                             textStyle: TextStyle(
                               color: Colors.white,
                               height: 0.8,
@@ -142,16 +144,22 @@ class _OnboardingState extends State<Onboarding> {
                     GestureDetector(
                         onTap: () {
 
-                          CacheHelper.saveData(key: 'onBoarding', value: true).
+                          /*CacheHelper.saveData(key: 'onBoarding', value: true).
                           then((value) {
                             print('value when Save OnBoarding');
                             if(value){
                               Navigator.of(context).pushReplacement(MaterialPageRoute
                                 (builder: (context)=>HomeLayout()));
                             }
-                          });
+                          });*/
+                          String? token = CacheHelper.getData(key: 'token');
+                          if (token != null) {
+                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomeLayout()));
+                          } else {
+                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Login()));
+                          }
                         },
-                        child: Text("skip",
+                        child: Text(LocaleKeys.OnBoardingskip.tr(),
                           style: TextStyle(
                               color: Colors.white
                           ),
@@ -169,17 +177,23 @@ class _OnboardingState extends State<Onboarding> {
                     GestureDetector(
 
                         onTap: (){
-                          CacheHelper.saveData(key: 'onBoarding', value: true).
+/*                          CacheHelper.saveData(key: 'onBoarding', value: true).
                           then((value) {
                             print('value when Save OnBoarding');
                             if(value){
                               Navigator.of(context).pushReplacement(MaterialPageRoute
                                 (builder: (context)=>HomeLayout()));
                             }
-                          });
+                          });*/
+                          String? token = CacheHelper.getData(key: 'token');
+                          if (token != null) {
+                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomeLayout()));
+                          } else {
+                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Login()));
+                          }
 
                         },
-                        child: Text("done",
+                        child: Text(LocaleKeys.OnBoardingsdone.tr(),
                           style: TextStyle(
                               color: Colors.white
                           ),))
@@ -190,7 +204,7 @@ class _OnboardingState extends State<Onboarding> {
                               curve: Curves.easeIn
                           );
                         },
-                        child: Text("next",
+                        child: Text(LocaleKeys.OnBoardingsnext.tr(),
                           style: TextStyle(
                               color: Colors.white
                           ),)),

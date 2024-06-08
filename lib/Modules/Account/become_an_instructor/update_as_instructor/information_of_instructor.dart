@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:learning/TColors.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import '../../../../apis/update_instructor/http_service_update_instructor.dart';
 import '../../../../network/local/cache_helper.dart';
+import '../../../../translations/locale_keys.g.dart';
 
 class InstructorInformation extends StatefulWidget {
   @override
@@ -106,7 +106,7 @@ class _InstructorInformationState extends State<InstructorInformation> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Please Complete This Information!',
+                Text(LocaleKeys.InstructorInstructorInformationPleaseCompleteThisInformation.tr(),
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16.0.sp
@@ -162,14 +162,14 @@ class _InstructorInformationState extends State<InstructorInformation> {
                   obscureText: false,
                   controller: _jobTitleContoller,
                   decoration: InputDecoration(
-                      labelText: "Job Title",
+                      labelText: "${LocaleKeys.InstructorInstructorInformationJobTitle.tr()}",
                       border: OutlineInputBorder(
                           borderRadius:BorderRadius.all(Radius.circular(20.0.r) )
                       )
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Job Title is required';
+                      return '${LocaleKeys.InstructorInstructorInformationJobTitleisrequired.tr()}';
                     }
                     return null;
                   },
@@ -182,14 +182,14 @@ class _InstructorInformationState extends State<InstructorInformation> {
                   obscureText: false,
                   controller: _jobDescriptionContoller,
                   decoration: InputDecoration(
-                      labelText: "Job Description",
+                      labelText: "${LocaleKeys.InstructorInstructorInformationJobDescription.tr()}",
                       border: OutlineInputBorder(
                           borderRadius:BorderRadius.all(Radius.circular(20.0.r) )
                       )
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Job Description is required';
+                      return '${LocaleKeys.InstructorInstructorInformationJobDescriptionisrequired.tr()}';
                     }
                     return null;
                   },
@@ -202,14 +202,14 @@ class _InstructorInformationState extends State<InstructorInformation> {
                   obscureText: false,
                   controller: _faceAccountContoller,
                   decoration: InputDecoration(
-                      labelText: "FaceBook Account Url",
+                      labelText: "${LocaleKeys.InstructorInstructorInformationFaceBookAccountUrl.tr()}",
                       border: OutlineInputBorder(
                           borderRadius:BorderRadius.all(Radius.circular(20.0.r) )
                       )
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'FaceBook Account is required';
+                      return '${LocaleKeys.InstructorInstructorInformationFaceBookAccountisrequired.tr()}';
                     }
                     return null;
                   },
@@ -222,14 +222,14 @@ class _InstructorInformationState extends State<InstructorInformation> {
                   obscureText: false,
                   controller: _linkedinAccountContoller,
                   decoration: InputDecoration(
-                      labelText: "Linkedin Account Url",
+                      labelText: "${LocaleKeys.InstructorInstructorInformationLinkedinAccountUrl.tr()}",
                       border: OutlineInputBorder(
                           borderRadius:BorderRadius.all(Radius.circular(20.0.r) )
                       )
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Linkedin Account is required';
+                      return '${LocaleKeys.InstructorInstructorInformationLinkedinAccountisrequired.tr()}';
                     }
                     return null;
                   },
@@ -242,14 +242,14 @@ class _InstructorInformationState extends State<InstructorInformation> {
                   obscureText: false,
                   controller: _instagramAccountContoller,
                   decoration: InputDecoration(
-                      labelText: "Instagram Account Url",
+                      labelText: "${LocaleKeys.InstructorInstructorInformationInstagramAccountUrl.tr()}",
                       border: OutlineInputBorder(
                           borderRadius:BorderRadius.all(Radius.circular(20.0.r) )
                       )
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Instagram Account is required';
+                      return '${LocaleKeys.InstructorInstructorInformationInstagramAccountisrequired.tr()}';
                     }
                     return null;
                   },
@@ -268,7 +268,7 @@ class _InstructorInformationState extends State<InstructorInformation> {
                       ),
                       child: MaterialButton(
                         child:  Text(
-                          'save',
+                          '${LocaleKeys.InstructorInstructorInformationsave.tr()}',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 22.0.sp,
@@ -307,7 +307,7 @@ class _InstructorInformationState extends State<InstructorInformation> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                title: Text('Please Upload Image!'
+                title: Text('${LocaleKeys.EditAccountPleaseUploadImage.tr()}'
                 ,style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -319,7 +319,7 @@ class _InstructorInformationState extends State<InstructorInformation> {
               ),
               ListTile(
                 leading: Icon(Icons.camera_alt),
-                title: Text('Camera'),
+                title: Text('${LocaleKeys.EditAccountCamera.tr()}'),
                 onTap: () {
                   // Handle edit action
                   _pickImageFromCamera();
@@ -328,7 +328,7 @@ class _InstructorInformationState extends State<InstructorInformation> {
               ),
               ListTile(
                 leading: Icon(Icons.store),
-                title: Text('Gallery'),
+                title: Text('${LocaleKeys.EditAccountGallery.tr()}'),
                 onTap: () {
                   // Handle delete action
                   _pickImageFromGallery();

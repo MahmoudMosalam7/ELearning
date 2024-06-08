@@ -2,13 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import '../../../TColors.dart';
 import '../../../apis/forget_password/forget_password.dart';
 import '../../../apis/forget_password/http_service_check_your_email.dart';
 import '../../../network/local/cache_helper.dart';
+import '../../../translations/locale_keys.g.dart';
 import 'ResetPassword.dart';
 class CheckEmail extends StatefulWidget {
   String email;
@@ -117,8 +116,9 @@ class _CheckEmailState extends State<CheckEmail> {
         textColor: Colors.white,
         fontSize: 16.0,
       );
-      Get.to(ResetPassword( email: email,));
-
+      Navigator.push(context, MaterialPageRoute(builder: (context){
+        return ResetPassword( email: email,);
+      }));
       print(' successful!');
     } catch (e) {
       // Handle validation errors or network errors
@@ -170,7 +170,7 @@ class _CheckEmailState extends State<CheckEmail> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Check your Email',
+                    Text(LocaleKeys.CheckEmailCheckyourEmail.tr(),
                       style:TextStyle(
                         fontWeight: FontWeight.bold ,
                         fontSize: 40.0.sp,
@@ -183,7 +183,7 @@ class _CheckEmailState extends State<CheckEmail> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children:[
-                    Text('Please Enter the Code of Verification',
+                    Text(LocaleKeys.CheckEmailPleaseEntertheCodeofVerification.tr(),
                     style:TextStyle(
                       fontWeight: FontWeight.bold ,
                       fontSize: 15.0.sp,
@@ -214,7 +214,7 @@ class _CheckEmailState extends State<CheckEmail> {
                        controller: _codeContoller,
 
                        decoration:  InputDecoration(
-                         labelText:'Verification Code',
+                         labelText:'${LocaleKeys.CheckEmailVerificationCode.tr()}',
                          labelStyle: TextStyle(
                            fontSize: 25.0.sp,
                          ),
@@ -229,7 +229,7 @@ class _CheckEmailState extends State<CheckEmail> {
                        },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Code is required';
+                            return '${LocaleKeys.CheckEmailCodeisrequired.tr()}';
                           }
                           return null;
                           },
@@ -248,7 +248,7 @@ class _CheckEmailState extends State<CheckEmail> {
 
                            child:  Text(
 
-                             'Continue',
+                             LocaleKeys.CheckEmailContinue.tr(),
                              style: TextStyle(
                                color: Colors.white,
                                fontSize: 20.0.sp,
@@ -269,7 +269,7 @@ class _CheckEmailState extends State<CheckEmail> {
                          onTap: (){
                            _forgetPassword();
                          },
-                         child:  Text('send code',style:
+                         child:  Text(LocaleKeys.CheckEmailsendcode.tr(),style:
                          TextStyle(
                            fontSize: 15.0.sp,
                            color:Colors.blue,

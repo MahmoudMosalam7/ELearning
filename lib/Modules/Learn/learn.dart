@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../translations/locale_keys.g.dart';
 import 'TabBar/AllCoursesPayed.dart'; // Import the file where All widget is defined
 
+import 'package:easy_localization/easy_localization.dart';
 class LearnScreen extends StatefulWidget {
   @override
   _LearnScreenState createState() => _LearnScreenState();
@@ -40,45 +42,15 @@ class _LearnScreenState extends State<LearnScreen> with SingleTickerProviderStat
             },
           ),
         ],
-        bottom: TabBar(
-          controller: _tabController,
-          indicatorColor: Colors.green,
-        labelColor: Colors.green,
-        // Set the color of the selected tab's text to black
-          unselectedLabelColor: Colors.grey, // Set the color of unselected tabs' text to gray
-          tabs: [
-            Tab(
-              text: 'All',
-            ),
-            Tab(
-              text: 'Downloaded',
-            ),
-            Tab(
-              text: 'Favorited',
-            ),
-          ],
-        ),
-        title: const Text(
-          'My Courses',
+
+        title:  Text(
+          LocaleKeys.LearnScreenMyCourses.tr(),
           style: TextStyle(
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          All(), // Assuming All widget is for the "All" tab
-          Container(
-            color: Colors.redAccent,
-            child: const Icon(Icons.settings),
-          ),
-          Container(
-            color: Colors.cyanAccent,
-            child: const Icon(Icons.person),
-          ),
-        ],
-      ),
+      body: All(),
     );
   }
 }

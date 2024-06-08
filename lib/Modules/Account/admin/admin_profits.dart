@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:learning/models/listView_Courses.dart';
 
-import '../../../../apis/update_instructor/http_service_courses.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../../../../network/local/cache_helper.dart';
-import '../../../../shared/constant.dart';
 import '../../../apis/courseInformation/http_service_courseInformation.dart';
+import '../../../translations/locale_keys.g.dart';
 class AdminProfites extends StatefulWidget {
   const AdminProfites({super.key});
 
@@ -97,7 +95,7 @@ class _AdminProfitesState extends State<AdminProfites> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profits'),
+        title: Text(LocaleKeys.AdminProfitsTitle.tr()),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -105,14 +103,14 @@ class _AdminProfitesState extends State<AdminProfites> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("E-Learning Profits = EGP ${profits} ",style: TextStyle(
+              Text("${LocaleKeys.AdminProfitsELearningProfits1.tr()} ${profits} ",style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20.sp
               ),
               maxLines: 2,
               ),
               SizedBox(height: 20.sp,),
-              Text("E-Learning ProfitsUSD = USD ${profitsUSD}",style: TextStyle(
+              Text("${LocaleKeys.AdminProfitsELearningProfits2.tr()} ${profitsUSD}",style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20.sp
               ),

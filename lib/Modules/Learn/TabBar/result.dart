@@ -6,10 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:learning/Modules/Learn/TabBar/testScreen.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import '../../../apis/courseInformation/http_service_courseInformation.dart';
 import '../../../network/local/cache_helper.dart';
 import '../../../shared/constant.dart';
+import '../../../translations/locale_keys.g.dart';
 
 class Result extends StatefulWidget {
    Result({super.key, required this.score,required this.courseID});
@@ -125,7 +126,7 @@ class _ResultState extends State<Result> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Hello ${getData?['data']['name']}',
+                  '${LocaleKeys.LearnResultHello.tr()} ${getData?['data']['name']}',
                   style: TextStyle(
                     fontSize: 25,
                     color: Colors.white,
@@ -134,7 +135,7 @@ class _ResultState extends State<Result> {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  'Your Score is',
+                  LocaleKeys.LearnResultYourScoreis.tr(),
                   style: TextStyle(
                     fontSize: 25,
                     color: Colors.white,
@@ -157,7 +158,7 @@ class _ResultState extends State<Result> {
                     _downloadPDF(certificate!.trim());
 
                   },
-                  child: Text('Download PDF'),
+                  child: Text(LocaleKeys.LearnResultDownloadPDF.tr()),
                 ),
                 if(widget.score >= 7)
                 SizedBox(height: 20),
@@ -172,7 +173,7 @@ class _ResultState extends State<Result> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Text(
-                      'Questions and Answers',
+                      LocaleKeys.LearnResultQuestionsandAnswers.tr(),
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -214,7 +215,7 @@ class _ResultState extends State<Result> {
                         ),
                         SizedBox(height: 5),
                         Text(
-                          'Correct Answer: ${correctAnswer}',
+                          '${LocaleKeys.LearnResultCorrectAnswer.tr()} ${correctAnswer}',
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.white70,

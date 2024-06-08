@@ -2,11 +2,12 @@ import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import '../../../../../Layout/Login_Register_ForgetPassword/DropDownList/dropDownList.dart';
 import '../../../../../apis/upload_course/add_price_compiler_delete_publish.dart';
 import '../../../../../network/local/cache_helper.dart';
+import 'package:easy_localization/easy_localization.dart';
 
+import '../../../../../translations/locale_keys.g.dart';
 class AddPriceAndPublish extends StatefulWidget {
   const AddPriceAndPublish({super.key, required this.courseId, required this.fromInstructor});
   final String courseId;
@@ -233,7 +234,7 @@ class _AddPriceAndPublishState extends State<AddPriceAndPublish> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Add Price And Test',
+                Text(LocaleKeys.InstructorAddPriceAndPublishAddPriceAndTest.tr(),
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20.0.sp
@@ -245,14 +246,14 @@ class _AddPriceAndPublishState extends State<AddPriceAndPublish> {
                   obscureText: false,
                   controller: _amountContoller,
                   decoration: InputDecoration(
-                      labelText: "amount",
+                      labelText: "${LocaleKeys.InstructorAddPriceAndPublishamount.tr()}",
                       border: OutlineInputBorder(
                           borderRadius:BorderRadius.all(Radius.circular(20.0.r) )
                       )
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return ' Amount is required';
+                      return '${LocaleKeys.InstructorAddPriceAndPublishAmountisrequired.tr()}';
                     }
                     return null;
                   },
@@ -262,12 +263,13 @@ class _AddPriceAndPublishState extends State<AddPriceAndPublish> {
                    SizedBox(height: 10.h,),
                 AppTextField(
                   data: [
-                    SelectedListItem(name:'EGP' ),
-                    SelectedListItem(name:'USD' ),
+                    //
+                    SelectedListItem(name:'${LocaleKeys.InstructorAddPriceAndPublishEGP.tr()}' ),
+                    SelectedListItem(name:'${LocaleKeys.InstructorAddPriceAndPublishUSD.tr()}' ),
                   ],
                   textEditingController: _currencyContoller,
-                  title: 'Select Currency',
-                  hint: 'Currency',
+                  title: '${LocaleKeys.InstructorAddPriceAndPublishSelectCurrency.tr()}',
+                  hint: '${LocaleKeys.InstructorAddPriceAndPublishCurrency.tr()}',
                   isDataSelected: true,
                 ),
                 SizedBox(height: 30.h,),
@@ -282,7 +284,7 @@ class _AddPriceAndPublishState extends State<AddPriceAndPublish> {
                       ),
                       child: MaterialButton(
                         child:  Text(
-                          'Add Price',
+                          LocaleKeys.InstructorAddPriceAndPublishAddPrice.tr(),
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 22.0.sp,
@@ -299,10 +301,10 @@ class _AddPriceAndPublishState extends State<AddPriceAndPublish> {
                   ],
                 ),
                 SizedBox(height: 30.h,),
-                Text("""Please enter a Google Sheet link containing the following:
-  1- Column A contains the questions.
-  2- Columns from B to E,each column contains an answer.
-  3- Column F contains the correct answer."""),
+                Text("""${LocaleKeys.InstructorAddPriceAndPublishPleaseenteraGoogleSheetlinkcontainingthefollowing.tr()}
+  ${LocaleKeys.InstructorAddPriceAndPublishColumnAcontainsthequestions.tr()}
+  ${LocaleKeys.InstructorAddPriceAndPublishColumnsfromBtoEeachcolumncontainsananswer.tr()}
+  ${LocaleKeys.InstructorAddPriceAndPublishColumnFcontainsthecorrectanswer.tr()}"""),
                 SizedBox(height: 30.h,),
                   TextFormField(
                     keyboardType: TextInputType.text,
@@ -316,7 +318,7 @@ class _AddPriceAndPublishState extends State<AddPriceAndPublish> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return ' spread sheet link is required';
+                        return '${LocaleKeys.InstructorAddPriceAndPublishspreadsheetlinkisrequired.tr()}';
                       }
                       return null;
                     },
@@ -337,7 +339,7 @@ class _AddPriceAndPublishState extends State<AddPriceAndPublish> {
                         ),
                         child: MaterialButton(
                           child:  Text(
-                            'Add Spread Sheet Link',
+                            '${LocaleKeys.InstructorAddPriceAndPublishspreadAddSpreadSheetLink.tr()}',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 18.0.sp,
@@ -359,14 +361,14 @@ class _AddPriceAndPublishState extends State<AddPriceAndPublish> {
                   obscureText: false,
                   controller: _compilerContoller,
                   decoration: InputDecoration(
-                      labelText: "compiler",
+                      labelText: "${LocaleKeys.InstructorAddPriceAndPublishspreadcompiler.tr()}",
                       border: OutlineInputBorder(
                           borderRadius:BorderRadius.all(Radius.circular(20.0.r) )
                       )
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'compiler is required';
+                      return '${LocaleKeys.InstructorAddPriceAndPublishspreadcompilerisrequired.tr()}';
                     }
                     return null;
                   },
@@ -387,7 +389,7 @@ class _AddPriceAndPublishState extends State<AddPriceAndPublish> {
                       ),
                       child: MaterialButton(
                         child:  Text(
-                          'Add Compiler',
+                          '${LocaleKeys.InstructorAddPriceAndPublishspreadAddCompiler.tr()}',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 22.0.sp,
@@ -416,7 +418,7 @@ class _AddPriceAndPublishState extends State<AddPriceAndPublish> {
                       ),
                       child: MaterialButton(
                         child:  Text(
-                          'Publish',
+                          '${LocaleKeys.InstructorAddPriceAndPublishspreadPublish.tr()}',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 22.0.sp,
@@ -443,7 +445,7 @@ class _AddPriceAndPublishState extends State<AddPriceAndPublish> {
                       ),
                       child: MaterialButton(
                         child:  Text(
-                          'Save & Next',
+                          '${LocaleKeys.InstructorAddPriceAndPublishspreadSaveNext.tr()}',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 22.0.sp,

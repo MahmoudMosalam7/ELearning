@@ -2,10 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import '../../../apis/admin/http_service_admin.dart';
 import '../../../models/payment.dart';
 import '../../../network/local/cache_helper.dart';
+import '../../../translations/locale_keys.g.dart';
 
 class AdminPayment extends StatefulWidget {
   const AdminPayment({super.key});
@@ -262,9 +263,9 @@ class _AdminPaymentState extends State<AdminPayment> {
               Column(
                 children: [
                   //
-                  Text('price : ${payment.price} '),
+                  Text('${LocaleKeys.AdminPaymentprice.tr()} : ${payment.price} '),
                   SizedBox(height: 10.h),
-                  Text('currency : ${payment.currency} '),
+                  Text('${LocaleKeys.AdminPaymentcurrency.tr()} : ${payment.currency} '),
                   //Text('${payment.userID}'),
                 ],
               ),

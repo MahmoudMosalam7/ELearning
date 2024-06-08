@@ -1,18 +1,20 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:accordion/accordion.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-import 'package:learning/Modules/Home/InformationOFCourses/payment.dart';
-import 'package:learning/Modules/Home/InformationOFCourses/review_screen.dart';
 import 'package:learning/Modules/Home/InformationOFCourses/select_method_of_payment.dart';
 import 'package:learning/Modules/Home/InformationOFCourses/video_preview.dart';
 import 'package:learning/Modules/Home/InformationOFCourses/video_screen.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:video_player/video_player.dart';
 
+import 'package:http/http.dart' as http;
+import 'package:easy_localization/easy_localization.dart';
 import '../../../TColors.dart';
 import '../../../apis/courseInformation/http_service_courseInformation.dart';
 import '../../../apis/update_instructor/http_service_courses.dart';
@@ -22,8 +24,10 @@ import '../../../models/module_model.dart';
 import '../../../models/review_model.dart';
 import '../../../network/local/cache_helper.dart';
 import '../../../shared/constant.dart';
+import '../../../translations/locale_keys.g.dart';
 import '../../Account/become_an_instructor/Instructor_page/update_course_information.dart';
 import '../../Account/videoPlay.dart';
+import '../../WishList/wishlist.dart';
 import '../Product.dart';
 import 'instructor_information.dart';
 
@@ -272,6 +276,13 @@ class _CourseInformationState extends State<CourseInformation>  {
                fontSize: 16.0,
              );
            }else{
+             for(int i =0 ; i<coursesOfFav.length;i++){
+               if(coursesOfFav[i].id == data!['_id'] ){
+                setState(() {
+                  coursesOfFav.removeAt(i);
+                });
+               }
+             }
              Fluttertoast.showToast(
                msg: " Course removed from Wishlist",
                toastLength: Toast.LENGTH_SHORT,
@@ -367,9 +378,9 @@ class _CourseInformationState extends State<CourseInformation>  {
     if (_isLoading) {
       return Scaffold(
         appBar: AppBar(
-          title: const Text("Course Details"),
+          title:  Text(LocaleKeys.CourseInformationTitleCourseDetails.tr()),
         ),
-        body: const Center(child: CircularProgressIndicator()),
+        body: const Center(child: CircularProgressIndicator(color: Colors.green,)),
       );
     } else {
       if (data != null && data!.isNotEmpty) {
@@ -386,7 +397,7 @@ class _CourseInformationState extends State<CourseInformation>  {
         print('[[[[[[[[[[[[[');
         return Scaffold(
           appBar: AppBar(
-            title: const Text("Course Details"),
+            title:  Text(LocaleKeys.CourseInformationTitleCourseDetails.tr()),
             actions: widget.fromInstructor?[
               CircleAvatar(
                 backgroundColor: Colors.grey,
@@ -396,17 +407,57 @@ class _CourseInformationState extends State<CourseInformation>  {
                 },),
               )
             ]:[
-              CircleAvatar(
-                backgroundColor: Colors.grey,
-                radius: 15.h,
-                child: const Icon(Icons.share),
+              IconButton(
+                icon: Icon(Icons.share),
+                onPressed: () async {
+                  try {
+                    // Fetch the image URL
+                    final urlImage = data!['thumbnail'];
+                    final url = Uri.parse(urlImage);
+
+                    // Download the image
+                    final response = await http.get(url);
+                    if (response.statusCode == 200) {
+                      final bytes = response.bodyBytes;
+
+                      // Get the temporary directory and save the image
+                      final temp = await getTemporaryDirectory();
+                      final filePath = '${temp.path}/image.jpg';
+                      await File(filePath).writeAsBytes(bytes);
+
+                      // Share the image and text
+                      await Share.shareFiles(
+                        [filePath],
+                        text: 'Let\'s Learn ${data!['title']} with instructor ${data!['instructor']['name']} #E_Learning',
+                      );
+                    } else {
+                      // Handle error while downloading the image
+                      Fluttertoast.showToast(
+                        msg: "Failed to download the image.",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 5,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                    }
+                  } catch (e) {
+                    // Handle any errors during the process
+                    Fluttertoast.showToast(
+                      msg: "Error: $e",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 5,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0,
+                    );
+                  }
+                },
               ),
               const SizedBox(width: 4),
-              CircleAvatar(
-                backgroundColor: Colors.grey,
-                radius: 15.h,
-                child: const Icon(Icons.shopping_cart),
-              ),
+
             ],
           ),
           body: Padding(
@@ -448,7 +499,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             SizedBox(width: 5.w),
-                            const Text('39.768 students (248 ratings)'),
+                             Text('39.768 ${LocaleKeys.CourseInformationstudentsratings.tr()}'),
                             SizedBox(width: 5.w),
                           ],
                         ),
@@ -457,7 +508,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             SizedBox(width: 5.w),
-                            const Text('Created by'),
+                             Text(LocaleKeys.CourseInformationCreatedby.tr()),
                             TextButton(
                               child: Text(' ${data!['instructor']['name']}',
                               style: const TextStyle(
@@ -475,7 +526,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            const Text('Language '),
+                             Text( LocaleKeys.CourseInformationLanguage.tr()),
                             SizedBox(width: 5.w),
                             Text('${data!['language']}'),
                             SizedBox(width: 5.w),
@@ -495,10 +546,10 @@ class _CourseInformationState extends State<CourseInformation>  {
                               child: Container(
                                 width: 160.w,
                                 height: 40.h,
-                                decoration: const BoxDecoration(
+                                decoration:  BoxDecoration(
                                     color: Colors.green
                                 ),
-                                child: const Center(child: Text('Add to wishlist')),
+                                child:  Center(child: Text(LocaleKeys.CourseInformationAddtowishlist.tr())),
                               ),
                             ),
                             SizedBox (width: 2.w,),
@@ -519,10 +570,11 @@ class _CourseInformationState extends State<CourseInformation>  {
                         child: Container(
                           width: 160.w,
                           height: 40.h,
-                          decoration: const BoxDecoration(
+                          decoration:  BoxDecoration(
                             color: Colors.green,
                           ),
-                          child: widget.fromInstructor? Center(child: Text('Make Coupon')):Center(child: Text('Add Coupon')),
+                          child: widget.fromInstructor? Center(child: Text(LocaleKeys.CourseInformationMakeCoupon.tr())):
+                          Center(child: Text(LocaleKeys.CourseInformationAddCoupon.tr())),
                         ),
                       ),
                             const Spacer(),
@@ -533,7 +585,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                             padding: const EdgeInsets.all(10.0),
                             child: Row(
                               children: [
-                                       Text('your coupon is : $codeOfCoupon'),
+                                       Text('${LocaleKeys.CourseInformationyourcouponis.tr()} $codeOfCoupon'),
                               ],
                             ),
                           ),
@@ -542,7 +594,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             SizedBox(width: 5.w),
-                            Text('What you\'ll learn',
+                            Text(LocaleKeys.CourseInformationWhatyoulearn.tr(),
                               style: TextStyle(
                                   fontSize: 20.sp,
                                   fontWeight: FontWeight.bold
@@ -576,7 +628,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             SizedBox(width: 5.w),
-                            Text('Curriculum',
+                            Text(LocaleKeys.CourseInformationCurriculum.tr(),
                               style: TextStyle(
                                   fontSize: 20.sp,
                                   fontWeight: FontWeight.bold
@@ -632,7 +684,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             SizedBox(width: 5.w),
-                            Text('Requirements',
+                            Text(LocaleKeys.CourseInformationRequirements.tr(),
                               style: TextStyle(
                                   fontSize: 20.sp,
                                   fontWeight: FontWeight.bold
@@ -663,7 +715,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             SizedBox(width: 5.w),
-                            Text('Target Audience',
+                            Text(LocaleKeys.CourseInformationTargetAudience.tr(),
                               style: TextStyle(
                                   fontSize: 20.sp,
                                   fontWeight: FontWeight.bold
@@ -694,7 +746,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             SizedBox(width: 5.w),
-                            Text('Description',
+                            Text(LocaleKeys.CourseInformationDescription.tr(),
                               style: TextStyle(
                                   fontSize: 20.sp,
                                   fontWeight: FontWeight.bold
@@ -726,7 +778,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             SizedBox(width: 5.w),
-                            Text('Reviews',
+                            Text(LocaleKeys.CourseInformationReviews.tr(),
                               style: TextStyle(
                                   fontSize: 20.sp,
                                   fontWeight: FontWeight.bold
@@ -810,7 +862,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             SizedBox(width: 5.w),
-                            Text('suggestion',
+                            Text(LocaleKeys.CourseInformationsuggestion.tr(),
                               style: TextStyle(
                                   fontSize: 20.sp,
                                   fontWeight: FontWeight.bold
@@ -899,8 +951,8 @@ class _CourseInformationState extends State<CourseInformation>  {
                         color: TColors.secondray,
                       ),
                       child: MaterialButton(
-                        child: const Text(
-                          'Update',
+                        child:  Text(
+                          LocaleKeys.CourseInformationUpdate.tr(),
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 20.0,
@@ -922,8 +974,8 @@ class _CourseInformationState extends State<CourseInformation>  {
                         color: TColors.secondray,
                       ),
                       child: MaterialButton(
-                        child: const Text(
-                          'Publish',
+                        child:  Text(
+                          LocaleKeys.CourseInformationPublish.tr(),
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 20.0,
@@ -959,8 +1011,8 @@ class _CourseInformationState extends State<CourseInformation>  {
                           color: TColors.secondray,
                         ),
                         child: MaterialButton(
-                          child: const Text(
-                            'Enroll Now',
+                          child:  Text(
+                            LocaleKeys.CourseInformationEnrollNow.tr(),
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 20.0,
@@ -987,10 +1039,10 @@ class _CourseInformationState extends State<CourseInformation>  {
       } else {
         return Scaffold(
           appBar: AppBar(
-            title: const Text("Course Details"),
+            title:  Text(LocaleKeys.CourseInformationTitleCourseDetails.tr()),
           ),
-          body: const Center(
-            child: Text("No data available"),
+          body:  Center(
+            child: Text(LocaleKeys.CourseInformationNodataavailable.tr()),
           ),
         );
       }
@@ -1088,7 +1140,7 @@ class _CourseInformationState extends State<CourseInformation>  {
             child: Column(
               children: [
                 ListTile(
-                  title: Text('Make Coupon!'
+                  title: Text(LocaleKeys.CourseInformationMakeCoupon.tr()
                     ,style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
@@ -1101,7 +1153,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                 Expanded(
                   child: TextFormField(
                     controller: _exContoller,
-                    decoration: const InputDecoration(
+                    decoration:  InputDecoration(
                       labelText: 'Enter Ex YYYY-mm-dd',
                       labelStyle: TextStyle(
                         fontSize: 25.0,
@@ -1183,7 +1235,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                     decoration: const BoxDecoration(
                       color: Colors.green,
                     ),
-                    child: const Center(child: Text('Apply')),
+                    child: Center(child: Text(LocaleKeys.CourseInformationApply.tr())),
                   ),
                 ),
               ],

@@ -4,32 +4,6 @@ import '../../../models/review_model.dart';
 
 
 
-/*
-class ReviewScreen extends StatelessWidget {
-  final List<Review> reviews = [
-    Review(
-      name: 'John Doe',
-      rating: 4.5,
-      comment: 'Great service! Will definitely come back again.',
-    ),
-    Review(
-      name: 'Jane Smith',
-      rating: 5.0,
-      comment: 'Excellent experience. Highly recommended!',
-    ),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: reviews.length,
-      itemBuilder: (context, index) {
-        return ReviewCard(review: reviews[index]);
-      },
-    );
-  }
-}*/
-
 class ReviewCard extends StatelessWidget {
   final ReviewModel review;
 
