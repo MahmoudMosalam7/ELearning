@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../../apis/courseInformation/http_service_courseInformation.dart';
 import '../../../apis/reviews/reviews.dart';
@@ -22,6 +23,7 @@ import '../../../network/local/cache_helper.dart';
 import '../../../shared/constant.dart';
 import '../../../translations/locale_keys.g.dart';
 import '../../Home/InformationOFCourses/CourseInformation.dart';
+import '../../Home/InformationOFCourses/video_screen.dart';
 import 'compiler_webview.dart';
 
 
@@ -416,7 +418,7 @@ class _CourseContentScreenState extends State<CourseContentScreen> {
                   if(module[index].isFree){
                     await _getModule(module[index].id );
                     Navigator.of(context).push(MaterialPageRoute(builder: (context){
-                      return VideoPlayerScreen(videoUrl:path,) ;
+                      return VideoPlayerScreen(videoUrl:path,id:module[index].id,courseId: widget.courseId,) ;
                     }));
                   }
                 }, child: module[index].isFree?Text(LocaleKeys.LearnCourseContentScreenWatch.tr(),
@@ -523,4 +525,119 @@ class _CourseContentScreenState extends State<CourseContentScreen> {
       },
     );
   }
+}
+
+class VideoPlayerScreen extends StatefulWidget {
+  final String videoUrl;
+  final String id;
+  final String courseId;
+
+  const VideoPlayerScreen({Key? key, required this.videoUrl,required this.id,required this.courseId}) : super(key: key);
+
+  @override
+  _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
+}
+
+class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
+  late VideoPlayerController _controller;
+  bool _isPlaying = false;
+  bool _isVertical = false;
+  HttpServiceCourse httpServiceCourse = HttpServiceCourse();
+  bool _isLoading = true;
+  Future<void> _progress() async {
+    try {
+      // Only fetch data if not already loading
+      String? token = CacheHelper.getData(key: 'token');
+      await httpServiceCourse.progress(
+      widget.courseId,
+      widget.id,
+          token!);
+      setState(() {
+        // _initializeController();
+        _isLoading = false;
+      });
+         print('success form progress');
+    } catch (e) {
+      print('Error progress data: $e');
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.network(widget.videoUrl)
+      ..initialize().then((_) {
+        setState(() {});
+      });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _progress();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _controller.value.isInitialized
+        ? Center(
+      child: AspectRatio(
+        aspectRatio: _controller.value.aspectRatio,
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            RotatedBox(
+              quarterTurns: _isVertical ? 3 : 0,
+              child: VideoPlayer(_controller),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
+                  onPressed: () {
+                    setState(() {
+                      _isPlaying ? _controller.pause() : _controller.play();
+                      _isPlaying = !_isPlaying;
+                    });
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.fast_rewind),
+                  onPressed: () {
+                    _controller.seekTo(_controller.value.position - Duration(seconds: 10));
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.fast_forward),
+                  onPressed: () {
+                    _controller.seekTo(_controller.value.position + Duration(seconds: 10));
+                  },
+                ),
+                IconButton(
+                  icon: Icon(_isVertical ? Icons.rotate_90_degrees_ccw : Icons.rotate_90_degrees_cw),
+                  onPressed: () {
+                    _controller.pause();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => VideoPlayFullScreenRotated(videoUrl: widget.videoUrl),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    )
+        : Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
 }

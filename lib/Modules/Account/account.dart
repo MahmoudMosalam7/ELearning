@@ -256,19 +256,7 @@ class _AccountScreenState extends State<AccountScreen> {
               fontSize: 20.0
           ),
         ),
-        actions: [
-          MaterialButton(onPressed: (){},
-            child:  CircleAvatar(
-              radius: 25.0,
-              backgroundColor: Colors.grey,
-              child: Icon(
-                Icons.shopping_cart,
-                size: 30.0,
-              ),
-            ),
 
-          )
-        ],
       ),
       body: Center(
         child: Container(

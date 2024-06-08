@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../translations/locale_keys.g.dart';
 import '../../firebase/fire_database.dart';
 import '../../firebase/fire_storage.dart';
 import '../../model/message_model.dart';
@@ -125,7 +127,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         child: GestureDetector(
                           onTap:()=>FireData().sendMessage(
                               widget.chatUser.id!,
-                              "Say Assalamu Alaikum 👋",
+                              "${LocaleKeys.SayAssalamuAlaikum.tr()}👋",
                               widget.roomid!) ,
                           child: Card(
                             child: Padding(
@@ -142,7 +144,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                     height: 16,
                                   ),
                                   Text(
-                                    "Say Assalamu Alaikum",
+                                    "${LocaleKeys.SayAssalamuAlaikum.tr()}",
                                     style: Theme.of(context).textTheme.bodyMedium,
                                   ),
                                 ],
@@ -191,7 +193,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             ],
                           ),
                           border: InputBorder.none,
-                          hintText: "Message",
+                          hintText: "${LocaleKeys.Message.tr()}",
                           contentPadding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 10)),
                     ),

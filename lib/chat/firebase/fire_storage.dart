@@ -10,7 +10,7 @@ class FireStorage {
     final ref=fireStorage.ref().child("image/$roomid/${DateTime.now().millisecondsSinceEpoch}.$ext");
     await ref.putFile(file);
     String imageUrl=await ref.getDownloadURL();
-   // print(imageUrl);
+    // print(imageUrl);
     FireData().sendMessage(uid, imageUrl, roomid, type: "image");
   }
 }

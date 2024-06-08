@@ -46,29 +46,29 @@ class _EditAccountState extends State<EditAccount> {
 
     try {
 
-        // Check if the selected file is an image
-          await httpService.updateMe(
-            usernameContoller.text,
-            emailContoller.text,
-            bioContoller.text,
-            phoneContoller.text,
-            genderContoller.text,
-            _profileImage!,
-            CacheHelper.getData(key: 'token'),
-          );
+      // Check if the selected file is an image
+      await httpService.updateMe(
+        usernameContoller.text,
+        emailContoller.text,
+        bioContoller.text,
+        phoneContoller.text,
+        genderContoller.text,
+        _profileImage!,
+        CacheHelper.getData(key: 'token'),
+      );
 
-          Fluttertoast.showToast(
-            msg: "Update Success",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 5,
-            backgroundColor: Colors.green,
-            textColor: Colors.white,
-            fontSize: 16.0,
-          );
+      Fluttertoast.showToast(
+        msg: "Update Success",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 5,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
 
-          print('Update successful!');
-        }  catch (e) {
+      print('Update successful!');
+    }  catch (e) {
       setState(() {
         errorMessage = 'Error: $e';
         if (errorMessage.contains('404')) {
@@ -145,8 +145,8 @@ class _EditAccountState extends State<EditAccount> {
           actions: [
             TextButton(
               onPressed: (){
-                  _updateMe();
-                  fetchData();
+                _updateMe();
+                fetchData();
               },
               //OnBoardingsdone
               child:Text("${LocaleKeys.OnBoardingsdone.tr()}",
@@ -207,7 +207,7 @@ class _EditAccountState extends State<EditAccount> {
                                   backgroundColor: Colors.grey,
                                   child: Icon(
                                     Icons.camera_alt,
-                                                ),
+                                  ),
                                 ),
                               ),
                             ],
@@ -372,7 +372,7 @@ class _EditAccountState extends State<EditAccount> {
 
   }
 
- /* Future _pickImageFromCamera() async {
+/* Future _pickImageFromCamera() async {
     final image = await ImagePicker().pickImage(source: ImageSource.camera);
     if (image == null) return;
 

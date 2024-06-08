@@ -1154,7 +1154,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                   child: TextFormField(
                     controller: _exContoller,
                     decoration:  InputDecoration(
-                      labelText: 'Enter Ex YYYY-mm-dd',
+                      labelText: '${LocaleKeys.EnterExYYYYmmdd.tr()}',
                       labelStyle: TextStyle(
                         fontSize: 25.0,
                       ),
@@ -1168,7 +1168,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                     onFieldSubmitted: (value) {},
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Expire is required';
+                        return '${LocaleKeys.Expireisrequired.tr()}';
                       }
                       return null;
                     },
@@ -1177,8 +1177,8 @@ class _CourseInformationState extends State<CourseInformation>  {
                 Expanded(
                   child: TextFormField(
                     controller: _discountContoller,
-                    decoration: const InputDecoration(
-                      labelText: 'Percentage of Discount 1-100',
+                    decoration:  InputDecoration(
+                      labelText: '${LocaleKeys.PercentageofDiscount1100.tr()}',
                       labelStyle: TextStyle(
                         fontSize: 25.0,
                       ),
@@ -1192,7 +1192,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                     onFieldSubmitted: (value) {},
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Discount is required';
+                        return '${LocaleKeys.Discountisrequired.tr()}';
                       }
                       return null;
                     },
@@ -1202,7 +1202,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                   child: TextFormField(
                     controller: _maximumUserContoller,
                     decoration:  InputDecoration(
-                      labelText: 'Enter Max number of users',
+                      labelText: '${LocaleKeys.EnterMaxnumberofusers.tr()}',
                       labelStyle: TextStyle(
                         fontSize: 25.0,
                       ),
@@ -1216,7 +1216,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                     onFieldSubmitted: (value) {},
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Max is required';
+                        return '${LocaleKeys.Maxisrequired.tr()}';
                       }
                       return null;
                     },

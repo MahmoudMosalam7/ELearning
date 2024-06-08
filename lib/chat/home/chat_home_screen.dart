@@ -1,12 +1,13 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../translations/locale_keys.g.dart';
 import '../firebase/fire_database.dart';
 import '../model/room_model.dart';
 import '../widget/chat_widget/chat_card.dart';
@@ -28,7 +29,7 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
     if (widget.email.isNotEmpty) {
       FireData().creatRoom(widget.email.toLowerCase()).then((value) {
         setState(() {
-         // widget.email = "";
+          // widget.email = "";
         });
       });
     }
@@ -58,7 +59,7 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
                     Row(
                       children: [
                         Text(
-                          "Enter Friend Email",
+                          LocaleKeys.EnterFriendEmail.tr(),
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                         Spacer(),
@@ -71,7 +72,7 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
                     CustomField(
                       controller: emailcon,
                       icon: Iconsax.direct,
-                      lable: "Email",
+                      lable: "${LocaleKeys.RegisterEmailAddress.tr()}",
                     ),
                     SizedBox(
                       height: 16,
@@ -95,7 +96,7 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
                           }
                         },
                         child: Center(
-                          child: Text("Create Chat"),
+                          child: Text(LocaleKeys.CreateChat.tr()),
                         )
                     )
                   ],
@@ -107,7 +108,8 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
         child: const Icon(Iconsax.message_add),
       ),
       appBar: AppBar(
-        title: Text("chat"),
+        //
+        title: Text(LocaleKeys.InstructorInstructorHomeScreenChats.tr()),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -147,4 +149,3 @@ class _ChatHomeScreenState extends State<ChatHomeScreen> {
     );
   }
 }
-
