@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:learning/Modules/Account/admin/admin_payment.dart';
 
+import 'package:easy_localization/easy_localization.dart';
 import '../../../../apis/user/http_service_get_user_data.dart';
+import '../../../translations/locale_keys.g.dart';
 import 'add_users.dart';
+import 'admin_profits.dart';
 import 'allusers.dart';
+import 'find_user_by_email.dart';
 
 
 class AdminHome extends StatelessWidget {
@@ -26,7 +29,9 @@ class AdminHome extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: (){
-                   Get.to(AddUser());
+                   Navigator.push(context, MaterialPageRoute(builder: (context){
+                     return AddUser();
+                   }));
                   },
                   child: Card(
                     elevation: 5, // Add elevation for a shadow effect
@@ -50,7 +55,7 @@ class AdminHome extends StatelessWidget {
                           ),
                           SizedBox(height: 10.h),
                           Text(
-                            'Add New User',
+                            LocaleKeys.AdminHomeAddNewUser.tr(),
                             style: TextStyle(
                               color: Colors.white, // Customize the text color
                               fontSize: 16.sp,
@@ -65,7 +70,10 @@ class AdminHome extends StatelessWidget {
                 Spacer(),
                 GestureDetector(
                   onTap: (){
-               //     Get.to(CoursesOfInstructor());
+
+                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                      return FindUserByEmail();
+                    }));
                   },
                   child: Card(
                     elevation: 5, // Add elevation for a shadow effect
@@ -83,13 +91,13 @@ class AdminHome extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            Icons.delete,
+                            Icons.search,
                             size: 50.sp,
                             color: Colors.white, // Customize the icon color
                           ),
                           SizedBox(height: 10.h),
                           Text(
-                            'Delete User',
+                            LocaleKeys.AdminHomeFindUser.tr(),
                             style: TextStyle(
                               color: Colors.white, // Customize the text color
                               fontSize: 16.sp,
@@ -114,7 +122,10 @@ class AdminHome extends StatelessWidget {
                   ),
                   child: GestureDetector(
                     onTap: (){
-                      Get.to(AllUsers());
+
+                      Navigator.push(context, MaterialPageRoute(builder: (context){
+                        return AllUsers();
+                      }));
                     },
                     child: Container(
                       width: 140.w,
@@ -133,7 +144,7 @@ class AdminHome extends StatelessWidget {
                           ),
                           SizedBox(height: 10.h),
                           Text(
-                            'Users',
+                            LocaleKeys.AdminHomeUsers.tr(),
                             style: TextStyle(
                               color: Color(0xFFEFECEC), // Customize the text color
                               fontSize: 16.sp,
@@ -147,7 +158,10 @@ class AdminHome extends StatelessWidget {
                 Spacer(),
                 GestureDetector(
                   onTap: (){
-                    Get.to(AdminPayment());
+
+                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                      return AdminPayment();
+                    }));
                   },
                   child: Card(
                     elevation: 5, // Add elevation for a shadow effect
@@ -172,7 +186,7 @@ class AdminHome extends StatelessWidget {
                           SizedBox(height: 10.h),
                           SizedBox(height: 10.h),
                           Text(
-                            'Payment',
+                            LocaleKeys.AdminHomePayment.tr(),
                             style: TextStyle(
                               color: Colors.white, // Customize the text color
                               fontSize: 16,
@@ -188,41 +202,49 @@ class AdminHome extends StatelessWidget {
             SizedBox(height: 20.h,),
             Row(
               children: [
-                Card(
-                  elevation: 5, // Add elevation for a shadow effect
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.0.r), // Adjust the radius for a square shape
-                  ),
-                  child: Container(
-                    width: 140.w,
-                    height: 140.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16.0.r),
-                      color: Color(0xffADA2FF), // Customize the background color
+                GestureDetector(
+                  onTap: (){
+
+                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                      return AdminProfites();
+                    }));
+                    },
+                  child: Card(
+                    elevation: 5, // Add elevation for a shadow effect
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16.0.r), // Adjust the radius for a square shape
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.leaderboard,
-                          size: 50.sp,
-                          color: Colors.white, // Customize the icon color
-                        ),
-                        SizedBox(height: 10.h),
-                        Text(
-                          'Profits',
-                          style: TextStyle(
-                            color: Colors.white, // Customize the text color
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                    child: Container(
+                      width: 140.w,
+                      height: 140.h,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16.0.r),
+                        color: Color(0xffADA2FF), // Customize the background color
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.leaderboard,
+                            size: 50.sp,
+                            color: Colors.white, // Customize the icon color
                           ),
-                        ),
-                      ],
+                          SizedBox(height: 10.h),
+                          Text(
+                            LocaleKeys.AdminHomeProfits.tr(),
+                            style: TextStyle(
+                              color: Colors.white, // Customize the text color
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
                 Spacer(),
-                Card(
+               /* Card(
                   elevation: 5, // Add elevation for a shadow effect
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16.0.r), // Adjust the radius for a square shape
@@ -262,7 +284,7 @@ class AdminHome extends StatelessWidget {
                       ],
                     ),
                   ),
-                ),
+                ),*/
               ],
             ),
           ],

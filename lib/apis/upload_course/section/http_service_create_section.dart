@@ -210,4 +210,39 @@ class HttpServiceSection {
 
     }
   }
+  Future< bool > setModuleFreeOrNot( String moduleID,String token) async {
+    try {
+      print('from setModuleFreeOrNot id = $moduleID');
+      print('from setModuleFreeOrNot token = $token');
+      final response = await _dio.put(
+        '/v1/coursemodule/setFreeNotFree/$moduleID',
+
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+
+      print('from setModuleFreeOrNot  = ${response.data}');
+      if (response.statusCode == 200) {
+
+        try{
+          print(' get  setModuleFreeOrNot is done ${response.data['data']} ');
+          print(' get  setModuleFreeOrNot is done = ${response.data['data']['isFree']} ');
+        }catch(e){
+          print('error when  setModuleFreeOrNot  course /');
+        }
+
+        return response.data['data']['isFree'];
+      } else {
+        // Registration failed
+
+        print('from setModuleFreeOrNot error = ${response.data}');
+        throw ('setModuleFreeOrNot: ${response.data}');
+      }
+    } catch (e) {
+      // Handle network or other errors
+
+      print('from addAndRemoveCourseFromWishList error = ${e}');
+      throw ('Error addAndRemoveCourseFromWishList course: $e');
+    }
+  }
+
 }

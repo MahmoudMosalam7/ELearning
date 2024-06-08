@@ -1,18 +1,16 @@
-
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:video_player/video_player.dart';
-
 import '../../../../../../apis/upload_course/section/http_service_create_section.dart';
 import '../../../../../../models/file_and_video_of_section_model.dart';
 import '../../../../../../network/local/cache_helper.dart';
 import '../../../../../../shared/constant.dart';
+import '../../../../../../translations/locale_keys.g.dart';
 import 'file_and_video_container.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 class PickFileAndVideo extends StatefulWidget {
   final int index;
   final int counter;
@@ -208,7 +206,70 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
     }
 
   }
+  void _isModuleFreeFromServer(String id) async {
+    // Reset error message and loading state
+    setState(() {
+      errorMessage = '';
+      isLoading = true;
+    });
 
+    try {
+
+      // Add your login logic here, e.g., make API call
+    bool isFree =    await httpServiceSection.setModuleFreeOrNot(
+          id,
+          CacheHelper.getData(key: 'token')
+      );
+     if(isFree){
+       Fluttertoast.showToast(
+         msg: "This Module isFree",
+         toastLength: Toast.LENGTH_SHORT,
+         gravity: ToastGravity.BOTTOM,
+         timeInSecForIosWeb: 5,
+         backgroundColor: Colors.green,
+         textColor: Colors.white,
+         fontSize: 16.0,
+       );
+     }else{
+       Fluttertoast.showToast(
+         msg: "This Module isNotFree",
+         toastLength: Toast.LENGTH_SHORT,
+         gravity: ToastGravity.BOTTOM,
+         timeInSecForIosWeb: 5,
+         backgroundColor: Colors.green,
+         textColor: Colors.white,
+         fontSize: 16.0,
+       );
+     }
+    } catch (e) {
+      // Handle validation errors or network errors
+      setState(() {
+        errorMessage = 'Error: $e';
+        if (errorMessage.contains('404')) {
+          // Your code here
+          errorMessage ="Email Not Found!";
+        }else{
+          errorMessage ="Unexpected Error!";
+        }
+
+        Fluttertoast.showToast(
+          msg: errorMessage,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+
+      });
+    } finally {
+      // Update loading state
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -259,7 +320,7 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
                 onEdit: _editViedoName,
                 onAdd: _addVideo,
                 onDelete: _deleteFileContainer,
-                onDuplicate: _duplicateFileContainer,
+                onDuplicate: _isModuleFree,
               ),
             );
           },
@@ -276,7 +337,7 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
               ),
               child: MaterialButton(
                 child:  Text(
-                  'Add File',
+                  LocaleKeys.InstructorPickFileAndVideoAddFile.tr(),
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 22.0.sp,
@@ -348,6 +409,17 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
       });
     });
   }
+  void _isModuleFree(int index) {
+    setState(() {
+      late String? _id;
+      if(widget.fromUpdataCirc)
+        _id = sections[widget.index].videos[index].idServ;
+      else _id = fileId['modules'][index];
+      print('from delte file = $_id');
+        _isModuleFreeFromServer(_id!);
+
+    });
+  }
 
   void _addVideo(int index ) {
     // Implement logic to add a video
@@ -365,7 +437,7 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Edit Video OR File Name',
+            LocaleKeys.InstructorPickFileAndVideoEditVideoORFileName.tr(),
             style: TextStyle(
               fontWeight: FontWeight.bold,
             ),
@@ -392,7 +464,7 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
                   Navigator.pop(context);
                 },
                 decoration: InputDecoration(
-                  hintText: 'Enter Video Name',
+                  hintText: '${LocaleKeys.InstructorPickFileAndVideoEnterVideoName.tr()}',
                 ),
               ),
               SizedBox(height: 16.0), // Add some spacing if needed
@@ -413,7 +485,7 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                title: Text('Please Upload File OR Video!'
+                title: Text(LocaleKeys.InstructorPickFileAndVideoPleaseUploadFileORVideo.tr()
                   ,style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -426,7 +498,7 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
 
               ListTile(
                 leading: Icon(Icons.file_upload),
-                title: Text('File'),
+                title: Text(LocaleKeys.InstructorPickFileAndVideoFile.tr()),
                 onTap: () {
                   // Handle delete action
                   // _pickImageFromGallery();
@@ -436,7 +508,7 @@ class _PickFileAndVideoState extends State<PickFileAndVideo> {
               ),
               ListTile(
                 leading: Icon(Icons.ondemand_video_outlined),
-                title: Text('Video'),
+                title: Text(LocaleKeys.InstructorPickFileAndVideoVideo.tr()),
                 onTap: () {
                   // Handle delete action
                   // _pickImageFromGallery();

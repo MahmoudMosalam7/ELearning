@@ -1,16 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
+import 'package:easy_localization/easy_localization.dart';
 import '../../../TColors.dart';
 import '../../../apis/forget_password/forget_password.dart';
 import '../../../network/local/cache_helper.dart';
-import 'ResetPassword.dart';
+import '../../../translations/locale_keys.g.dart';
 import 'checkEmail.dart';
 class ForgetPassword extends StatefulWidget {
-
+//LocaleKeys.Settingupdatepassword.tr()
 
   @override
   State<ForgetPassword> createState() => _ForgetPasswordState();
@@ -59,7 +58,9 @@ void _forgetPassword() async {
         fontSize: 16.0,
       );
 
-      Get.to(CheckEmail(email: _emailContoller.text,));
+      Navigator.push(context, MaterialPageRoute(builder: (context){
+        return CheckEmail(email: _emailContoller.text,);
+      }));
 
       print(' successful!');
     } catch (e) {
@@ -100,13 +101,13 @@ void _forgetPassword() async {
           SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height/3.0,
-            child: const Column(
+            child:  Column(
               children: [
                 SizedBox(height: 80.0,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Recover Password',
+                    Text(LocaleKeys.ForgetPasswordRecoverPassword.tr(),
                       style:TextStyle(
                         fontWeight: FontWeight.bold ,
                         fontSize: 40.0,
@@ -119,7 +120,7 @@ void _forgetPassword() async {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children:[
-                    Text('Please enter your Email to Reset the Password',
+                    Text(LocaleKeys.ForgetPasswordPleaseenteryourEmailtoResetthePassword.tr(),
                     style:TextStyle(
                       fontWeight: FontWeight.bold ,
                       fontSize: 15.0,
@@ -149,8 +150,8 @@ void _forgetPassword() async {
                       TextFormField(
                         controller: _emailContoller,
 
-                        decoration: const InputDecoration(
-                          labelText:'Email Address',
+                        decoration:  InputDecoration(
+                          labelText:'${LocaleKeys.ForgetPasswordEmailAddress.tr()}',
                           labelStyle: TextStyle(
                             fontSize: 25.0,
                           ),
@@ -165,7 +166,7 @@ void _forgetPassword() async {
                         },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Email is required';
+                            return '${LocaleKeys.ForgetPasswordEmailisrequired.tr()}';
                           }
                           return null;
                         },
@@ -182,9 +183,9 @@ void _forgetPassword() async {
                           ),
                           child: MaterialButton(
 
-                            child: const Text(
+                            child:  Text(
 
-                              'Continue',
+                              LocaleKeys.ForgetPasswordContinue.tr(),
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 20.0,

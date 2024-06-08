@@ -1,16 +1,15 @@
 import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import '../../../TColors.dart';
 import '../../../apis/edit_profile/http_service_edit_profile.dart';
 import '../../../apis/user/http_service_get_user_data.dart';
 import '../../../network/local/cache_helper.dart';
 import '../../../shared/constant.dart';
+import '../../../translations/locale_keys.g.dart';
 
 class EditAccount extends StatefulWidget{
   @override
@@ -38,69 +37,7 @@ class _EditAccountState extends State<EditAccount> {
   bool isLoading = false;
 
   String errorMessage = '';
-  /*void _updateMe() async {
-    // Reset error message and loading state
-    setState(() {
-      errorMessage = '';
-      isLoading = true;
-    });
 
-    try {
-
-
-      // Check if _profileImage is not null before calling updateMe
-
-        print(']]]]]]]]]]]]]]]]]]]]]from edit');
-        await httpService.updateMe(
-          usernameContoller.text,
-          emailContoller.text,
-          bioContoller.text,
-          phoneContoller.text,
-          genderContoller.text,
-          _selectedImage!.files.single.path!, // Use _profileImage directly
-          CacheHelper.getData(key: 'token'),
-        );
-
-
-      errorMessage = "";
-      Fluttertoast.showToast(
-        msg: "Update Success",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 5,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
-
-      print(' successful!');
-    } catch (e) {
-      // Handle validation errors or network errors
-      setState(() {
-        errorMessage = 'Error: $e';
-        if (errorMessage.contains('404')) {
-          errorMessage = "Email Not Found!";
-        } else {
-          errorMessage = "Unexpected Error!";
-        }
-
-        Fluttertoast.showToast(
-          msg: errorMessage,
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 5,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
-      });
-    } finally {
-      // Update loading state
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }*/
   void _updateMe() async {
     setState(() {
       errorMessage = '';
@@ -190,7 +127,7 @@ class _EditAccountState extends State<EditAccount> {
             onPressed: (){
               Navigator.pop(context);
             },
-            child:Text("Cancel",
+            child:Text("${LocaleKeys.EditAccountCancel.tr()}",
               style: TextStyle(
                   fontSize:9.0,
                   fontWeight: FontWeight.bold,
@@ -199,7 +136,7 @@ class _EditAccountState extends State<EditAccount> {
           ),
           title:
           Text(
-            "Edit Profile",
+            "${LocaleKeys.EditAccountEditProfile.tr()}",
             style: TextStyle(
               fontSize: 25.0,
               fontWeight: FontWeight.bold,
@@ -211,7 +148,8 @@ class _EditAccountState extends State<EditAccount> {
                   _updateMe();
                   fetchData();
               },
-              child:Text("Done",
+              //OnBoardingsdone
+              child:Text("${LocaleKeys.OnBoardingsdone.tr()}",
                 style: TextStyle(
                     fontSize:10.0 ,
                     fontWeight: FontWeight.bold,
@@ -287,7 +225,7 @@ class _EditAccountState extends State<EditAccount> {
                             controller: usernameContoller,
                             decoration: InputDecoration(
 
-                                labelText: "username",
+                                labelText: "${LocaleKeys.EditAccountusername.tr()}",
                                 border: OutlineInputBorder(
                                     borderRadius:BorderRadius.all(Radius.circular(20.0) )
                                 )
@@ -305,7 +243,7 @@ class _EditAccountState extends State<EditAccount> {
                             keyboardType: TextInputType.visiblePassword,
                             controller: bioContoller,
                             decoration: InputDecoration(
-                                labelText: "Bio",
+                                labelText: "${LocaleKeys.EditAccountBio.tr()}",
                                 border: OutlineInputBorder(
                                     borderRadius:BorderRadius.all(Radius.circular(20.0) )
                                 )
@@ -323,7 +261,7 @@ class _EditAccountState extends State<EditAccount> {
                             keyboardType: TextInputType.emailAddress,
                             controller: emailContoller,
                             decoration: InputDecoration(
-                                labelText: "email",
+                                labelText: "${LocaleKeys.RegisterEmailAddress.tr()}",
                                 border: OutlineInputBorder(
                                     borderRadius:BorderRadius.all(Radius.circular(20.0) )
                                 )
@@ -341,7 +279,7 @@ class _EditAccountState extends State<EditAccount> {
                             keyboardType: TextInputType.phone,
                             controller: phoneContoller,
                             decoration: InputDecoration(
-                                labelText: "phone",
+                                labelText: "${LocaleKeys.RegisterPhoneNumber.tr()}",
                                 border: OutlineInputBorder(
                                     borderRadius:BorderRadius.all(Radius.circular(20.0) )
                                 )
@@ -357,7 +295,7 @@ class _EditAccountState extends State<EditAccount> {
                           child: TextFormField(
                             controller: genderContoller,
                             decoration: InputDecoration(
-                                labelText: "Gender",
+                                labelText: "${LocaleKeys.EditAccountGender.tr()}",
                                 border: OutlineInputBorder(
                                     borderRadius:BorderRadius.all(Radius.circular(20.0) )
                                 )
@@ -390,7 +328,7 @@ class _EditAccountState extends State<EditAccount> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                title: Text('Please Upload Image!'
+                title: Text('${LocaleKeys.EditAccountPleaseUploadImage.tr()}'
                   ,style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -402,7 +340,7 @@ class _EditAccountState extends State<EditAccount> {
               ),
               ListTile(
                 leading: Icon(Icons.camera_alt),
-                title: Text('Camera'),
+                title: Text('${LocaleKeys.EditAccountCamera.tr()}'),
                 onTap: () {
                   // Handle edit action
                   //_pickImageFromCamera();
@@ -411,7 +349,7 @@ class _EditAccountState extends State<EditAccount> {
               ),
               ListTile(
                 leading: Icon(Icons.store),
-                title: Text('Gallery'),
+                title: Text('${LocaleKeys.EditAccountGallery.tr()}'),
                 onTap: () {
                   // Handle delete action
                   _pickImageFromGallery();

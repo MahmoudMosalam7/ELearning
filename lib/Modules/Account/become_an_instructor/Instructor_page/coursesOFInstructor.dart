@@ -13,6 +13,7 @@ import '../../../Home/Product.dart';
 class CoursesOfInstructor extends StatefulWidget {
   const CoursesOfInstructor({super.key});
 
+
   @override
   State<CoursesOfInstructor> createState() => _CoursesOfInstructorState();
 }
@@ -89,8 +90,7 @@ class _CoursesOfInstructorState extends State<CoursesOfInstructor> {
   }
   @override
   Widget build(BuildContext context) {
-    _allCoursesOfInstructor();
-    return Scaffold(
+     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
         child: ListView.separated(

@@ -38,6 +38,7 @@ class HttpServiceCoursePriceAndPublishAndDeleteAndCompiler {
       throw ('Error during courseId: $e');
     }
   }
+
   Future<void> addCourseCompiler( String compiler,String token,String courseId
       ) async {
     try {
@@ -66,6 +67,66 @@ class HttpServiceCoursePriceAndPublishAndDeleteAndCompiler {
 
       print('from add compiler error = ${e}');
       throw ('Error during courseId: $e');
+    }
+  }
+
+  Future<void> publishCourse( String token,String courseId
+      ) async {
+    try {
+      print('token = $token');
+      print('courseId = $courseId');
+
+      final response = await _dio.put(
+        '/v1/course/setPublish',
+        data: { 'courseId': courseId},
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      print(response);
+      print(response.data);
+      if (response.statusCode == 200) {
+        print(response.data);
+        return;
+      } else {
+        // Registration failed
+
+        print('from  publishCourse error = ${response.data}');
+        throw ('publishCourse failed: ${response.data}');
+      }
+    } catch (e) {
+      // Handle network or other errors
+
+      print('from publishCourse error = ${e}');
+      throw ('Error during publishCourse: $e');
+    }
+  }
+  Future<void> addSpreadSheetLinkOfCourse( String link,String token,String courseId
+      ) async {
+    try {
+      print('spreadsheetlink = $link');
+      print('token = $token');
+      print('courseId = $courseId');
+
+      final response = await _dio.put(
+        '/v1/course/$courseId',
+        data: { 'spreadsheetlink': link},
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      print(response);
+      print(response.data);
+      if (response.statusCode == 200) {
+        print(response.data);
+        return;
+      } else {
+        // Registration failed
+
+        print('from  addSpreadSheetLinkOfCourse error = ${response.data}');
+        throw ('addSpreadSheetLinkOfCourse failed: ${response.data}');
+      }
+    } catch (e) {
+      // Handle network or other errors
+
+      print('from addSpreadSheetLinkOfCourse error = ${e}');
+      throw ('Error during addSpreadSheetLinkOfCourse: $e');
     }
   }
   Future<void> deleteCourse( String token,String courseId ) async {

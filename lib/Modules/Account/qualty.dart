@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:easy_localization/easy_localization.dart';
 
+import '../../translations/locale_keys.g.dart';
 class Quality extends StatelessWidget{
 
   static String q="";
@@ -19,7 +20,7 @@ class Quality extends StatelessWidget{
           Icons.keyboard_arrow_left
         )
       ),  */
-            title: Text("video download quality"),
+            title: Text("${LocaleKeys.QualityTitle.tr()}"),
 
             centerTitle: true,
           ),
@@ -30,7 +31,7 @@ class Quality extends StatelessWidget{
               child: Column(
                 children: [
 
-                  Text("Select your quality preference for videos you download. if the beast video quality is not available , then you will get the next highest level",
+                  Text("${LocaleKeys.QualityText.tr()}",
                     style: TextStyle(
                         fontSize: 17.5,
                         fontWeight: FontWeight.w300
@@ -48,16 +49,16 @@ class Quality extends StatelessWidget{
                         q="360p";
                       },
                       child: Row(
-                        children: const [
+                        children:  [
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Data saver",
+                              Text("${LocaleKeys.QualityDatasaver.tr()}",
                                 style: TextStyle(
                                     fontSize: 17.5,
                                     fontWeight:FontWeight.w400
                                 ),),
-                              Text("360p- smallest file size",
+                              Text("${LocaleKeys.Qualitysmallestfilesize.tr()}",
                                 style: TextStyle(
                                     fontSize: 12.5,
                                     fontWeight:FontWeight.w300
@@ -79,11 +80,11 @@ class Quality extends StatelessWidget{
                         q="480p";
                       },
                       child: Row(
-                        children: const [
+                        children:  [
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Good",
+                              Text("${LocaleKeys.QualityGood.tr()}",
                                 style: TextStyle(
                                     fontSize: 17.5,
                                     fontWeight:FontWeight.w400
@@ -110,11 +111,11 @@ class Quality extends StatelessWidget{
                         q="720p";
                       },
                       child: Row(
-                        children: const [
+                        children:  [
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Better",
+                              Text("${LocaleKeys.QualityBetter.tr()}",
                                 style: TextStyle(
                                     fontSize: 17.5,
                                     fontWeight:FontWeight.w400
@@ -141,16 +142,16 @@ class Quality extends StatelessWidget{
                         q="1080p";
                       },
                       child: Row(
-                        children: const [
+                        children:  [
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Best",
+                              Text("${LocaleKeys.QualityBest.tr()}",
                                 style: TextStyle(
                                     fontSize: 17.5,
                                     fontWeight:FontWeight.w400
                                 ),),
-                              Text("1080p-largest file size",
+                              Text("${LocaleKeys.Qualitylargestfilesize.tr()}",
                                 style: TextStyle(
                                     fontSize: 12.5,
                                     fontWeight:FontWeight.w300

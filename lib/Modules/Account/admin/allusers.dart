@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:learning/Modules/Account/admin/update_user_information.dart';
 import 'package:learning/Modules/Account/admin/update_user_password.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import '../../../apis/admin/http_service_admin.dart';
 import '../../../models/usermodel.dart';
 import '../../../network/local/cache_helper.dart';
+import '../../../translations/locale_keys.g.dart';
 
 class AllUsers extends StatefulWidget {
   const AllUsers({super.key});
@@ -154,7 +154,7 @@ class _AllUsersState extends State<AllUsers> {
    // _allUsers();
     return Scaffold(
       appBar: AppBar(
-        title: Text('All Users'),
+        title: Text(LocaleKeys.AdminAllUsersTitle.tr()),
       ),
       body:SingleChildScrollView(
         child: ListView.separated(
@@ -167,9 +167,7 @@ class _AllUsersState extends State<AllUsers> {
             return InkWell(
               onTap: () {
                 // Handle the tap event here
-        
-                //Get.to(CourseInformation(courseId: products[index].id));
-        
+
               },
               child: _userUI( user),
             );
@@ -274,7 +272,7 @@ class _AllUsersState extends State<AllUsers> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                title: Text('What You Will Updata!'
+                title: Text(LocaleKeys.AdminAllUsersWhatYouWillUpdata.tr()
                   ,style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -286,7 +284,7 @@ class _AllUsersState extends State<AllUsers> {
               ),
               ListTile(
                 leading: Icon(Icons.dashboard_customize_rounded),
-                title: Text('Update Information'),
+                title: Text(LocaleKeys.AdminAllUsersUpdateInformation.tr()),
                 onTap: () {
                   // Handle edit action
 
@@ -297,8 +295,8 @@ class _AllUsersState extends State<AllUsers> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.update),
-                title: Text('Update Password'),
+                leading: Icon(Icons.password),
+                title: Text(LocaleKeys.AdminAllUsersUpdatePassword.tr()),
                 onTap: () {
                   // Handle delete action
 

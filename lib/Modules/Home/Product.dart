@@ -34,14 +34,7 @@ class ProductListItem extends StatelessWidget {
                 ),
                 Spacer(),
                 InkWell(
-                  child: CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Colors.grey[300],
-                    child: Icon(
-                      Icons.favorite_border,
-                  //    color: product.isFavorite ? Colors.green : Colors.grey,
-                    ),
-                  ),
+                  child:Text(product.instructorName),
                 ),
               ],
             ),

@@ -1,0 +1,23 @@
+class ChatCard extends StatelessWidget {
+  const ChatCard({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        onTap: () => Navigator.push(context,MaterialPageRoute(builder: (context)=>ChatScreen())),
+        leading: CircleAvatar(),
+        title: Text("name"),
+        subtitle: Text("last message"),
+        trailing: Badge(
+          backgroundColor: Colors.green,
+          padding: EdgeInsets.symmetric(horizontal: 12),
+          label: Text("3"),
+          largeSize: 30,
+        ),
+      ),
+    );
+  }
+}

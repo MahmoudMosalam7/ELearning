@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:learning/Modules/Account/become_an_instructor/Instructor_page/add_new_course/basic_information.dart';
-import 'package:learning/Modules/Home/InformationOFCourses/payment_by_method.dart';
-
+import '../../../../translations/locale_keys.g.dart';
+import 'add_new_course/add_price_publish.dart';
 import 'add_new_course/advanced_information.dart';
 import 'add_new_course/course_curriculum/course_curriculum.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 class UpdateCourse extends StatelessWidget {
   UpdateCourse({super.key,required this.courseID});
   String courseID ;
@@ -14,7 +13,7 @@ class UpdateCourse extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Update Course',style: TextStyle(
+        title: Text(LocaleKeys.InstructorUpdateCourseTitle.tr(),style: TextStyle(
             fontWeight: FontWeight.bold
         ),),
       ),
@@ -26,7 +25,9 @@ class UpdateCourse extends StatelessWidget {
               child: GestureDetector(
                 onTap: () {
                   // Add your functionality here
-                  Get.to(BasicInformation(fromUpdateCourse: true,courseId:courseID,));
+                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                    return BasicInformation(fromUpdateCourse: true,courseId:courseID,);
+                  }));
                 },
                 child: Container(
                   width: double.infinity,// تحديد العرض المطلوب للبطاقة
@@ -42,7 +43,7 @@ class UpdateCourse extends StatelessWidget {
                         children: [
                           Icon(Icons.info_outline_rounded), // إضافة الأيقونة في البداية
                           SizedBox(width: 10.w), // إضافة مسافة بين الأيقونة والنص
-                          Text("Update Basic Information",
+                          Text(LocaleKeys.InstructorUpdateCourseUpdateBasicInformation.tr(),
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18.sp
@@ -81,7 +82,7 @@ class UpdateCourse extends StatelessWidget {
                         children: [
                           Icon(Icons.info_outline_rounded), // إضافة الأيقونة في البداية
                           SizedBox(width: 10.w), // إضافة مسافة بين الأيقونة والنص
-                          Text("Update Advanced Information",
+                          Text(LocaleKeys.InstructorUpdateCourseUpdateAdvancedInformation.tr(),
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18.sp
@@ -99,7 +100,9 @@ class UpdateCourse extends StatelessWidget {
               child: GestureDetector(
                 onTap: () {
                   // Add your functionality here
-                  Get.to(CourseCurriculum(fromUpdateCourse: true,courseId:courseID));
+                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                    return CourseCurriculum(fromUpdateCourse: true,courseId:courseID);
+                  }));
                 },
                 child: Container(
                   width: double.infinity,// تحديد العرض المطلوب للبطاقة
@@ -115,7 +118,7 @@ class UpdateCourse extends StatelessWidget {
                         children: [
                           Icon(Icons.info_outline_rounded), // إضافة الأيقونة في البداية
                           SizedBox(width: 10.w), // إضافة مسافة بين الأيقونة والنص
-                          Text("Update Course Curriculum",
+                          Text(LocaleKeys.InstructorUpdateCourseUpdateCourseCurriculum.tr(),
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18.sp
@@ -132,8 +135,10 @@ class UpdateCourse extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: GestureDetector(
                 onTap: () {
-                  // Add your functionality here
-                },
+                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                    return AddPriceAndPublish(fromInstructor: true,courseId:courseID);
+                  }));
+                  },
                 child: Container(
                   width: double.infinity,// تحديد العرض المطلوب للبطاقة
                   height: 70.h,
@@ -148,7 +153,7 @@ class UpdateCourse extends StatelessWidget {
                         children: [
                           Icon(Icons.payment), // إضافة الأيقونة في البداية
                           SizedBox(width: 10.w), // إضافة مسافة بين الأيقونة والنص
-                          Text("InstaPay",
+                          Text(LocaleKeys.InstructorUpdateCoursePriceORSpreadSheet.tr(),
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18.sp

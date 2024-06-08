@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import '../../../../TColors.dart';
+import '../../../../translations/locale_keys.g.dart';
 import '../update_as_instructor/information_of_instructor.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 class BoardingModel{
   final String image;
   final String title;
@@ -26,13 +24,13 @@ class _OnBordingInstructorScreenState extends State<OnBordingInstructorScreen> {
   List<BoardingModel> boarding =[
     BoardingModel(
       image: 'assets/images/onboarding_instructor/instructor.jpeg',
-      title: 'Welcome',
-      body: 'Thank You For Deciding To Work With US',
+      title: '${LocaleKeys.InstructorOnBordingInstructorScreenWelcome.tr()}',
+      body: '${LocaleKeys.InstructorOnBordingInstructorScreenbody1.tr()}',
     ),
     BoardingModel(
       image: 'assets/images/onboarding_instructor/instructor1.jpeg',
-      title: 'We look forward to working with you',
-      body: ' let\'s get started',
+      title: '${LocaleKeys.InstructorOnBordingInstructorScreenWelookforwardtoworkingwithyou.tr()}',
+      body: '${LocaleKeys.InstructorOnBordingInstructorScreenbody2.tr()}',
     ),
   ];
 
@@ -42,9 +40,12 @@ class _OnBordingInstructorScreenState extends State<OnBordingInstructorScreen> {
       appBar: AppBar(
         actions: [
           TextButton(onPressed: (){
-            Get.to(InstructorInformation());
+
+            Navigator.push(context, MaterialPageRoute(builder: (context){
+              return InstructorInformation();
+            }));
             },
-              child: Text('SKIP'
+              child: Text(LocaleKeys.InstructorOnBordingInstructorScreenSKIP.tr()
               ,style: TextStyle(
                   color: Colors.green
                 ),
@@ -92,7 +93,9 @@ class _OnBordingInstructorScreenState extends State<OnBordingInstructorScreen> {
                 Spacer(),
                 FloatingActionButton(onPressed: (){
                   if(isLast){
-                      Get.to(InstructorInformation());
+                      Navigator.push(context, MaterialPageRoute(builder: (context){
+                        return InstructorInformation();
+                      }));
                      }
                  else {
                     boardController.nextPage(duration: Duration(

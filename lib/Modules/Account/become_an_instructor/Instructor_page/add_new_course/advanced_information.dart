@@ -5,13 +5,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:learning/shared/constant.dart';
 import 'package:video_player/video_player.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import '../../../../../apis/upload_course/http_service_advanced_information.dart';
 import '../../../../../network/local/cache_helper.dart';
+import '../../../../../translations/locale_keys.g.dart';
 import 'course_curriculum/course_curriculum.dart';
 
 class AdvancedInformationScreen extends StatefulWidget {
@@ -83,7 +82,10 @@ class _AdvancedInformationScreenState extends State<AdvancedInformationScreen> {
 
       print(' successful!');
       sections = [];
-      Get.to(CourseCurriculum(courseId:'null' ,fromUpdateCourse:false ,));
+
+      Navigator.push(context, MaterialPageRoute(builder: (contet){
+        return CourseCurriculum(courseId:'null' ,fromUpdateCourse:false ,);
+      }));
     } catch (e) {
       // Handle validation errors or network errors
       setState(() {
@@ -251,7 +253,7 @@ class _AdvancedInformationScreenState extends State<AdvancedInformationScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Advanced Information',
+                Text(LocaleKeys.InstructorAdvancedInformationScreenTitle.tr(),
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20.0.sp
@@ -304,7 +306,7 @@ class _AdvancedInformationScreenState extends State<AdvancedInformationScreen> {
                   ),
                 ),
                 SizedBox(height: 10.h),
-                Text('Upload Image of Course',
+                Text(LocaleKeys.InstructorAdvancedInformationScreenUploadImageofCourse.tr(),
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 15.0.sp
@@ -390,7 +392,7 @@ class _AdvancedInformationScreenState extends State<AdvancedInformationScreen> {
                       ),
                       child: MaterialButton(
                         child:  Text(
-                          'Upload Trailer',
+                          LocaleKeys.InstructorAdvancedInformationScreenUploadTrailer.tr(),
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 22.0.sp,
@@ -404,7 +406,7 @@ class _AdvancedInformationScreenState extends State<AdvancedInformationScreen> {
                 ),
 
                 SizedBox(height: 20.h),
-                Text('Course Description',
+                Text(LocaleKeys.InstructorAdvancedInformationScreenCourseDescription.tr(),
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 15.0.sp
@@ -415,18 +417,18 @@ class _AdvancedInformationScreenState extends State<AdvancedInformationScreen> {
               controller: _courseDescriptionController,
               maxLines: null, // Set to null for a multiline text area
               decoration: InputDecoration(
-                hintText: 'Enter your text here...',
+                hintText: '${LocaleKeys.InstructorAdvancedInformationScreenEnteryourtexhere.tr()}',
               ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Course Description is required';
+                      return '${LocaleKeys.InstructorAdvancedInformationScreenCourseDescriptionisrequired.tr()}';
                     }
                     return null;
                   },
 
                 ),
                 SizedBox(height: 20.h),
-                Text('What you will teach in this course',
+                Text(LocaleKeys.InstructorAdvancedInformationScreenWhatyouwillteachinthiscourse.tr(),
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 15.0.sp
@@ -437,18 +439,18 @@ class _AdvancedInformationScreenState extends State<AdvancedInformationScreen> {
                   controller: _courseTeachController,
                   maxLines: null, // Set to null for a multiline text area
                   decoration: InputDecoration(
-                    hintText: 'Enter your text here...',
+                    hintText: '${LocaleKeys.InstructorAdvancedInformationScreenEnteryourtexhere.tr()}',
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'This Field is required';
+                      return '${LocaleKeys.InstructorAdvancedInformationScreenThisFieldisrequired.tr()}';
                     }
                     return null;
                   },
 
                 ),
                 SizedBox(height: 20.h),
-                Text('Target Audience',
+                Text(LocaleKeys.InstructorAdvancedInformationScreenTargetAudience.tr(),
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 15.0.sp
@@ -459,11 +461,11 @@ class _AdvancedInformationScreenState extends State<AdvancedInformationScreen> {
                   controller: _targetAudienceController,
                   maxLines: null, // Set to null for a multiline text area
                   decoration: InputDecoration(
-                    hintText: 'Enter your text here...',
+                    hintText: '${LocaleKeys.InstructorAdvancedInformationScreenEnteryourtexhere.tr()}',
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Target Audience is required';
+                      return '${LocaleKeys.InstructorAdvancedInformationScreenTargetAudienceisrequired.tr()}';
                     }
                     return null;
                   },
@@ -471,7 +473,7 @@ class _AdvancedInformationScreenState extends State<AdvancedInformationScreen> {
 
                 ),
                 SizedBox(height: 20.h),
-                Text('Course Requirments',
+                Text(LocaleKeys.InstructorAdvancedInformationScreenCourseRequirments.tr(),
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 15.0.sp
@@ -482,11 +484,11 @@ class _AdvancedInformationScreenState extends State<AdvancedInformationScreen> {
                   controller: _courseRequrirementsController,
                   maxLines: null, // Set to null for a multiline text area
                   decoration: InputDecoration(
-                    hintText: 'Enter your text here...',
+                    hintText: '${LocaleKeys.InstructorAdvancedInformationScreenEnteryourtexhere.tr()}',
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Course Requiremenets is required';
+                      return '${LocaleKeys.InstructorAdvancedInformationScreenCourseDescriptionisrequired.tr()}';
                     }
                     return null;
                   },
@@ -504,7 +506,7 @@ class _AdvancedInformationScreenState extends State<AdvancedInformationScreen> {
                       ),
                       child: MaterialButton(
                         child:  Text(
-                          'Save & Next',
+                          LocaleKeys.InstructorAdvancedInformationScreenSaveNext.tr(),
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 22.0.sp,
@@ -553,7 +555,7 @@ class _AdvancedInformationScreenState extends State<AdvancedInformationScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                title: Text('Please Upload Image!'
+                title: Text(LocaleKeys.InstructorAdvancedInformationScreenPleaseUploadImage.tr()
                   ,style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -566,7 +568,7 @@ class _AdvancedInformationScreenState extends State<AdvancedInformationScreen> {
 
               ListTile(
                 leading: Icon(Icons.store),
-                title: Text('Gallery'),
+                title: Text(LocaleKeys.InstructorAdvancedInformationScreenGallery.tr()),
                 onTap: () {
                   // Handle delete action
                   _pickImageFromGallery();

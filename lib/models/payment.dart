@@ -20,7 +20,7 @@ class Payment{
        return Payment(
          imageUrl: productData['paymentReceiptImage'],
          userID: productData['userId'],
-         price: productData['coursePrice']['amount'] ,
+         price: (productData['coursePrice']['amount'] as num).toDouble() ,
          currency:productData['coursePrice']['currency'] ,
          courseID: productData['courseId'],
          transactionId: productData['_id'],

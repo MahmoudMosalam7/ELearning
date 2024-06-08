@@ -1,5 +1,6 @@
 // lib/http_service.dart
 import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
 
 import '../../network/local/cache_helper.dart';
 import '../../shared/constant.dart';
@@ -71,7 +72,34 @@ class HttpServiceCourse {
       throw ('Error during get all course: $e');
     }
   }
+  Future< Map<String,dynamic> >createTest(String token,String courseId)async {
+    try {
+      print('token = $token');
+      print('courseId = $courseId');
 
+      final response = await _dio.post(
+        '/v1/tests/$courseId',
+       // data:{'courseId':courseId},
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      print(response);
+      print(response.data);
+      if (response.statusCode == 200) {
+        print(response.data);
+        return response.data;
+      } else {
+        // Registration failed
+
+        print('from  addSpreadSheetLinkOfCourse error = ${response.data}');
+        throw ('addSpreadSheetLinkOfCourse failed: ${response.data}');
+      }
+    } catch (e) {
+      // Handle network or other errors
+
+      print('from addSpreadSheetLinkOfCourse error = ${e}');
+      throw ('Error during addSpreadSheetLinkOfCourse: $e');
+    }
+  }
   Future< Map<String,dynamic> > getCourse( String id,String token) async {
     try {
         print('from me id = $id');
@@ -135,19 +163,111 @@ class HttpServiceCourse {
       throw ('Error during get  course: $e');
     }
   }
+  Future< Map<String,dynamic> > addAndRemoveCourseFromWishList( String id,String token) async {
+    try {
+      print('from addAndRemoveCourseFromWishList id = $id');
+      print('from addAndRemoveCourseFromWishList token = $token');
+      final response = await _dio.put(
+        '/v1/course/wishlist',
+        data: {'courseId':id},
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
 
+      print('from addAndRemoveCourseFromWishList  = ${response.data}');
+      if (response.statusCode == 200) {
+
+        try{
+          print(' get  addAndRemoveCourseFromWishList is done ${response.data['data']['results']} ');
+        }catch(e){
+          print('error when  addAndRemoveCourseFromWishList  course /');
+        }
+
+        return response.data;
+      } else {
+        // Registration failed
+
+        print('from addAndRemoveCourseFromWishList error = ${response.data}');
+        throw ('addAndRemoveCourseFromWishListfailed: ${response.data}');
+      }
+    } catch (e) {
+      // Handle network or other errors
+
+      print('from addAndRemoveCourseFromWishList error = ${e}');
+      throw ('Error addAndRemoveCourseFromWishList course: $e');
+    }
+  }
+  Future< Map<String,dynamic> > getAllCoursesFromWishList( String token) async {
+    try {
+      print('from getAllCoursesFromWishList token = $token');
+      final response = await _dio.get(
+        '/v1/course/wishlist',
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+
+      print('from getAllCoursesFromWishList  = ${response.data}');
+      if (response.statusCode == 200) {
+
+        try{
+          print(' get  getAllCoursesFromWishList is done ${response.data['data']['results']} ');
+        }catch(e){
+          print('error when  getAllCoursesFromWishList  course /');
+        }
+
+        return response.data;
+      } else {
+        // Registration failed
+
+        print('from getAllCoursesFromWishList error = ${response.data}');
+        throw ('getAllCoursesFromWishList: ${response.data}');
+      }
+    } catch (e) {
+      // Handle network or other errors
+
+      print('from getAllCoursesFromWishList error = ${e}');
+      throw ('Error getAllCoursesFromWishList course: $e');
+    }
+  }
   Future<void> paymentByMethod(imageFilePath,String userId,String CoursePrice
-      ,String phoneNumber,String courseId ,String token) async {
+      ,String phoneNumber,String courseId ,String token,{String? coupon}) async {
+    String imageFileName = '';
+    FormData formData;
+    if( coupon != null ){
+       if(coupon!.length == 11){
 
-    String imageFileName = imageFilePath.split('/').last;
+         print('from transaction copuon free');
+         formData =  FormData.fromMap({
 
-    FormData formData =  FormData.fromMap({
-      "paymentReceiptImage": await MultipartFile.fromFile(imageFilePath, filename: imageFileName),
-      "courseId": courseId,
-      "userId": userId,
-      "CoursePrice": CoursePrice,
-      "phoneNumber": phoneNumber,
-    });
+           "courseId": courseId,
+           "userId": userId,
+           "CoursePrice": CoursePrice,
+           "phoneNumber": phoneNumber,
+           "couponCode":coupon
+         });
+       }else{
+         formData =  FormData.fromMap({
+           "paymentReceiptImage": await MultipartFile.fromFile(imageFilePath, filename: imageFileName),
+           "courseId": courseId,
+           "userId": userId,
+           "CoursePrice": CoursePrice,
+           "phoneNumber": phoneNumber,
+           "couponCode":coupon
+         });
+       }
+    }else{
+       imageFileName = imageFilePath.split('/').last;
+
+
+        print('last last last');
+        formData =  FormData.fromMap({
+          "paymentReceiptImage": await MultipartFile.fromFile(imageFilePath, filename: imageFileName),
+          "courseId": courseId,
+          "userId": userId,
+          "CoursePrice": CoursePrice,
+          "phoneNumber": phoneNumber,
+        });
+
+    }
+
 
 
     try {
@@ -157,6 +277,7 @@ class HttpServiceCourse {
       print('from make transactons image = $phoneNumber');
       print('from make transactons image = $courseId');
       print('from make transactons image = $token');
+      print('from make transactons formdata = ${formData.fields}');
       final response = await _dio.post
         ('/v1/transaction'
         ,data: formData,
@@ -186,4 +307,42 @@ class HttpServiceCourse {
       print('from make transaction error = ${e}');
     }
   }
+  Future< Map<String,dynamic>> getCertificate( String courseId,int sore,String token) async {
+    try {
+      print('from getCertificate courseId = $courseId');
+      print('from getCertificate sore = $sore');
+      print('from getCertificate token = $token');
+      final response = await _dio.post(
+        '/v1/certificate',
+        data: {
+          'courseId':courseId,
+          'score':sore,
+        },
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+
+      print('from getCertificate = ${response.data}');
+      if (response.statusCode == 200) {
+
+        try{
+          print(' getCertificateis done ${response.data['data']['results']} ');
+        }catch(e){
+          print('error when getCertificate /');
+        }
+
+        return response.data;
+      } else {
+        // Registration failed
+
+        print('from get  course error = ${response.data}');
+        throw ('get  course failed: ${response.data}');
+      }
+    } catch (e) {
+      // Handle network or other errors
+
+      print('from get  course error = ${e}');
+      throw ('Error during get  course: $e');
+    }
+  }
+
 }

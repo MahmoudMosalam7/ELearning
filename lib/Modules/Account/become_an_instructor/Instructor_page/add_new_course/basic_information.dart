@@ -3,14 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
 import 'package:learning/shared/constant.dart';
-
 import '../../../../../Layout/Login_Register_ForgetPassword/DropDownList/dropDownList.dart';
 import '../../../../../apis/upload_course/http_service_basic_information.dart';
 import '../../../../../network/local/cache_helper.dart';
+import '../../../../../translations/locale_keys.g.dart';
+import '../../../../Home/home.dart';
 import '../../../../Home/listView_category.dart';
 import 'advanced_information.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class BasicInformation extends StatefulWidget {
   final bool fromUpdateCourse;
@@ -67,7 +68,10 @@ class _BasicInformationState extends State<BasicInformation> {
       // Now navigate to the appropriate screen based on the fetched data
      
       print('courseId successful!');
-      Get.to(AdvancedInformationScreen(courseId:'' ,fromUpdateCourse:false ,));
+
+      Navigator.push(context, MaterialPageRoute(builder: (context){
+        return AdvancedInformationScreen(courseId:'' ,fromUpdateCourse:false ,);
+      }));
     } catch (e) {
       // Handle validation errors or network errors
       setState(() {
@@ -186,7 +190,7 @@ class _BasicInformationState extends State<BasicInformation> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Basic Information',
+                Text(LocaleKeys.InstructorBasicInformationBasicInformation.tr(),
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20.0.sp
@@ -198,14 +202,14 @@ class _BasicInformationState extends State<BasicInformation> {
                   obscureText: false,
                   controller: _titleContoller,
                   decoration: InputDecoration(
-                      labelText: "Title",
+                      labelText: "${LocaleKeys.InstructorBasicInformationTitle.tr()}",
                       border: OutlineInputBorder(
                           borderRadius:BorderRadius.all(Radius.circular(20.0.r) )
                       )
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return ' Title is required';
+                      return '${LocaleKeys.InstructorBasicInformationTitleisrequired.tr()}';
                     }
                     return null;
                   },
@@ -218,14 +222,14 @@ class _BasicInformationState extends State<BasicInformation> {
                   obscureText: false,
                   controller: _subTitleContoller,
                   decoration: InputDecoration(
-                      labelText: "SubTitle",
+                      labelText: "${LocaleKeys.InstructorBasicInformationSubTitle.tr()}",
                       border: OutlineInputBorder(
                           borderRadius:BorderRadius.all(Radius.circular(20.0.r) )
                       )
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'SubTitle is required';
+                      return '${LocaleKeys.InstructorBasicInformationSubTitleisrequired.tr()}';
                     }
                     return null;
                   },
@@ -248,8 +252,8 @@ class _BasicInformationState extends State<BasicInformation> {
                     SelectedListItem(name:'Computer Science(cs)' ),
                   ],
                   textEditingController: _categoryContoller,
-                  title: 'Select Category',
-                  hint: 'Category',
+                  title: '${LocaleKeys.InstructorBasicInformationSelectCategory.tr()}',
+                  hint: '${LocaleKeys.InstructorBasicInformationCategory.tr()}',
                   isDataSelected: true,
                 ),
                 SizedBox(height: 10.h,),
@@ -257,13 +261,13 @@ class _BasicInformationState extends State<BasicInformation> {
                   data: [
                     SelectedListItem(name:'Arabic' ),
                     SelectedListItem(name:'English' ),
-                    SelectedListItem(name:'Italy' ),
+                    SelectedListItem(name:'Japan' ),
                     SelectedListItem(name:'Germany' ),
                     SelectedListItem(name:'France' ),
                   ],
                   textEditingController: _languageContoller,
-                  title: 'Select Language',
-                  hint: 'Language',
+                  title: '${LocaleKeys.InstructorBasicInformationSelectLanguage.tr()}',
+                  hint: '${LocaleKeys.InstructorBasicInformationLanguage.tr()}',
                   isDataSelected: true,
                 ),
                 SizedBox(height: 10.h,),
@@ -275,8 +279,8 @@ class _BasicInformationState extends State<BasicInformation> {
                     SelectedListItem(name:'Proficient' ),
                   ],
                   textEditingController: _levelContoller,
-                  title: 'Select Level',
-                  hint: 'Level',
+                  title: '${LocaleKeys.InstructorBasicInformationSelectLevel.tr()}',
+                  hint: '${LocaleKeys.InstructorBasicInformationLevel.tr()}',
                   isDataSelected: true,
                 ),
                 SizedBox(height: 30.h,),
@@ -292,7 +296,7 @@ class _BasicInformationState extends State<BasicInformation> {
                       ),
                       child: MaterialButton(
                         child:  Text(
-                          'Save & Next',
+                          LocaleKeys.InstructorBasicInformationSaveNext.tr(),
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 22.0.sp,
@@ -303,7 +307,8 @@ class _BasicInformationState extends State<BasicInformation> {
                           print('token = ${CacheHelper.getData(key: 'token')}');
                           print('mahmoud ${_categoryContoller.text}');
                           CategoryData? result;
-                          for (var category in categoryData) {
+                           List<CategoryData> categoryData2 = getCategoryData(context);
+                          for (var category in categoryData2) {
                             print('${category.text}');
                             if (category.text == _categoryContoller.text) {
                               result = category;

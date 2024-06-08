@@ -5,6 +5,7 @@ class Product {
   String id;
   String instructorName;
   double rating;
+  double profites;
 
   Product({
     required this.imageURL,
@@ -13,6 +14,7 @@ class Product {
     required this.id,
     required this.instructorName,
     required this.rating,
+    required this.profites,
   });
   static List<Product> parseProductsFromServer(dynamic serverData) {
     print('parseProductsFromServer $serverData');
@@ -30,6 +32,7 @@ class Product {
           id: productData['_id'],
           instructorName: productData['instructorName'],
           rating: (productData['ratingsAverage'] as num).toDouble(),
+          profites: (productData['profits'] as num).toDouble(),
         );
       }).toList();
     } else {

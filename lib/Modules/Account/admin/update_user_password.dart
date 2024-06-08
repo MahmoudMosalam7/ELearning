@@ -1,15 +1,10 @@
-import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-
-import '../../../Layout/Login_Register_ForgetPassword/DropDownList/dropDownList.dart';
-import '../../../Layout/Login_Register_ForgetPassword/Login.dart';
-import '../../../TColors.dart';
 import '../../../apis/admin/http_service_admin.dart';
-import '../../../apis/user/http_service_regstration.dart';
 import '../../../network/local/cache_helper.dart';
+import 'package:easy_localization/easy_localization.dart';
 
+import '../../../translations/locale_keys.g.dart';
 
 class UpdateUserPassword extends StatefulWidget {
    final String userId;
@@ -136,7 +131,7 @@ class _AddUserState extends State<UpdateUserPassword> {
                     TextFormField(
                       controller: _passwordContoller,
                       decoration:  InputDecoration(
-                        labelText:'Password',
+                        labelText:'${LocaleKeys.AdminUpdateUserPasswordPassword.tr()}',
                         labelStyle: TextStyle(
                           fontSize: 25.0,
                         ),
@@ -162,7 +157,7 @@ class _AddUserState extends State<UpdateUserPassword> {
                       },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Password is required';
+                          return '${LocaleKeys.RegisterPasswordisrequired.tr()}';
                         }
                         return null;
                       },
@@ -173,7 +168,7 @@ class _AddUserState extends State<UpdateUserPassword> {
                     TextFormField(
                       controller: _confirmPasswordContoller,
                       decoration: InputDecoration(
-                        labelText:'Confirm Password',
+                        labelText:'${LocaleKeys.AdminUpdateUserPasswordConfirmPassword.tr()}',
                         labelStyle: TextStyle(
                           fontSize: 25.0,
                         ),
@@ -200,7 +195,7 @@ class _AddUserState extends State<UpdateUserPassword> {
 
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Confirm Password is required';
+                          return '${LocaleKeys.RegisterConfirmPasswordisrequired.tr()}';
                         }
                         return null;
                       },
@@ -215,9 +210,9 @@ class _AddUserState extends State<UpdateUserPassword> {
                         ),
                         child: MaterialButton(
 
-                          child: const Text(
+                          child: Text(
 
-                            'Update User Password',
+                            '${LocaleKeys.AdminUpdateUserPasswordUpdateUserPassword.tr()}',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 20.0,
