@@ -7,12 +7,11 @@ import 'dart:io';
 class HttpServiceEditProfile {
   final Dio _dio = Dio(BaseOptions(baseUrl: baseUrl));
 
-  Future<void> updateMe(String name, String email, String bio, String phone,
+  Future<void> updateMe(String name,  String bio, String phone,
       String gender, XFile image, String token) async {
     try {
       // Print statements for debugging
       print('Name: $name');
-      print('Email: $email');
       print('Bio: $bio');
       print('Phone: $phone');
       print('Token: $token');
@@ -22,7 +21,6 @@ class HttpServiceEditProfile {
       final imageFileName = image.path.split('/').last;
       final formData = FormData.fromMap({
         'name': name,
-        'email': email,
         'profileImage': await MultipartFile.fromFile(
           imageFile.path,
           filename: imageFileName,

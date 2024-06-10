@@ -6,8 +6,8 @@ class ReviewModel {
   final String comment;
   ReviewModel( {required this.name,required this.imageUrl, required this.rating, required this.comment});
   static List<ReviewModel> parseReviewsFromServer(dynamic serverData) {
-    print('parseReviewsFromServer ${serverData['reviews']}');
-    dynamic results = serverData['reviews'];
+    print('parseReviewsFromServer ${serverData}');
+    dynamic results = serverData;
     print('parseReviewsFromServer $results');
 
     if (results != null && results is List) {
@@ -17,8 +17,8 @@ class ReviewModel {
          return ReviewModel(
              name: reviewModel['user']['name'],
              imageUrl: reviewModel['user']['profileImage'],
-             rating: (reviewModel['ratings'] as num).toDouble(),
-             comment: reviewModel['title']
+             rating: (reviewModel['rate'] as num).toDouble(),
+             comment: reviewModel['comment']
 
         );
       }).toList();
@@ -29,7 +29,7 @@ class ReviewModel {
   }
   @override
   String toString() {
-    return 'Course{sectionName: , ';
+    return 'Course{sectionName: ,${this.name} , image:${this.imageUrl}, ${this.comment} ,${this.rating} ';
   }
 
 }

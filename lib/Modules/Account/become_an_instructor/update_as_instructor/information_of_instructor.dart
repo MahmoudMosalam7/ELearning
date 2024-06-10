@@ -42,13 +42,26 @@ class _InstructorInformationState extends State<InstructorInformation> {
       // Check if _profileImage is not null before calling updateMe
 
       print(']]]]]]]]]]]]]]]]]]]]]from edit');
+      String? _jobTitle = _jobTitleContoller.text.isNotEmpty ? _jobTitleContoller.text : null;
+      String? _jobDesc = _jobDescriptionContoller.text.isNotEmpty ? _jobDescriptionContoller.text : null;
+      String? _linkedUrl = _linkedinAccountContoller.text.isNotEmpty ? _linkedinAccountContoller.text : null;
+      String? _faceUrl = _faceAccountContoller.text.isNotEmpty ? _faceAccountContoller.text : null;
+      String? _instadUrl = _instagramAccountContoller.text.isNotEmpty ? _instagramAccountContoller.text : null;
+
+
+      print(' job 1= ${_jobTitle}');
+      print(' job =2 ${_jobDesc}');
+      print(' job =3 ${_faceUrl}');
+      print(' job =4 ${_linkedUrl}');
+      print(' job =5 ${_instadUrl}');
+      //print(' job = ${_jobTitleContoller.text}');
       await httpService.updateMe(
-        _jobTitleContoller.text,
-        _jobDescriptionContoller.text,
-        _faceAccountContoller.text,
-        _linkedinAccountContoller.text,
-        _instagramAccountContoller.text,
-        _profileImage!, // Use _profileImage directly
+        _jobTitle,
+        _jobDesc,
+        _faceUrl,
+        _linkedUrl,
+        _instadUrl,
+        _profileImage, // Use _profileImage directly
         CacheHelper.getData(key: 'token'),
       );
 
@@ -208,12 +221,6 @@ class _InstructorInformationState extends State<InstructorInformation> {
                           borderRadius:BorderRadius.all(Radius.circular(20.0.r) )
                       )
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return '${LocaleKeys.InstructorInstructorInformationFaceBookAccountisrequired.tr()}';
-                    }
-                    return null;
-                  },
 
 
                 ),
@@ -228,12 +235,6 @@ class _InstructorInformationState extends State<InstructorInformation> {
                           borderRadius:BorderRadius.all(Radius.circular(20.0.r) )
                       )
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return '${LocaleKeys.InstructorInstructorInformationLinkedinAccountisrequired.tr()}';
-                    }
-                    return null;
-                  },
 
 
                 ),
@@ -248,12 +249,6 @@ class _InstructorInformationState extends State<InstructorInformation> {
                           borderRadius:BorderRadius.all(Radius.circular(20.0.r) )
                       )
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return '${LocaleKeys.InstructorInstructorInformationInstagramAccountisrequired.tr()}';
-                    }
-                    return null;
-                  },
 
 
                 ),
@@ -277,9 +272,9 @@ class _InstructorInformationState extends State<InstructorInformation> {
                         )  ,
 
                         onPressed: (){
-                          if (_formKey.currentState!.validate()) {
-                            _updateMe();
-                          }
+            if (_formKey.currentState!.validate()) {
+                             _updateMe();
+                            }
                           //Get.to(Payment());
                         },),
                     ),

@@ -180,6 +180,7 @@ class _UpdateUserState extends State<UpdateUser> {
                     const SizedBox(height: 20.0,),
                     // this text field for phone number
                     AppTextField(
+                      isFromInstructo: true,
                       data: [
                         SelectedListItem(name:'${LocaleKeys.AdminUpdataUserInformationRoles1.tr()}' ),
                         SelectedListItem(name:'${LocaleKeys.AdminUpdataUserInformationRoles2.tr()}' ),

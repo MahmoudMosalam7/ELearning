@@ -41,7 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
     });
 
     await _instructorInfo();
-    await _allCoursesOfInstructor();
+    //await _allCoursesOfInstructor();
 
     setState(() {
       isLoading = false;
@@ -55,11 +55,18 @@ class _ProfilePageState extends State<ProfilePage> {
         CacheHelper.getData(key: 'token'),
       );
 
+      if (serverData != null) {
+        products = Product.parseProductsFromServer2(serverData);
+        print('Products: $products');
+      } else {
+        throw Exception('Server data is null');
+      }
       print('Get instructor info successful! $serverData');
     } catch (e) {
       _handleError(e);
     }
   }
+/*
 
   Future<void> _allCoursesOfInstructor() async {
     try {
@@ -79,6 +86,7 @@ class _ProfilePageState extends State<ProfilePage> {
       _handleError(e);
     }
   }
+*/
 
   void _handleError(dynamic e) {
     setState(() {
@@ -153,6 +161,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                         SizedBox(height: 5.0),
+
                         Text(
                           '${LocaleKeys.ProfilePageJobDescription.tr()} ${serverData['data']['results']['jobDescription']}',
                           style: TextStyle(
@@ -160,7 +169,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                         SizedBox(height: 5.0),
-                        Text(
+                        if(serverData['data']['results']['linkedinUrl']!=null)
+                         Text(
                           '${LocaleKeys.ProfilePageLinkedIn.tr()} ${serverData['data']['results']['linkedinUrl']}',
                           style: TextStyle(
                             fontSize: 12.0,

@@ -17,8 +17,8 @@ class HttpServiceReviews {
       print('token=$token');
       final response = await _dio.post(
         '/v1/review',
-        data: { 'courses': courseId,'ratings':rating
-        ,'title':comment
+        data: { 'courseID': courseId,'rate':rating
+        ,'comment':comment
         },
           options: Options(
             headers: {

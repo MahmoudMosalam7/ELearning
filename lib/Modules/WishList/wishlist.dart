@@ -93,28 +93,7 @@ class _WishListScreenState extends State<WishListScreen> {
     } else {
       if (coursesOfFav != null && coursesOfFav!.isNotEmpty) {
         return Scaffold(
-          appBar: AppBar(
-            actions: [
-              IconButton(
-                color: Colors.black,
-                icon: const CircleAvatar(
-                  radius: 15.0,
-                  backgroundColor: Colors.grey,
-                  child: Icon(
-                    Icons.search,
-                    size: 20.0,
-                  ),
-                ),
-                onPressed: () {},
-              ),
-            ],
-            title:  Text(
-              LocaleKeys.WishListScreenWishList.tr(),
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
+
           body: RefreshIndicator(
             onRefresh: _refreshCourses,
             child: ListView.separated(
@@ -148,7 +127,7 @@ class _WishListScreenState extends State<WishListScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
 
-              Lottie.asset('assets/animation/animation1/Animation5.json'),
+              Lottie.asset('assets/animation/animation2/Animation2.json'),
 
               Center(child: Text(LocaleKeys.CourseInformationNodataavailable.tr())),
             ],

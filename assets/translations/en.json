@@ -4,7 +4,7 @@
   "HomeNavButtonLearn": "Learn",
   "HomeNavButtonWishList": "WishList",
   "HomeNavButtonAccount": "Account",
-  "LoginLetslearn":  "Let\\'s learn",
+  "LoginLetslearn":  "Let's learn",
   "LoginSignintocontinue":  "Sign in to continue",
   "LoginEmailAddress":  "Email Address",
   "LoginEmailisrequired":  "Email is required",
@@ -12,7 +12,7 @@
   "LoginPasswordisrequired":  "Password is required",
   "LoginForgetPassword":  "Forget Password",
   "LoginSignin": "Sign in",
-  "LoginDonthaveanaccount ":  "Don\\'t have an account?",
+  "LoginDonthaveanaccount ":  "Don't have an account?",
   "LoginSignup ": "Sign Up",
   "RegisterSignUp ": "Sign Up",
   "RegisterName ": "Name",
@@ -344,5 +344,6 @@
   "EnterFriendEmail":"Enter Friend Email",
   "CreateChat": "Create Chat",
   "SayAssalamuAlaikum":"Peace be upon you, and God's mercy and blessings",
-  "Message":"Message"
+  "Message":"Message",
+  "GetStarted":"Get Started"
 }

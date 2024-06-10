@@ -7,31 +7,37 @@ class HttpServiceUpdateInstructor {
 
   final Dio _dio = Dio(BaseOptions(baseUrl: baseUrl));
 
-  Future<void> updateMe(String jobTitle, String jobDescription,
-      String facebookUrl, String linkedinUrl, String instagramUrl, XFile image, String token) async {
+  Future<void> updateMe(String? jobTitle, String? jobDescription,
+      String? facebookUrl, String? linkedinUrl, String? instagramUrl, XFile? image, String token) async {
     print(']]]]]]]]]]]]]]]]]]]]]from api update');
     try {
-       String? fileType = await image.mimeType;
-      print('image = ${image.path}');
-      print('fileType = $fileType');
-      /*if (!allowedFileTypes.contains(fileType)) {
-        print('Invalid file type. Only JPEG, PNG, MP4, PDF, and PPT files are allowed.');
-        return;
-      }*/
+      print('fileType = $jobTitle');
+      print('fileType = $jobDescription');
+      print('fileType = $facebookUrl');
+      print('fileType = $linkedinUrl');
+      print('fileType = $instagramUrl');
 
-      var im = await uploadImageToApi(image);
-      inspect(im);
       print(']]]]]]]]]]]]]]]]]]]]]from api edit');
-      print(']]]]]]]]]]]]]]]]]]]]]from api edit im = ${im.filename}');
+      FormData formData;
+      if(image != null){
+        formData = FormData.fromMap({
+          'jobDescription': jobDescription,
+          'jobTitle': jobTitle,
+          'profileImage': await MultipartFile.fromFile(image.path, filename: image.path.split('/').last),
+          'facebookUrl': facebookUrl,
+          'linkedinUrl': linkedinUrl,
+          'instagramUrl': instagramUrl,
+        });
 
-      FormData formData = FormData.fromMap({
-        'jobDescription': jobDescription,
-        'jobTitle': jobTitle,
-        'profileImage': await MultipartFile.fromFile(image.path, filename: image.path.split('/').last),
-        'facebookUrl': facebookUrl,
-        'linkedinUrl': linkedinUrl,
-        'instagramUrl': instagramUrl,
-      });
+      }else{
+        formData = FormData.fromMap({
+          'jobDescription': jobDescription,
+          'jobTitle': jobTitle,
+          'facebookUrl': facebookUrl,
+          'linkedinUrl': linkedinUrl,
+          'instagramUrl': instagramUrl,
+        });
+      }
 
       final response = await _dio.put(
         '/v1/users/updateMe',
@@ -39,7 +45,6 @@ class HttpServiceUpdateInstructor {
         options: Options(
           headers: {
             'Authorization': 'Bearer $token',
-            'Content-Type': 'multipart/form-data',
           },
         ),
       );

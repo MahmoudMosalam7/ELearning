@@ -321,7 +321,7 @@ class _LoginState extends State<Login> {
                                 errorMessage = "";
                               },
                               child:  Text(
-                                LocaleKeys.LoginSignUp.tr(),
+                                LocaleKeys.RegisterSignUp.tr(),
                                 style: TextStyle(
                                   fontSize: 15.0,
                                   color: Colors.blue,
