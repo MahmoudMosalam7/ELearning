@@ -345,6 +345,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               onPressed: (){
                 /* print()*/
+                print(" getData!['data']['email'] = ${ getData!['data']['email']} ");
                 Navigator.push(context, MaterialPageRoute(builder: (context){
                   return ChatHomeScreen(email: getData!['data']['email'],);
                 }));

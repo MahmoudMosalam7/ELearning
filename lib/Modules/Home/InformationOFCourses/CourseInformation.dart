@@ -27,6 +27,7 @@ import '../../../shared/constant.dart';
 import '../../../translations/locale_keys.g.dart';
 import '../../Account/become_an_instructor/Instructor_page/update_course_information.dart';
 import '../../Account/videoPlay.dart';
+import '../../Learn/TabBar/course_videos.dart';
 import '../../WishList/wishlist.dart';
 import '../Product.dart';
 import 'instructor_information.dart';
@@ -231,23 +232,24 @@ class _CourseInformationState extends State<CourseInformation>  {
       _getCourse(); // Fetch course data only if _isLoading is true
     }
   }
-
+  late Map<String, dynamic> courseData;
   Future<void> _getCourse() async {
     try {
       // Fetch course data only if not already loading
       if (_isLoading) {
         String? token = CacheHelper.getData(key: 'token');
-        Map<String, dynamic> courseData = await httpServiceCourse.getCourse(widget.courseId, token!);
+         courseData = await httpServiceCourse.getCourse(widget.courseId, token!);
+        _allCoursesByCategory(courseData['data']['results']['category']['_id']);
         setState(() {
           data = courseData['data']['results'];
-          print('drrrrrrrrrrrrrrro = ${ courseData['data']['results']}');
-          reviews = ReviewModel.parseReviewsFromServer(courseData['data']['results']);
+          print('drrrrrrrrrrrrrrro = ${ courseData['data']['reviewsWithComments']}');
+          reviews = ReviewModel.parseReviewsFromServer(courseData['data']['reviewsWithComments']);
           print('rrrrrrrrrrrrrrrrrrrrrrrviewa =$reviews ');
 
 
           _isLoading = false; // Set _isLoading to false after data is fetched
         });
-        _allCoursesByCategory(courseData['data']['results']['category']['_id']);
+
          }
     } catch (e) {
       print('Error fetching course data: $e');
@@ -384,7 +386,12 @@ class _CourseInformationState extends State<CourseInformation>  {
       );
     } else {
       if (data != null && data!.isNotEmpty) {
-        List<dynamic?> reve =  data!['reviews'];
+        //data!['_id']
+        List <dynamic?> enrolledourses = getData?['data']['enrolledCourses'];
+        print('enrolledourses = ${enrolledourses}');
+        print('enrolledourses = ${enrolledourses.contains(data!['_id'])}');
+
+        List<dynamic?> reve =  courseData['data']['reviewsWithComments'];
         String videoURL = 'https://youtube.com/shorts/r9BGpTQzTjI?si=PRUUCiCHLPei7vIU' ;
         if(data?['videoTrailer'] != null){
           videoURL = data?['videoTrailer'];
@@ -990,7 +997,8 @@ class _CourseInformationState extends State<CourseInformation>  {
                   ],
                 ),
                 if(widget.fromInstructor == false)
-                  Row(
+                  if(!enrolledourses.contains(data!['_id']))
+                    Row(
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1032,6 +1040,42 @@ class _CourseInformationState extends State<CourseInformation>  {
                       )
                     ],
                   ),
+
+                if(widget.fromInstructor == false)
+                  if(enrolledourses.contains(data!['_id']))
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+
+                        Expanded(
+                          child: Container(
+                            width: 300.w,
+                          
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.0.r),
+                              color: TColors.secondray,
+                            ),
+                            child: MaterialButton(
+                              child:  Text(
+                                "Get Started",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20.0,
+                                ),
+                              ),
+                              onPressed: () {
+
+
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                                  return CourseContent(courseId: data!['_id'], );
+                                }));
+                              },
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
               ],
             ),
           ),

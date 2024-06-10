@@ -267,6 +267,7 @@ class _AddPriceAndPublishState extends State<AddPriceAndPublish> {
                     SelectedListItem(name:'${LocaleKeys.InstructorAddPriceAndPublishEGP.tr()}' ),
                     SelectedListItem(name:'${LocaleKeys.InstructorAddPriceAndPublishUSD.tr()}' ),
                   ],
+                  isFromInstructo: true,
                   textEditingController: _currencyContoller,
                   title: '${LocaleKeys.InstructorAddPriceAndPublishSelectCurrency.tr()}',
                   hint: '${LocaleKeys.InstructorAddPriceAndPublishCurrency.tr()}',

@@ -13,9 +13,10 @@ import '../../../shared/constant.dart';
 import '../../../translations/locale_keys.g.dart';
 
 class Result extends StatefulWidget {
-   Result({super.key, required this.score,required this.courseID});
+   Result({super.key, required this.score,required this.courseID,required this.colors});
   final int score;
   final String  courseID;
+  final List<String>  colors;
 
   @override
   State<Result> createState() => _ResultState();
@@ -117,6 +118,7 @@ class _ResultState extends State<Result> {
 
   @override
   Widget build(BuildContext context) {
+    print("colors = ${widget.colors}");
     return Scaffold(
       backgroundColor: Colors.cyan,
       body: SafeArea(
@@ -189,6 +191,8 @@ class _ResultState extends State<Result> {
                   shrinkWrap: true,
                   itemCount: test.length,
                   itemBuilder: (context, index) {
+
+                    bool isGreen = widget.colors[index] == "green";
                     String correctAnswer ='';
                     if(test[index].correctAnswer == 0.0){
                       correctAnswer = test[index].choice1;
@@ -218,7 +222,7 @@ class _ResultState extends State<Result> {
                           '${LocaleKeys.LearnResultCorrectAnswer.tr()} ${correctAnswer}',
                           style: TextStyle(
                             fontSize: 14,
-                            color: Colors.white70,
+                            color: isGreen ? Colors.green : Colors.red,
                           ),
                         ),
                         SizedBox(height: 5),

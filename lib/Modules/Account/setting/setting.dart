@@ -87,6 +87,7 @@ class _Setting extends ConsumerState<Setting> {
             ),
             SizedBox(height: 5.0.h),
             AppTextField(
+              isFromInstructo: false,
               data: [
                 SelectedListItem(name: "Arabic"),
                 SelectedListItem(name:"English"), // Add .tr() for translation

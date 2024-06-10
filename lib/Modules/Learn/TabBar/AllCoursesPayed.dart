@@ -133,29 +133,31 @@ class _AllState extends State<All> {
         {  return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: [
-            ListView.separated(
-              scrollDirection: Axis.vertical,
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                final product = products[index];
-                return InkWell(
-                  onTap: () {
-                    // Handle the tap event here
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              ListView.separated(
+                scrollDirection: Axis.vertical,
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: products.length,
+                itemBuilder: (context, index) {
+                  final product = products[index];
+                  return InkWell(
+                    onTap: () {
+                      // Handle the tap event here
 
-                   Get.to(CourseContent(courseId: products[index].id, ));
+                     Get.to(CourseContent(courseId: products[index].id, ));
 
-                  },
-                  child: containerOFEnrolledCourses(product: product),
-                );
-              },
-              separatorBuilder: (context, index) => Divider(height: 15.0),
-            ),
+                    },
+                    child: containerOFEnrolledCourses(product: product),
+                  );
+                },
+                separatorBuilder: (context, index) => Divider(height: 15.0),
+              ),
 
-          ],
+            ],
+          ),
         ),
       ),
     );}
@@ -167,7 +169,7 @@ class _AllState extends State<All> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
 
-              Lottie.asset('assets/animation/animation1/Animation6.json'),
+              Lottie.asset('assets/animation/animation2/Animation2.json'),
 
               Center(child: Text("No data available")),
             ],
@@ -192,7 +194,7 @@ class _AllState extends State<All> {
               Image.network((product!.imageURL)),
             if(product.imageURL == null)
               Image.asset(''),
-            Positioned(
+            /*Positioned(
               top: 0,
               right: 0,
               child: CircleAvatar(
@@ -210,7 +212,7 @@ class _AllState extends State<All> {
                   ),
                 ),
               ),
-            ),
+            ),*/
           ],
         ),
         trailing: SizedBox(

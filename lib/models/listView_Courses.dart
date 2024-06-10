@@ -40,6 +40,31 @@ class Product {
       throw Exception('No results found in server data');
     }
   }
+
+  static List<Product> parseProductsFromServer2(dynamic serverData) {
+    print('parseProductsFromServer2222222222 $serverData');
+    var results = serverData['data']?['results']['instructorCourses'];
+    print('parseProductsFromServer5 $results');
+
+    if (results != null && results is List) {
+      print('parseProductsFromServer2');
+      return results.map<Product>((productData) {
+        print('parseProductsFromServer3 $productData');
+        return Product(
+          imageURL: productData['thumbnail'],
+          title: productData['title'],
+          price: productData['price'] ,
+          id: productData['_id'],
+          instructorName: serverData['data']?['results']['name'],
+          rating: (productData['ratingsAverage'] as num).toDouble(),
+          profites: (productData['profits'] as num).toDouble(),
+        );
+      }).toList();
+    } else {
+      print('error parseProductsFromServer');
+      throw Exception('No results found in server data');
+    }
+  }
   @override
   String toString() {
     return 'Product(imageURL: $imageURL, title: $title, price: $price, id: $id, instructorName: $instructorName, rating: $rating)';

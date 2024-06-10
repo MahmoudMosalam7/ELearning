@@ -49,7 +49,6 @@ class _EditAccountState extends State<EditAccount> {
       // Check if the selected file is an image
       await httpService.updateMe(
         usernameContoller.text,
-        emailContoller.text,
         bioContoller.text,
         phoneContoller.text,
         genderContoller.text,
@@ -258,24 +257,6 @@ class _EditAccountState extends State<EditAccount> {
                               borderRadius: BorderRadius.circular(20)),
                           padding: EdgeInsets.all(.0),
                           child: TextFormField(
-                            keyboardType: TextInputType.emailAddress,
-                            controller: emailContoller,
-                            decoration: InputDecoration(
-                                labelText: "${LocaleKeys.RegisterEmailAddress.tr()}",
-                                border: OutlineInputBorder(
-                                    borderRadius:BorderRadius.all(Radius.circular(20.0) )
-                                )
-                            ),
-
-                          ),
-                        ),
-                        SizedBox(height: 20.0,),
-                        Container(
-                          decoration: BoxDecoration(
-
-                              borderRadius: BorderRadius.circular(20)),
-                          padding: EdgeInsets.all(.0),
-                          child: TextFormField(
                             keyboardType: TextInputType.phone,
                             controller: phoneContoller,
                             decoration: InputDecoration(
@@ -343,7 +324,7 @@ class _EditAccountState extends State<EditAccount> {
                 title: Text('${LocaleKeys.EditAccountCamera.tr()}'),
                 onTap: () {
                   // Handle edit action
-                  //_pickImageFromCamera();
+                 _pickImageFromCamera();
                   Navigator.pop(context); // Close the bottom sheet
                 },
               ),
@@ -372,7 +353,7 @@ class _EditAccountState extends State<EditAccount> {
 
   }
 
-/* Future _pickImageFromCamera() async {
+ Future _pickImageFromCamera() async {
     final image = await ImagePicker().pickImage(source: ImageSource.camera);
     if (image == null) return;
 
@@ -380,6 +361,6 @@ class _EditAccountState extends State<EditAccount> {
       _profileImage = image;
       _selectedImage = File(image.path) ;
     });
- */// }
+  }
 
 }

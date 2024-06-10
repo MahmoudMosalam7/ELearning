@@ -344,5 +344,6 @@
   "EnterFriendEmail":"友達のメールアドレスを入力してください (said in Katakana: トモダチ の メールアドレス を にゅうりょく してください)",
   "CreateChat":"チャットを作成する (said in Katakana: チャット を さくせい する)",
   "SayAssalamuAlaikum":" こんにちは、神の慈悲と祝福がありますように (said in Katakana: コンニチハ、カミノ ジヒ ト シュクフク ガ アリマス ヨウニ)",
-  "Message":"メッセージ (said in Katakana: メッセージ)"
+  "Message":"メッセージ (said in Katakana: メッセージ)",
+  "GetStarted":"始める"
 }

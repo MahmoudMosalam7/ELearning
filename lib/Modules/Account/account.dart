@@ -675,7 +675,15 @@ class _AccountScreenState extends State<AccountScreen> {
                   ],
                 ):Container(),
                 TextButton(onPressed: ()async{
-                  _logout();
+
+                  try{
+                    bool? token =  await CacheHelper.removeData(key: 'token');
+                    if(token){
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Login()));
+                    }
+                  }catch(e){
+                    print('error when sign out = ]]]]]]]]]]]]]$e');
+                  }
                 },
                     child:
                     Text(

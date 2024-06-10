@@ -190,6 +190,7 @@ class _AddUserState extends State<AddUser> {
                     const SizedBox(height: 20.0,),
                     // this text field for phone number
                     AppTextField(
+                      isFromInstructo: true,
                       data: [
                         SelectedListItem(name:'${LocaleKeys.AdminAddUserRoles1.tr()}' ),
                         SelectedListItem(name:'${LocaleKeys.AdminAddUserRoles2.tr()}' ),

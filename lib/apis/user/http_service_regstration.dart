@@ -13,7 +13,7 @@ class HttpServiceRegstration {
 
       final response = await _dio.post(
         '/v1/auth/register',
-        data: {'name': name, 'email': email,'phone': phoneNumber,
+        data: {'name': name, 'email': email.toLowerCase(),'phone': phoneNumber,
           'roles': 'User' , 'password': password,'passwordConfirm': cpassword},
       );
       print("respons [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[${response.data}");

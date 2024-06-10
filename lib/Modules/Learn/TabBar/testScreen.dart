@@ -9,6 +9,7 @@ import '../../../models/test_model.dart';
 import '../../../network/local/cache_helper.dart';
 import '../../../shared/constant.dart';
 import '../../../translations/locale_keys.g.dart';
+
 class FlashCardView extends StatelessWidget {
   final String text;
 
@@ -20,11 +21,10 @@ class FlashCardView extends StatelessWidget {
       elevation: 4,
       color: Colors.cyan,
       child: Center(
-        child: Text(text,
+        child: Text(
+          text,
           textAlign: TextAlign.center,
-          style: TextStyle(
-              color: Colors.white
-          ),
+          style: TextStyle(color: Colors.white),
         ),
       ),
     );
@@ -38,13 +38,15 @@ class TestScreen extends StatefulWidget {
   @override
   State<TestScreen> createState() => _TestScreenState();
 }
+
 List<TestModel> test = [];
+
 class _TestScreenState extends State<TestScreen> {
   HttpServiceCourse httpServiceCourse = HttpServiceCourse();
   bool _isLoading = true;
-  late Map<String,dynamic> serverData ;
+  late Map<String, dynamic> serverData;
   String errorMessage = '';
- int score = 0;
+  int score = 0;
 
   Future<void> _getTest() async {
     try {
@@ -54,17 +56,16 @@ class _TestScreenState extends State<TestScreen> {
         await Future.delayed(Duration(seconds: 2));
 
         String? token = CacheHelper.getData(key: 'token');
-        Map<String, dynamic> courseData = await httpServiceCourse.createTest(
-            token!,widget.courseId);
+        Map<String, dynamic> courseData = await httpServiceCourse.createTest(token!, widget.courseId);
         setState(() {
           data = courseData['data']['results'];
-          print('drrrrrrrrrrrrrrro = ${ courseData['data']['results']}');
+          print('drrrrrrrrrrrrrrro = ${courseData['data']['results']}');
           test = TestModel.parseTestFromServer(courseData['data']['results']['test']);
-          print('rrrrrrrrrrrrrrrrrrrrrrrviewa =$test ');
+          print('rrrrrrrrrrrrrrrrrrrrrrrviewa =$test');
           _isLoading = false;
           startTimer();
-            });}
-
+        });
+      }
     } catch (e) {
       print('Error fetching course data: $e');
       setState(() {
@@ -72,13 +73,16 @@ class _TestScreenState extends State<TestScreen> {
       });
     }
   }
-  void initState(){
+
+  @override
+  void initState() {
     super.initState();
     _getTest();
   }
+
   bool _correct = false;
   int _currentIndex = 0;
-  int _selectedValue = 0;
+  int? _selectedValue;
   bool _onTouch = false;
   static const _maxSeconds = 180;
   int _seconds = _maxSeconds;
@@ -88,115 +92,129 @@ class _TestScreenState extends State<TestScreen> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return Center(child: CircularProgressIndicator(color: Colors.green,));
+      return Center(
+        child: CircularProgressIndicator(
+          color: Colors.green,
+        ),
+      );
     } else {
-    return SingleChildScrollView(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: 250,
-              height: 250,
-              child: FlipCard(
-                key: cardKey,
-                flipOnTouch: _onTouch,
-                front: FlashCardView(text: test[_currentIndex].question),
-                back: FlashCardView(text: test[_currentIndex].question),
+      return SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 250,
+                height: 250,
+                child: FlipCard(
+                  key: cardKey,
+                  flipOnTouch: _onTouch,
+                  front: FlashCardView(text: test[_currentIndex].question),
+                  back: FlashCardView(text: test[_currentIndex].question),
+                ),
               ),
-            ),
-
-            SizedBox(height: 10,),
-            radioOptions(test[_currentIndex].choice1,
+              SizedBox(
+                height: 10,
+              ),
+              radioOptions(
+                test[_currentIndex].choice1,
                 test[_currentIndex].choice2,
                 test[_currentIndex].choice3,
                 test[_currentIndex].choice4,
-            ),
-            SizedBox(height: 10,),
-            // to make next and previos
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                OutlinedButton.icon
-                  (onPressed: previousCard,
-                    icon: Icon(Icons.chevron_left
-                      ,color: Colors.cyan,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              // to make next and previous
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  OutlinedButton.icon(
+                    onPressed: previousCard,
+                    icon: Icon(
+                      Icons.chevron_left,
+                      color: Colors.cyan,
                     ),
-                    label: Text(LocaleKeys.LearnTestScreenPrev.tr()
-                      ,style: TextStyle(
-                          color: Colors.cyan
-                      ),
-                    )),
-
-                OutlinedButton.icon
-                  (onPressed: nextCard,
-                    icon: Icon(Icons.chevron_right
-                      ,color: Colors.cyan,
+                    label: Text(
+                      LocaleKeys.LearnTestScreenPrev.tr(),
+                      style: TextStyle(color: Colors.cyan),
                     ),
-                    label: Text(LocaleKeys.LearnTestScreenNext.tr(),
-                      style: TextStyle(
-                          color: Colors.cyan
-                      ),
-                    )),
-              ],
-            ),
-            SizedBox(height: 10,),
-            buildTimer()
-          ],
+                  ),
+                  OutlinedButton.icon(
+                    onPressed: nextCard,
+                    icon: Icon(
+                      Icons.chevron_right,
+                      color: Colors.cyan,
+                    ),
+                    label: Text(
+                      LocaleKeys.LearnTestScreenNext.tr(),
+                      style: TextStyle(color: Colors.cyan),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              buildTimer()
+            ],
+          ),
         ),
-      ),
-    );}
+      );
+    }
   }
+
   void startTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if(_seconds >0){
+      if (_seconds > 0) {
         setState(() {
           _seconds--;
         });
-      }else{
-
-        timer?.cancel();
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-
-          return Result(score: score,courseID: widget.courseId,);
+      } else {
+        timer.cancel();
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+          return Result(
+            score: score,
+            courseID: widget.courseId,
+            colors: colors,
+          );
         }));
       }
-
     });
   }
+
   void nextCard() {
     setState(() {
-      _correct = false;
-      _currentIndex = (_currentIndex + 1 < test.length) ? _currentIndex
-          + 1 : test.length ;
-      _selectedValue = 1;
-      if(_onTouch){
+      if (_currentIndex < test.length - 1) {
+        _currentIndex++;
+        _selectedValue = null;
+        _onTouch = false;
         cardKey.currentState!.toggleCard();
-      }
-      if(_currentIndex == test.length){
-        _currentIndex--;
-       /* Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-          _timer?.cancel();
-          return Result();
-        }));*/
+      } else {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+          return Result(
+            score: score,
+            courseID: widget.courseId,
+            colors: colors,
+          );
+        }));
       }
     });
   }
 
   void previousCard() {
     setState(() {
-      _correct = false;
-      _currentIndex = (_currentIndex - 1 >= 0) ? _currentIndex - 1 : 0;
-      _selectedValue = 1;
-      if(_onTouch){
+      if (_currentIndex > 0) {
+        _currentIndex--;
+        _selectedValue = null;
+        _onTouch = false;
         cardKey.currentState!.toggleCard();
-
       }
     });
   }
-
-  Widget radioOptions(String option1 ,String option2,String option3,String option4
-      ){
+  int index =0;
+  List<String> colors = ['red','red','red','red','red','red','red','red','red','red'];
+  Widget radioOptions(String option1, String option2, String option3, String option4) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -216,48 +234,24 @@ class _TestScreenState extends State<TestScreen> {
                 groupValue: _selectedValue,
                 onChanged: (value) {
                   setState(() {
-                    _selectedValue = value as int;
-                    if(test[_currentIndex].correctAnswer == _selectedValue){
-                      _onTouch = true;
-
-                      _currentIndex = (_currentIndex + 1 < test.length) ?
-                      _currentIndex + 1 : test.length ;
-                      if(_currentIndex == test.length){
-                        _currentIndex--;
-                        _selectedValue = 1;
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context){
-                              _timer?.cancel();
-                              return Result(score: score,courseID: widget.courseId,);
-                            }));
-                      }
+                    _selectedValue = value as int?;
+                    if (test[_currentIndex].correctAnswer == _selectedValue){
                       score++;
-                   //   cardKey.currentState!.toggleCard();
-                    }else{
-                      _onTouch = false;
-                      _currentIndex = (_currentIndex + 1 < test.length) ?
-                      _currentIndex + 1 : test.length ;
-                      if(_currentIndex == test.length){
-                        _currentIndex--;
-
-                        _selectedValue = 1;
-                       Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context){
-                              _timer?.cancel();
-                              return Result(score: score,courseID: widget.courseId,);
-                            }));
-                      }
+                      setState(() {
+                        colors[index++]="green";
+                      });
                     }
+                    _onTouch = true; // Highlight the selected radio button
                   });
                 },
               ),
-      Expanded(
-        child: Text(
-          option1,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ),
+              Expanded(
+                child: Text(
+                  option1,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
             ],
           ),
           Row(
@@ -269,39 +263,15 @@ class _TestScreenState extends State<TestScreen> {
                 groupValue: _selectedValue,
                 onChanged: (value) {
                   setState(() {
-                    _selectedValue = value as int;
-                    if(test[_currentIndex].correctAnswer == _selectedValue){
-                      _onTouch = true;
+                    _selectedValue = value as int?;
+                    if (test[_currentIndex].correctAnswer == _selectedValue){
                       score++;
+                      setState(() {
+                        colors[index++]="green";
+                      });
 
-                      _currentIndex = (_currentIndex + 1 < test.length) ?
-                      _currentIndex + 1 : test.length ;
-                      if(_currentIndex == test.length){
-
-                        _selectedValue = 1;
-                        _currentIndex--;
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context){
-                              _timer?.cancel();
-                              return Result(score: score,courseID: widget.courseId,);
-                            }));
-                      }
-                     // cardKey.currentState!.toggleCard();
-                    }else{
-                      _onTouch = false;
-                      _currentIndex = (_currentIndex + 1 < test.length) ?
-                      _currentIndex + 1 : test.length ;
-                      if(_currentIndex == test.length){
-                        _currentIndex--;
-
-                        _selectedValue = 1;
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context){
-                              _timer?.cancel();
-                              return Result(score: score,courseID: widget.courseId,);
-                            }));
-                      }
                     }
+                    _onTouch = true; // Highlight the selected radio button
                   });
                 },
               ),
@@ -323,39 +293,14 @@ class _TestScreenState extends State<TestScreen> {
                 groupValue: _selectedValue,
                 onChanged: (value) {
                   setState(() {
-                    _selectedValue = value as int;
-                    if(test[_currentIndex].correctAnswer == _selectedValue){
+                    _selectedValue = value as int?;
+                    if (test[_currentIndex].correctAnswer == _selectedValue){
                       score++;
-                      _onTouch = true;
-
-                      _currentIndex = (_currentIndex + 1 < test.length) ?
-                      _currentIndex + 1 : test.length ;
-                      if(_currentIndex == test.length){
-                        _currentIndex--;
-
-                        _selectedValue = 1;
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context){
-                              _timer?.cancel();
-                              return Result(score: score,courseID: widget.courseId,);
-                            }));
-                      }
-                      //cardKey.currentState!.toggleCard();
-                    }else{
-                      _onTouch = false;
-                      _currentIndex = (_currentIndex + 1 < test.length) ?
-                      _currentIndex + 1 : test.length ;
-                      if(_currentIndex == test.length){
-                        _currentIndex--;
-
-                        _selectedValue = 1;
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context){
-                              _timer?.cancel();
-                              return Result(score: score,courseID: widget.courseId,);
-                            }));
-                      }
+                      setState(() {
+                        colors[index++]="green";
+                      });
                     }
+                    _onTouch = true; // Highlight the selected radio button
                   });
                 },
               ),
@@ -377,39 +322,14 @@ class _TestScreenState extends State<TestScreen> {
                 groupValue: _selectedValue,
                 onChanged: (value) {
                   setState(() {
-                    _selectedValue = value as int;
-                    if(test[_currentIndex].correctAnswer == _selectedValue){
+                    _selectedValue = value as int?;
+                    if (test[_currentIndex].correctAnswer == _selectedValue){
                       score++;
-                      _onTouch = true;
-
-                      _currentIndex = (_currentIndex + 1 < test.length) ?
-                      _currentIndex + 1 : test.length ;
-                      if(_currentIndex == test.length){
-                        _currentIndex--;
-
-                        _selectedValue = 1;
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context){
-                              _timer?.cancel();
-                              return Result(score: score,courseID: widget.courseId,);
-                            }));
-                      }
-                     // cardKey.currentState!.toggleCard();
-                    }else{
-                      _onTouch = false;
-                      _currentIndex = (_currentIndex + 1 < test.length) ?
-                      _currentIndex + 1 : test.length ;
-                      if(_currentIndex == test.length){
-                        _currentIndex--;
-
-                        _selectedValue = 1;
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context){
-                              _timer?.cancel();
-                              return Result(score: score,courseID: widget.courseId,);
-                            }));
-                      }
+                      setState(() {
+                        colors[index++]="green";
+                      });
                     }
+                    _onTouch = true; // Highlight the selected radio button
                   });
                 },
               ),
@@ -422,20 +342,19 @@ class _TestScreenState extends State<TestScreen> {
               ),
             ],
           ),
-          // Add more rows for additional radio buttons as needed.
         ],
       ),
     );
   }
 
-  Widget buildButtons(){
+  Widget buildButtons() {
     return buttonWidget(
         text: '${LocaleKeys.LearnTestScreenStartTimer.tr()}',
-        onClicked: (){
+        onClicked: () {
           startTimer();
-        }
-    );
+        });
   }
+
   Widget buildTimer() => SizedBox(
     height: 100,
     width: 100,
@@ -455,10 +374,10 @@ class _TestScreenState extends State<TestScreen> {
     ),
   );
 
-  Widget buildTime(){
-    return Text('$_seconds',style: TextStyle(
-
-        fontSize: 40
-    ),);
+  Widget buildTime() {
+    return Text(
+      '$_seconds',
+      style: TextStyle(fontSize: 40),
+    );
   }
 }

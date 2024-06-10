@@ -27,21 +27,7 @@ class _LearnScreenState extends State<LearnScreen> with SingleTickerProviderStat
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        actions: [
-          IconButton(
-            icon: const CircleAvatar(
-              radius: 15.0,
-              backgroundColor: Colors.grey,
-              child: Icon(
-                Icons.search,
-                size: 20.0,
-              ),
-            ),
-            onPressed: () {
-              // Add functionality for search button here
-            },
-          ),
-        ],
+
 
         title:  Text(
           LocaleKeys.LearnScreenMyCourses.tr(),

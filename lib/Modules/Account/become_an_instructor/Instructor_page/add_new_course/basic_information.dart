@@ -255,6 +255,7 @@ class _BasicInformationState extends State<BasicInformation> {
                   title: '${LocaleKeys.InstructorBasicInformationSelectCategory.tr()}',
                   hint: '${LocaleKeys.InstructorBasicInformationCategory.tr()}',
                   isDataSelected: true,
+                  isFromInstructo: true,
                 ),
                 SizedBox(height: 10.h,),
                 AppTextField(
@@ -269,6 +270,7 @@ class _BasicInformationState extends State<BasicInformation> {
                   title: '${LocaleKeys.InstructorBasicInformationSelectLanguage.tr()}',
                   hint: '${LocaleKeys.InstructorBasicInformationLanguage.tr()}',
                   isDataSelected: true,
+                  isFromInstructo: true,
                 ),
                 SizedBox(height: 10.h,),
                 AppTextField(
@@ -282,6 +284,7 @@ class _BasicInformationState extends State<BasicInformation> {
                   title: '${LocaleKeys.InstructorBasicInformationSelectLevel.tr()}',
                   hint: '${LocaleKeys.InstructorBasicInformationLevel.tr()}',
                   isDataSelected: true,
+                  isFromInstructo:true ,
                 ),
                 SizedBox(height: 30.h,),
 

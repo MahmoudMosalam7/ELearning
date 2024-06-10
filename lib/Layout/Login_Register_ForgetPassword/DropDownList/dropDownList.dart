@@ -12,6 +12,7 @@ class AppTextField extends StatefulWidget {
   final String title;
   final String hint;
   final bool isDataSelected;
+  final bool isFromInstructo;
   final List<SelectedListItem>? data;
 
   const AppTextField({
@@ -19,6 +20,7 @@ class AppTextField extends StatefulWidget {
     required this.title,
     required this.hint,
     required this.isDataSelected,
+    required this.isFromInstructo,
     this.data,
     Key? key,
   }) : super(key: key);
@@ -54,42 +56,44 @@ class _AppTextFieldState extends State<AppTextField> {
             if (item is SelectedListItem) {
               list.add(item.name);
 
+                if(widget.isFromInstructo == false){
 
-                if('Arabic' ==item.name){
-                  setState(() async{
+                  if('Arabic' ==item.name){
+                    setState(() async{
 
-                    await context.setLocale(Locale('ar'));
+                      await context.setLocale(Locale('ar'));
+                      RestartWidget.restartApp(context);
+                      print('Arabic = ${item.name}');
+                    });
+                  }
+                  else if('English' ==item.name){
+                    setState(()async {
+
+                      await context.setLocale(Locale('en'));
+                      RestartWidget.restartApp(context);
+                      print('English = ${item.name}');
+                    });
+                  }
+                  else if('germany' ==item.name){
+                    setState(() async{
+
+                      await context.setLocale(Locale('de'));
+                      RestartWidget.restartApp(context);
+                      print('germany = ${item.name}');
+                    });
+                  }
+                  else if('france' ==item.name){
+
+                    await context.setLocale(Locale('fr'));
                     RestartWidget.restartApp(context);
-                    print('Arabic = ${item.name}');
-                  });
-                }
-                else if('English' ==item.name){
-                  setState(()async {
+                    print('france = ${item.name}');
+                  }
+                  else if('japan' ==item.name){
 
-                    await context.setLocale(Locale('en'));
+                    await context.setLocale(Locale('ja'));
                     RestartWidget.restartApp(context);
-                    print('English = ${item.name}');
-                  });
-                }
-                else if('germany' ==item.name){
-                  setState(() async{
-
-                    await context.setLocale(Locale('de'));
-                    RestartWidget.restartApp(context);
-                    print('germany = ${item.name}');
-                  });
-                }
-                else if('france' ==item.name){
-
-                  await context.setLocale(Locale('fr'));
-                  RestartWidget.restartApp(context);
-                  print('france = ${item.name}');
-                }
-                else if('japan' ==item.name){
-
-                  await context.setLocale(Locale('ja'));
-                  RestartWidget.restartApp(context);
-                  print('japan = ${item.name}');
+                    print('japan = ${item.name}');
+                  }
                 }
                 print('Arabic');
 
