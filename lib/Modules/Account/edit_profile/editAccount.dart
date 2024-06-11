@@ -17,8 +17,6 @@ class EditAccount extends StatefulWidget{
 }
 
 class _EditAccountState extends State<EditAccount> {
-  @override
-
   var usernameContoller = TextEditingController();
 
   var bioContoller = TextEditingController();

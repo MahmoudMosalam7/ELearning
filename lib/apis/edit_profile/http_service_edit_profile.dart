@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:developer';
 import '../../shared/constant.dart';
 import 'dart:io';
 

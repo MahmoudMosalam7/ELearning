@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:learning/network/local/cache_helper.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 class LanguageProvider extends ChangeNotifier{

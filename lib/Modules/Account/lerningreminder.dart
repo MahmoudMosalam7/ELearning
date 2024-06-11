@@ -6,7 +6,6 @@ class LerningReminder extends StatefulWidget{
 }
 
 class _remState extends State<LerningReminder> {
-  @override
   bool s=true;
 
 

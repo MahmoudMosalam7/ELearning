@@ -6,11 +6,10 @@ class TestModel {
   final String choice3;
   final String choice4;
   final double correctAnswer;
-  final String _id;
 
   TestModel({required this.question, required this.choice1,
     required this.choice2, required this.choice3, required this.choice4,
-    required this.correctAnswer, required String id}) : _id = id;
+    required this.correctAnswer, required String id});
 
   static List<TestModel> parseTestFromServer(dynamic serverData) {
     print('parseTestFromServer ${serverData}');

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flip_card/flip_card.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:learning/Modules/Learn/TabBar/result.dart';
 import '../../../apis/courseInformation/http_service_courseInformation.dart';
@@ -80,13 +79,11 @@ class _TestScreenState extends State<TestScreen> {
     _getTest();
   }
 
-  bool _correct = false;
   int _currentIndex = 0;
   int? _selectedValue;
   bool _onTouch = false;
   static const _maxSeconds = 180;
   int _seconds = _maxSeconds;
-  Timer? _timer;
   GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
 
   @override
@@ -165,22 +162,6 @@ class _TestScreenState extends State<TestScreen> {
   }
 
   void startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (_seconds > 0) {
-        setState(() {
-          _seconds--;
-        });
-      } else {
-        timer.cancel();
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-          return Result(
-            score: score,
-            courseID: widget.courseId,
-            colors: colors,
-          );
-        }));
-      }
-    });
   }
 
   void nextCard() {
@@ -234,7 +215,7 @@ class _TestScreenState extends State<TestScreen> {
                 groupValue: _selectedValue,
                 onChanged: (value) {
                   setState(() {
-                    _selectedValue = value as int?;
+                    _selectedValue = value;
                     if (test[_currentIndex].correctAnswer == _selectedValue){
                       score++;
                       setState(() {
@@ -263,7 +244,7 @@ class _TestScreenState extends State<TestScreen> {
                 groupValue: _selectedValue,
                 onChanged: (value) {
                   setState(() {
-                    _selectedValue = value as int?;
+                    _selectedValue = value;
                     if (test[_currentIndex].correctAnswer == _selectedValue){
                       score++;
                       setState(() {
@@ -293,7 +274,7 @@ class _TestScreenState extends State<TestScreen> {
                 groupValue: _selectedValue,
                 onChanged: (value) {
                   setState(() {
-                    _selectedValue = value as int?;
+                    _selectedValue = value;
                     if (test[_currentIndex].correctAnswer == _selectedValue){
                       score++;
                       setState(() {
@@ -322,7 +303,7 @@ class _TestScreenState extends State<TestScreen> {
                 groupValue: _selectedValue,
                 onChanged: (value) {
                   setState(() {
-                    _selectedValue = value as int?;
+                    _selectedValue = value;
                     if (test[_currentIndex].correctAnswer == _selectedValue){
                       score++;
                       setState(() {

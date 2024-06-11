@@ -2,12 +2,8 @@ import 'dart:async';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:learning/Modules/Home/searchBar/search_bar.dart';
-import 'package:learning/TColors.dart';
-import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -17,8 +13,6 @@ import '../../apis/user/http_service_get_user_data.dart';
 import '../../chat/firebase/fire_auth.dart';
 import '../../chat/home/chat_home_screen.dart';
 import '../../network/local/cache_helper.dart';
-import '../../shared/constant.dart';
-import '../../shared/constant.dart';
 import '../../shared/constant.dart';
 import '../../translations/locale_keys.g.dart';
 import 'InformationOFCourses/CourseInformation.dart';
@@ -226,14 +220,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
       print('get all course successful! $serverData');
 
-      if (serverData != null) {
-       print('serverdata = ${Product.parseProductsFromServer(serverData)}');
-       products = Product.parseProductsFromServer(serverData);
-       print('Products: $products');
-      } else {
-        throw Exception('Server data is null');
-      }
-    } catch (e) {
+     print('serverdata = ${Product.parseProductsFromServer(serverData)}');
+     products = Product.parseProductsFromServer(serverData);
+     print('Products: $products');
+        } catch (e) {
       // Handle validation errors or network errors
       setState(() {
         errorMessage = 'Error: $e';
@@ -278,14 +268,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
       print('get all course by category successful! $serverData');
 
-      if (serverData != null) {
-        print('serverdata from category = ${Product.parseProductsFromServer(serverData)}');
-        products = Product.parseProductsFromServer(serverData);
-        print('Products: $products');
-      } else {
-        throw Exception('Server data is null');
-      }
-    } catch (e) {
+      print('serverdata from category = ${Product.parseProductsFromServer(serverData)}');
+      products = Product.parseProductsFromServer(serverData);
+      print('Products: $products');
+        } catch (e) {
       // Handle validation errors or network errors
       setState(() {
         errorMessage = 'Error: $e';

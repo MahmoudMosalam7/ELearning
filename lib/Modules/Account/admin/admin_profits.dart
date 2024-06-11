@@ -36,21 +36,17 @@ class _AdminProfitesState extends State<AdminProfites> {
 
       print('get all course successful! $serverData');
 
-      if (serverData != null) {
-        print('serverdata = ${Product.parseProductsFromServer(serverData)}');
-        products = Product.parseProductsFromServer(serverData);
-        print('Products: $products');
-        setState(() {
-          for(int i = 0 ;i<(products.length);i++){
-            if(products[i].price['currency'] == 'USD')
-             profitsUSD += products[i].profites;
-            else{profits += products[i].profites;}
-          }
-        });
-      } else {
-        throw Exception('Server data is null');
-      }
-    } catch (e) {
+      print('serverdata = ${Product.parseProductsFromServer(serverData)}');
+      products = Product.parseProductsFromServer(serverData);
+      print('Products: $products');
+      setState(() {
+        for(int i = 0 ;i<(products.length);i++){
+          if(products[i].price['currency'] == 'USD')
+           profitsUSD += products[i].profites;
+          else{profits += products[i].profites;}
+        }
+      });
+        } catch (e) {
       // Handle validation errors or network errors
       setState(() {
         errorMessage = 'Error: $e';
@@ -156,10 +152,7 @@ class _AdminProfitesState extends State<AdminProfites> {
         ),
         leading: Stack(
           children: [
-            if(product.imageURL != null)
-              Image.network((product!.imageURL)),
-            if(product.imageURL == null)
-              Image.asset(''),
+            Image.network((product.imageURL)),
 
           ],
         ),

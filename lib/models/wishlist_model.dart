@@ -1,5 +1,3 @@
-import 'file_and_video_of_section_model.dart';
-import 'module_model.dart';
 
 class WishList {
   final String title;

@@ -1,7 +1,5 @@
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:iconsax/iconsax.dart';
 
 import 'home/chat_home_screen.dart';
@@ -15,14 +13,10 @@ class layout extends StatefulWidget{
 }
 
 class _layoutState extends State<layout> {
-  @override
   int currentindex=0;
   PageController pageController=PageController();
 
   Widget build(BuildContext context) {
-List<Widget>screens=[
-  
-];
 return Scaffold(
   body: PageView(
         onPageChanged: (value) {

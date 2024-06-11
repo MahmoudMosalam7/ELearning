@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:learning/Modules/Account/become_an_instructor/Instructor_page/instructor_home_page.dart';
 import '../../../../apis/user/http_service_get_user_data.dart';
 import '../../../../translations/locale_keys.g.dart';
 import 'add_new_course/basic_information.dart';
@@ -12,7 +11,10 @@ import 'instructor_profites.dart';
 
 class InstructorCourses extends StatelessWidget {
   final HttpServiceGetData httpService = HttpServiceGetData();
+  final students;
+  final rating;
 
+   InstructorCourses({super.key, required this.students, required this.rating });
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -164,7 +166,7 @@ class InstructorCourses extends StatelessWidget {
                         ),
                         SizedBox(height: 10.h),
                         Text(
-                          '199,234,1',
+                          '$students',
                           style: TextStyle(
                             color: Colors.white, // Customize the text color
                             fontSize: 16.sp,
@@ -206,7 +208,7 @@ class InstructorCourses extends StatelessWidget {
                         ),
                         SizedBox(height: 10.h),
                         Text(
-                          '4.7',
+                          '$rating',
                           style: TextStyle(
                             color: Colors.white, // Customize the text color
                             fontSize: 16,
@@ -293,7 +295,7 @@ class InstructorCourses extends StatelessWidget {
                           ),
                           SizedBox(height: 10.h),
                           Text(
-                            '4.8',
+                            '$rating',
                             style: TextStyle(
                               color: Colors.white, // Customize the text color
                               fontSize: 16.sp,

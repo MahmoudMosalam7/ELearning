@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import '../../../../apis/update_instructor/http_service_courses.dart';
 import '../../../../models/listView_Courses.dart';
@@ -40,14 +38,10 @@ class _CoursesOfInstructorState extends State<CoursesOfInstructor> {
 
       print('get all course successful! $serverData');
 
-      if (serverData != null) {
-        print('serverdata = ${Product.parseProductsFromServer(serverData)}');
-        products = Product.parseProductsFromServer(serverData);
-        print('Products: $products');
-      } else {
-        throw Exception('Server data is null');
-      }
-    } catch (e) {
+      print('serverdata = ${Product.parseProductsFromServer(serverData)}');
+      products = Product.parseProductsFromServer(serverData);
+      print('Products: $products');
+        } catch (e) {
       // Handle validation errors or network errors
       setState(() {
         errorMessage = 'Error: $e';

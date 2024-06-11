@@ -107,7 +107,6 @@ class _AddUserState extends State<UpdateUserPassword> {
     }
   }
 
-  @override
   bool obscureText1 = true;
   bool obscure1 = true;
   bool obscureText2 = true;

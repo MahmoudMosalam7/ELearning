@@ -1,5 +1,4 @@
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:learning/Layout/Login_Register_ForgetPassword/Login.dart';
@@ -109,7 +108,6 @@ class _ResetPasswordState extends State<ResetPassword> {
     }
   }
 
-  @override
   bool obscureText1 = true;
 
   bool obscure1 = true;

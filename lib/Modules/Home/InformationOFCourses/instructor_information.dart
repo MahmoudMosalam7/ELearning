@@ -55,38 +55,13 @@ class _ProfilePageState extends State<ProfilePage> {
         CacheHelper.getData(key: 'token'),
       );
 
-      if (serverData != null) {
-        products = Product.parseProductsFromServer2(serverData);
-        print('Products: $products');
-      } else {
-        throw Exception('Server data is null');
-      }
-      print('Get instructor info successful! $serverData');
+      products = Product.parseProductsFromServer2(serverData);
+      print('Products: $products');
+          print('Get instructor info successful! $serverData');
     } catch (e) {
       _handleError(e);
     }
   }
-/*
-
-  Future<void> _allCoursesOfInstructor() async {
-    try {
-      serverData2 = await httpServiceCoursesOfInstructor.allCoursesOfInstructor(
-        CacheHelper.getData(key: 'token'),
-      );
-
-      print('Get all courses successful! $serverData2');
-
-      if (serverData2 != null) {
-        products = Product.parseProductsFromServer(serverData2);
-        print('Products: $products');
-      } else {
-        throw Exception('Server data is null');
-      }
-    } catch (e) {
-      _handleError(e);
-    }
-  }
-*/
 
   void _handleError(dynamic e) {
     setState(() {

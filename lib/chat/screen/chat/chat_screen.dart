@@ -36,10 +36,7 @@ class _ChatScreenState extends State<ChatScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
              Text(widget.chatUser.name!),
-            Text(
-              'widget.chatUser.lastactivated!',
-              style: Theme.of(context).textTheme.labelLarge,
-            ),
+
           ],
         ),
         actions: [
@@ -128,7 +125,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           onTap:()=>FireData().sendMessage(
                               widget.chatUser.id!,
                               "${LocaleKeys.SayAssalamuAlaikum.tr()}👋",
-                              widget.roomid!) ,
+                              widget.roomid) ,
                           child: Card(
                             child: Padding(
                               padding: const EdgeInsets.all(12.0),

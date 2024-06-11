@@ -62,12 +62,10 @@ class _ResultState extends State<Result> {
       });
     }
   }
-  bool _isDownloading = false;
   String _statusMessage = '';
 
   Future<void> _downloadPDF(String url) async {
     setState(() {
-      _isDownloading = true;
       _statusMessage = 'Downloading...';
     });
 
@@ -111,7 +109,6 @@ class _ResultState extends State<Result> {
       });
     } finally {
       setState(() {
-        _isDownloading = false;
       });
     }
   }

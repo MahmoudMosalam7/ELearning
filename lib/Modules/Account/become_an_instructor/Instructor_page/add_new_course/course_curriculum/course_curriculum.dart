@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:learning/Modules/Account/become_an_instructor/Instructor_page/add_new_course/course_curriculum/pick_file_and_video.dart';
 import '../../../../../../apis/upload_course/section/http_service_create_section.dart';
 import '../../../../../../models/section_model.dart';
@@ -22,7 +20,6 @@ class CourseCurriculum extends StatefulWidget {
 }
 
 class _CourseCurriculumState extends State<CourseCurriculum> {
-  final ImagePicker _imagePicker = ImagePicker();
   TextEditingController _sectionNameControllers = TextEditingController();
   HttpServiceSection httpServiceSection = HttpServiceSection();
 

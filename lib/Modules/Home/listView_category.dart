@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 class CategoryData {
   final String text;

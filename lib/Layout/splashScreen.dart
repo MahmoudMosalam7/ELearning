@@ -3,13 +3,11 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import 'package:learning/Layout/MainBottomNavigationBar.dart';
 import 'package:learning/network/local/cache_helper.dart';
 import 'package:lottie/lottie.dart';
 
 import '../apis/user/http_service_get_user_data.dart';
 import '../translations/locale_keys.g.dart';
-import 'Login_Register_ForgetPassword/Login.dart';
 import 'Login_Register_ForgetPassword/onboarding.dart';
 
 class Splash_Screen extends StatefulWidget {

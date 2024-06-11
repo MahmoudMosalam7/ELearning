@@ -125,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Text(
                             "Create Account".toUpperCase(),
                             style: TextStyle(
-                              color: Theme.of(context).colorScheme.onBackground,
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
                         )),

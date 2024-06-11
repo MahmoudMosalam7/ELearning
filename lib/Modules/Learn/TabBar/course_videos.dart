@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:accordion/accordion.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:learning/Modules/Learn/TabBar/testScreen.dart';
@@ -17,7 +15,6 @@ import '../../../models/module_model.dart';
 import '../../../network/local/cache_helper.dart';
 import '../../../shared/constant.dart';
 import '../../../translations/locale_keys.g.dart';
-import '../../Home/InformationOFCourses/video_screen.dart';
 import 'compiler_webview.dart';
 import 'course_content_screen.dart';
 
@@ -139,7 +136,6 @@ class _CourseContentState extends State<CourseContent> with SingleTickerProvider
           videoURL = data?['videoTrailer'];
         }
 
-        List<dynamic> listSections = data!['sections'];
         print('[[[[[[[[[[[[[');
         return Scaffold(
           appBar: AppBar(

@@ -26,22 +26,17 @@ class _CompilerWebViewState extends State<CompilerWebView> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            if (_webViewController != null) {
-              // Check if we can go back in WebView history
-              _webViewController.canGoBack().then((canGoBack) {
-                if (canGoBack) {
-                  // If WebView can go back, navigate back
-                  _webViewController.goBack();
-                } else {
-                  // If WebView cannot go back, navigate to previous screen
-                  Navigator.pop(context);
-                }
-              });
-            } else {
-              // If WebView controller is not initialized, navigate to previous screen
-              Navigator.pop(context);
-            }
-          },
+            // Check if we can go back in WebView history
+            _webViewController.canGoBack().then((canGoBack) {
+              if (canGoBack) {
+                // If WebView can go back, navigate back
+                _webViewController.goBack();
+              } else {
+                // If WebView cannot go back, navigate to previous screen
+                Navigator.pop(context);
+              }
+            });
+                    },
         ),
       ),
       body: Stack(

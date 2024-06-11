@@ -1,8 +1,6 @@
 // lib/http_service.dart
 import 'package:dio/dio.dart';
-import 'package:flutter/services.dart';
 
-import '../../network/local/cache_helper.dart';
 import '../../shared/constant.dart';
 class HttpServiceCourse {
 
@@ -232,7 +230,7 @@ class HttpServiceCourse {
     String imageFileName = '';
     FormData formData;
     if( coupon != null ){
-       if(coupon!.length == 11){
+       if(coupon.length == 11){
 
          print('from transaction copuon free');
          formData =  FormData.fromMap({

@@ -21,7 +21,6 @@ class _AddUserState extends State<AddUser> {
 
   final _emailContoller = TextEditingController();
 
-  final _phoneContoller = TextEditingController();
 
   final _statusContoller = TextEditingController();
 
@@ -117,7 +116,6 @@ class _AddUserState extends State<AddUser> {
     }
   }
 
-  @override
   bool obscureText1 = true;
   bool obscure1 = true;
   bool obscureText2 = true;
