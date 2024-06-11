@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:learning/Modules/Home/InformationOFCourses/CourseInformation.dart';
 import 'package:lottie/lottie.dart';
 
@@ -40,15 +39,11 @@ class _WishListScreenState extends State<WishListScreen> {
         errorMessage = '';
         isLoading = false;
       });
-      if (serverData != null) {
-        print(
-            'serverdata = ${WishList.parseSectionFromServer(serverData['data'])}');
-        coursesOfFav = WishList.parseSectionFromServer(serverData['data']);
-        print('coursesOfFav: $coursesOfFav');
-      } else {
-        throw Exception('Server data is null');
-      }
-    } catch (e) {
+      print(
+          'serverdata = ${WishList.parseSectionFromServer(serverData['data'])}');
+      coursesOfFav = WishList.parseSectionFromServer(serverData['data']);
+      print('coursesOfFav: $coursesOfFav');
+        } catch (e) {
       setState(() {
         errorMessage = 'Error: $e';
         if (errorMessage.contains('422')) {
@@ -91,7 +86,7 @@ class _WishListScreenState extends State<WishListScreen> {
         body:  buildShimmerEffect(),
       );
     } else {
-      if (coursesOfFav != null && coursesOfFav!.isNotEmpty) {
+      if (coursesOfFav.isNotEmpty) {
         return Scaffold(
 
           body: RefreshIndicator(
@@ -305,7 +300,13 @@ class _WishListScreenState extends State<WishListScreen> {
                                   Text("${course.priceCurrency} ${course.priceAmount}"),
                                   Spacer(),
                                   TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) {
+                                            return CourseInformation(
+                                                courseId: course.id, fromInstructor: false);
+                                          }));
+                                    },
                                     child: Text(
                                       "Enroll",
                                       style: TextStyle(color: Colors.white),

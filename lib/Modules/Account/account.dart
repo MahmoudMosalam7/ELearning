@@ -9,7 +9,6 @@ import 'package:learning/Layout/Login_Register_ForgetPassword/Login.dart';
 import 'package:learning/Modules/Account/admin/admin_home.dart';
 import 'package:learning/Modules/Account/qualty.dart';
 import 'package:learning/Modules/Account/setting/setting.dart';
-import 'package:learning/Modules/Account/videoPlay.dart';
 import 'package:learning/TColors.dart';
 import 'package:learning/shared/constant.dart';
 import 'package:lottie/lottie.dart';
@@ -24,9 +23,7 @@ import '../../network/local/cache_helper.dart';
 import '../../translations/locale_keys.g.dart';
 import 'become_an_instructor/Instructor_page/instructor_home_page.dart';
 import 'become_an_instructor/onboarding_instructor/on_bording_instructor_screen.dart';
-import 'download_option.dart';
 import 'edit_profile/editAccount.dart';
-import 'lerningreminder.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -65,80 +62,6 @@ class _AccountScreenState extends State<AccountScreen> {
       // Handle errors, if any
       print('Error fetching data: $e');
     }finally{
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-  void _logout() async {
-    // Reset error message and loading state
-    setState(() {
-      errorMessage = '';
-      isLoading = false;
-    });
-
-    try {
-
-
-      // Check if _profileImage is not null before calling updateMe
-
-      print(']]]]]]]]]]]]]]]]]]]]]from logout ');
-      await httpServiceLogout.logoutUser(
-        CacheHelper.getData(key: 'token'),
-      );
-
-
-      errorMessage = "";
-      Fluttertoast.showToast(
-        msg: "logout Success",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 5,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 16.0.sp,
-      );
-      try{
-        bool? token =  await CacheHelper.removeData(key: 'token');
-        if(token){
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Login()));
-        }
-      }catch(e){
-        print('error when sign out = ]]]]]]]]]]]]]$e');
-      }
-      print(' successful!');
-    } catch (e) {
-      // Handle validation errors or network errors
-      setState(() {
-        errorMessage = 'Error: $e';
-        if (errorMessage.contains('422')) {
-          // Your code here
-          errorMessage ="Valdition Error!";
-        }
-        else if (errorMessage.contains('401')) {
-          // Your code here
-          errorMessage =" unauthorized access !";
-        }
-        else if (errorMessage.contains('500')) {
-          // Your code here
-          errorMessage =" Server Not Available Now !";
-        }
-        else{
-          errorMessage ="Unexpected Error!";
-        }
-
-        Fluttertoast.showToast(
-          msg: errorMessage,
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 5,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
-      });
-    } finally {
-      // Update loading state
       setState(() {
         isLoading = false;
       });

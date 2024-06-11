@@ -7,7 +7,6 @@ import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:accordion/accordion.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
@@ -22,7 +21,6 @@ import 'package:easy_localization/easy_localization.dart';
 import '../../../network/local/cache_helper.dart';
 import '../../../shared/constant.dart';
 import '../../../translations/locale_keys.g.dart';
-import '../../Home/InformationOFCourses/CourseInformation.dart';
 import '../../Home/InformationOFCourses/video_screen.dart';
 import 'compiler_webview.dart';
 
@@ -56,9 +54,7 @@ class _CourseContentScreenState extends State<CourseContentScreen> {
       'downloader_send_port',
     );
     _port.listen((dynamic data) {
-      String id = data[0];
       int status = data[1];
-      int progress = data[2];
 
       final DownloadTaskStatus taskStatus = DownloadTaskStatus.values[status];
 
@@ -68,7 +64,7 @@ class _CourseContentScreenState extends State<CourseContentScreen> {
         print('Download failed!');
       }
     });
-    FlutterDownloader.registerCallback(downloadCallback as DownloadCallback);
+    FlutterDownloader.registerCallback(downloadCallback);
     if (_isLoading) {
       _getCourse(); // Fetch course data only if _isLoading is true
     } // Fetch course data only if _isLoading is true
@@ -543,7 +539,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   bool _isPlaying = false;
   bool _isVertical = false;
   HttpServiceCourse httpServiceCourse = HttpServiceCourse();
-  bool _isLoading = true;
   Future<void> _progress() async {
     try {
       // Only fetch data if not already loading
@@ -554,13 +549,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           token!);
       setState(() {
         // _initializeController();
-        _isLoading = false;
       });
          print('success form progress');
     } catch (e) {
       print('Error progress data: $e');
       setState(() {
-        _isLoading = false;
       });
     }
   }

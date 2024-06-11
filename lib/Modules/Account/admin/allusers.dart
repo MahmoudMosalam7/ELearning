@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:learning/Modules/Account/admin/update_user_information.dart';
@@ -41,14 +40,10 @@ class _AllUsersState extends State<AllUsers> {
 
       print('get all users successful! $serverData');
 
-      if (serverData != null) {
-        print('serverdata = ${UserModel.parseProductsFromServer(serverData)}');
-        users = UserModel.parseProductsFromServer(serverData);
-        print('users: $users');
-      } else {
-        throw Exception('Server data is null');
-      }
-    } catch (e) {
+      print('serverdata = ${UserModel.parseProductsFromServer(serverData)}');
+      users = UserModel.parseProductsFromServer(serverData);
+      print('users: $users');
+        } catch (e) {
       // Handle validation errors or network errors
       setState(() {
         errorMessage = 'Error: $e';

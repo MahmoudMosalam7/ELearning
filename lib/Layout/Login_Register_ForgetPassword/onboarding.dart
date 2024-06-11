@@ -15,7 +15,6 @@ class Onboarding extends StatefulWidget{
 //LocaleKeys.Settingupdatepassword.tr()
 
 class _OnboardingState extends State<Onboarding> {
-  @override
   PageController _controller=PageController();
   bool onlastpage =false;
 

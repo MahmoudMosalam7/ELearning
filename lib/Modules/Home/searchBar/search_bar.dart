@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import '../../../apis/search/http_service_search.dart';
 import '../../../models/listView_Courses.dart';
@@ -41,14 +40,10 @@ class _SearchBarContainerState extends State<SearchBarContainer> {
 
       print('get all course successful! $serverData');
 
-      if (serverData != null) {
-        print('serverdata = ${Product.parseProductsFromServer(serverData)}');
-        products = Product.parseProductsFromServer(serverData);
-        print('Products: $products');
-      } else {
-        throw Exception('Server data is null');
-      }
-    } catch (e) {
+      print('serverdata = ${Product.parseProductsFromServer(serverData)}');
+      products = Product.parseProductsFromServer(serverData);
+      print('Products: $products');
+        } catch (e) {
       // Handle validation errors or network errors
       setState(() {
         errorMessage = 'Error: $e';
@@ -92,7 +87,7 @@ class _SearchBarContainerState extends State<SearchBarContainer> {
           builder: (BuildContext context, SearchController controller) {
             return SearchBar(
               controller: controller,
-              padding: MaterialStatePropertyAll<EdgeInsets>(
+              padding: WidgetStatePropertyAll<EdgeInsets>(
                 EdgeInsets.symmetric(horizontal: 16),
               ),
               onTap: () {

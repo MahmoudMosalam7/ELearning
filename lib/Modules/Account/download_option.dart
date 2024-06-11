@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:learning/Modules/Account/qualty.dart';
 
-import 'package:easy_localization/easy_localization.dart';
 class Download_option extends StatefulWidget{
   @override
   State<Download_option> createState() => _Download_optionState();
 }
 
 class _Download_optionState extends State<Download_option> {
-  @override
-
   bool s=true;
   bool b=true;
   Widget build(BuildContext context) {

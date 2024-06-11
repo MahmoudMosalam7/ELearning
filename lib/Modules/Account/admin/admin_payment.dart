@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -39,14 +38,10 @@ class _AdminPaymentState extends State<AdminPayment> {
       );
 
       print('get all transaction successful! $serverData');
-      if (serverData != null) {
-        print('serverdata = ${Payment.parsePaymentFromServer(serverData)}');
-        transactions = Payment.parsePaymentFromServer(serverData);
-        print('transactions: $transactions');
-      } else {
-        throw Exception('Server data is null');
-      }
-    } catch (e) {
+      print('serverdata = ${Payment.parsePaymentFromServer(serverData)}');
+      transactions = Payment.parsePaymentFromServer(serverData);
+      print('transactions: $transactions');
+        } catch (e) {
       // Handle validation errors or network errors
       setState(() {
         errorMessage = 'Error: $e';

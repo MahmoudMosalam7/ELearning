@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:accordion/accordion.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -26,10 +25,8 @@ import '../../../network/local/cache_helper.dart';
 import '../../../shared/constant.dart';
 import '../../../translations/locale_keys.g.dart';
 import '../../Account/become_an_instructor/Instructor_page/update_course_information.dart';
-import '../../Account/videoPlay.dart';
 import '../../Learn/TabBar/course_videos.dart';
 import '../../WishList/wishlist.dart';
-import '../Product.dart';
 import 'instructor_information.dart';
 
 class CourseInformation extends StatefulWidget {
@@ -115,14 +112,10 @@ class _CourseInformationState extends State<CourseInformation>  {
       _isLoading = false;
       print('get all course by category successful! $serverData');
 
-      if (serverData != null) {
-        print('serverdata from category = ${Product.parseProductsFromServer(serverData)}');
-        products = Product.parseProductsFromServer(serverData);
-        print('Productshello: $products');
-      } else {
-        throw Exception('Server data is null');
-      }
-    } catch (e) {
+      print('serverdata from category = ${Product.parseProductsFromServer(serverData)}');
+      products = Product.parseProductsFromServer(serverData);
+      print('Productshello: $products');
+        } catch (e) {
       // Handle validation errors or network errors
       setState(() {
         errorMessage = 'Error: $e';
@@ -387,11 +380,12 @@ class _CourseInformationState extends State<CourseInformation>  {
     } else {
       if (data != null && data!.isNotEmpty) {
         //data!['_id']
-        List <dynamic?> enrolledourses = getData?['data']['enrolledCourses'];
+        List<dynamic> noOfStudents = data!['enrolledUsers'];
+        List <dynamic> enrolledourses = getData?['data']['enrolledCourses'];
         print('enrolledourses = ${enrolledourses}');
         print('enrolledourses = ${enrolledourses.contains(data!['_id'])}');
 
-        List<dynamic?> reve =  courseData['data']['reviewsWithComments'];
+        List<dynamic> reve =  courseData['data']['reviewsWithComments'];
         String videoURL = 'https://youtube.com/shorts/r9BGpTQzTjI?si=PRUUCiCHLPei7vIU' ;
         if(data?['videoTrailer'] != null){
           videoURL = data?['videoTrailer'];
@@ -506,7 +500,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             SizedBox(width: 5.w),
-                             Text('39.768 ${LocaleKeys.CourseInformationstudentsratings.tr()}'),
+                             Text('${noOfStudents.length} ${LocaleKeys.CourseInformationstudentsratings.tr()}'),
                             SizedBox(width: 5.w),
                           ],
                         ),
@@ -1148,7 +1142,6 @@ class _CourseInformationState extends State<CourseInformation>  {
         shrinkWrap: true,
         itemCount: 5,
         itemBuilder: (context, index) {
-          final product = products[index];
           return InkWell(
             onTap: () {
               // Handle the tap event here

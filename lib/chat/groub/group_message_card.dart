@@ -26,7 +26,7 @@ class GroupMessageCard extends StatelessWidget {
             topRight: Radius.circular(16),
           )),
           color: index % 2 == 0
-              ? Theme.of(context).colorScheme.background
+              ? Theme.of(context).colorScheme.surface
               : Theme.of(context).colorScheme.primaryContainer,
           child: Padding(
             padding: const EdgeInsets.all(12.0),

@@ -24,7 +24,6 @@ class _SignUpState extends State<SignUp> {
 
   final _phoneContoller = TextEditingController();
 
-  final _statusContoller = TextEditingController();
 
   final _passwordContoller = TextEditingController();
 
@@ -125,7 +124,6 @@ class _SignUpState extends State<SignUp> {
     }
   }
 
-  @override
   bool obscureText1 = true;
   bool obscure1 = true;
   bool obscureText2 = true;

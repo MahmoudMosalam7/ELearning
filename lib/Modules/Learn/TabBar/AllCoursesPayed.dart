@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:lottie/lottie.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shimmer/shimmer.dart';
@@ -42,14 +40,10 @@ class _AllState extends State<All> {
 
       print('get all course successful! $serverData');
 
-      if (serverData != null) {
-        print('datatttttttttttttt= ${serverData['data']['results']}');
-        products = EnrolledCourses.parseProductsFromServer(serverData['data']['results']);
-        print('Products: $products');
-      } else {
-        throw Exception('Server data is null');
-      }
-    } catch (e) {
+      print('datatttttttttttttt= ${serverData['data']['results']}');
+      products = EnrolledCourses.parseProductsFromServer(serverData['data']['results']);
+      print('Products: $products');
+        } catch (e) {
       // Handle validation errors or network errors
       setState(() {
         errorMessage = 'Error: $e';
@@ -129,7 +123,7 @@ class _AllState extends State<All> {
       );
     } else{
 
-      if (products != null && products!.isNotEmpty)
+      if (products.isNotEmpty)
         {  return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -187,13 +181,10 @@ class _AllState extends State<All> {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
-        subtitle:  Text(product!.instructorName),
+        subtitle:  Text(product.instructorName),
         leading: Stack(
           children: [
-            if(product.imageURL != null)
-              Image.network((product!.imageURL)),
-            if(product.imageURL == null)
-              Image.asset(''),
+            Image.network((product.imageURL)),
             /*Positioned(
               top: 0,
               right: 0,
@@ -221,8 +212,8 @@ class _AllState extends State<All> {
           child: CircularPercentIndicator(
             radius: 25.0,
             lineWidth: 4.0,
-            percent: ((product!.progress).toInt())/100,
-            center: Text("${(product!.progress).toInt()}%"),
+            percent: ((product.progress).toInt())/100,
+            center: Text("${(product.progress).toInt()}%"),
             progressColor: Colors.green,
           ),
         ),
