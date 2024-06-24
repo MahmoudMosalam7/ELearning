@@ -1052,7 +1052,7 @@ class _CourseInformationState extends State<CourseInformation>  {
                             ),
                             child: MaterialButton(
                               child:  Text(
-                                "Get Started",
+                                LocaleKeys.GetStarted.tr(),
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 20.0,
@@ -1091,44 +1091,46 @@ class _CourseInformationState extends State<CourseInformation>  {
     List<ModuleModel> module = ModuleModel.parseModuleFromServer(serverData!);
 
     print('modulessss]]]]]]]]]]sssssss = ${module}');
-    return ListView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: module.length ,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween, // Aligns children at the start and end of the row
-              children: [
-                Flexible(
-                  child: Text(
-                    '${module[index].name}',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+    return SingleChildScrollView(
+      child: ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: module.length ,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Aligns children at the start and end of the row
+                children: [
+                  Flexible(
+                    child: Text(
+                      '${module[index].name}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                ),
-                TextButton(onPressed: ()async{
-                  //VideoPreview
-                  if(module[index].isFree){
-                    await _getModule(module[index].id );
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context){
-                      return VideoPreview(videoUrl:path,) ;
-                    }));
-                    //Get.to(VideoPreview(videoUrl:path,));
-                  }
-                }, child: module[index].isFree?Text('Preview',
-                 style: TextStyle(
-                   color: Colors.white
-                 ),
-                ):Container()
-                )
-              ],
+                  TextButton(onPressed: ()async{
+                    //VideoPreview
+                    if(module[index].isFree){
+                      await _getModule(module[index].id );
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                        return VideoPreview(videoUrl:path,) ;
+                      }));
+                      //Get.to(VideoPreview(videoUrl:path,));
+                    }
+                  }, child: module[index].isFree?Text('Preview',
+                   style: TextStyle(
+                     color: Colors.white
+                   ),
+                  ):Container()
+                  )
+                ],
+              )
+              ,
             )
-            ,
-          )
-          ;
-        }
+            ;
+          }
+      ),
     );
   }
   Widget suggestion(String categoryId){

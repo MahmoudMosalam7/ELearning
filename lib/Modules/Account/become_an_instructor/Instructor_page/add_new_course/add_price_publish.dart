@@ -458,7 +458,6 @@ class _AddPriceAndPublishState extends State<AddPriceAndPublish> {
                           Navigator.pop(context);
                           Navigator.pop(context);
                           Navigator.pop(context);
-                          Navigator.pop(context);
                         },),
                     ),
                   ],

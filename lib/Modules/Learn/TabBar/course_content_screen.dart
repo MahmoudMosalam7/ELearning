@@ -15,6 +15,7 @@ import 'package:video_player/video_player.dart';
 import '../../../apis/courseInformation/http_service_courseInformation.dart';
 import '../../../apis/reviews/reviews.dart';
 import '../../../apis/upload_course/add_price_compiler_delete_publish.dart';
+import '../../../chat/firebase/fire_database.dart';
 import '../../../chat/home/chat_home_screen.dart';
 import '../../../models/module_model.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -290,9 +291,17 @@ class _CourseContentScreenState extends State<CourseContentScreen> {
                           if(email.isNotEmpty){
 
                             print('email =$email');
-                            Navigator.push(context, MaterialPageRoute(builder: (context){
+                           /* Navigator.push(context, MaterialPageRoute(builder: (context){
                               return ChatHomeScreen(email:email ,);
-                            }));
+                            }));*/
+                            FireData().creatRoom(email.toLowerCase()).then((value) {
+                              setState(() {
+                                email ="";
+                              });
+                              Navigator.push(context, MaterialPageRoute(builder: (context){
+                                return ChatHomeScreen();
+                              }));
+                            });
                           }
 
                         },

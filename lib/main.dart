@@ -17,8 +17,7 @@ import 'network/notifications/notifications.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
  await EasyLocalization.ensureInitialized();
-  notificationInitialization();
-  await Firebase.initializeApp(
+  notificationInitialization();  await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await FlutterDownloader.initialize(
