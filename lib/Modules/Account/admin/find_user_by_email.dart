@@ -51,8 +51,7 @@ class _FindUserByEmailState extends State<FindUserByEmail> {
       print('_findUser successful! $serverData');
       user = UserModel(name:serverData['data']['results']['name']
           , id:serverData['data']['results']['_id']
-          , email: serverData['data']['results']['email']
-          , phone: serverData['data']['results']['phone'],
+          , email: serverData['data']['results']['email'],
           roles: serverData['data']['results']['roles']
           , imageUrl: serverData['data']['results']['profileImage']);
 
@@ -283,13 +282,7 @@ class _FindUserByEmailState extends State<FindUserByEmail> {
                     fontSize: 16.0,
                   ),
                 ),
-                SizedBox(height: 5.0),
-                Text(
-                  userModel.phone,
-                  style: TextStyle(
-                    fontSize: 14.0,
-                  ),
-                ),
+
                 SizedBox(height: 5.0),
                 Text(
                   userModel.roles,

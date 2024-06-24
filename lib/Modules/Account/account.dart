@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -17,10 +18,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:video_player/video_player.dart';
 import '../../apis/user/http_service_get_user_data.dart';
 import '../../apis/user/http_service_logout.dart';
 import '../../network/local/cache_helper.dart';
 import '../../translations/locale_keys.g.dart';
+import '../Home/InformationOFCourses/video_screen.dart';
+import 'about_e_learning.dart';
 import 'become_an_instructor/Instructor_page/instructor_home_page.dart';
 import 'become_an_instructor/onboarding_instructor/on_bording_instructor_screen.dart';
 import 'edit_profile/editAccount.dart';
@@ -389,7 +393,12 @@ class _AccountScreenState extends State<AccountScreen> {
                           color: Colors.grey[600]
                       ),),
                     MaterialButton(
-                      onPressed: (){},
+                      onPressed: (){
+
+                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                          return AboutELearning(url: "https://res.cloudinary.com/djcwvsuw1/video/upload/v1718118128/course/user-5b832347-f671-4902-b6e3-84dbe49515bf-1718118087717.jpeg.mp4",);
+                        }));
+                      },
                       child:
                       Container(
                         width: double.infinity,
@@ -600,8 +609,10 @@ class _AccountScreenState extends State<AccountScreen> {
                 TextButton(onPressed: ()async{
 
                   try{
+
                     bool? token =  await CacheHelper.removeData(key: 'token');
                     if(token){
+                      await FirebaseAuth.instance.signOut();
                       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Login()));
                     }
                   }catch(e){

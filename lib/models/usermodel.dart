@@ -2,7 +2,6 @@ class UserModel {
   String name;
   String id;
   String email;
-  String phone;
   String roles;
   String imageUrl;
 
@@ -10,7 +9,6 @@ class UserModel {
     required this.name,
     required this.id,
     required this.email,
-    required this.phone,
     required this.roles,
     required this.imageUrl,
   });
@@ -27,7 +25,6 @@ class UserModel {
           name: productData['name'],
           id: productData['_id'],
           email:productData['email'] ,
-          phone: productData['phone'],
           roles: productData['roles'],
           imageUrl: productData['profileImage'],
         );
@@ -39,6 +36,6 @@ class UserModel {
   }
   @override
   String toString() {
-    return 'User(name: $name, id: $id, phone: $phone, id: $id, email: $email, imageUrl: $imageUrl )';
+    return 'User(name: $name, id: $id, id: $id, email: $email, imageUrl: $imageUrl )';
   }
 }

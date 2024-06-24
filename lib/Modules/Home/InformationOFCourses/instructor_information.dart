@@ -167,7 +167,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         Text(
                           '${serverData['data']['results']['enrolledUsers']}',
                           style: TextStyle(
-                            fontSize: 20.0,
+                            fontSize: 18.0,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -189,7 +189,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             for (int i = serverData['data']['results']['ratings'].round(); i < 5; i++)
                               Icon(Icons.star_border, color: Colors.yellow),
                             Text(
-                              '${serverData['data']['results']['ratings']}',
+                              '${serverData['data']['results']['ratings'].round()}',
                               style: TextStyle(
                                 fontSize: 20.0,
                                 fontWeight: FontWeight.bold,

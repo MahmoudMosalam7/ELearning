@@ -28,14 +28,14 @@ class _ResultState extends State<Result> {
   String errorMessage = '';
   String? certificate = '';
 
-  @override
+  /*@override
   void initState() {
     super.initState();
     if (_isLoading) {
-      _getCertificate(); // Fetch course data only if _isLoading is true
+      ; // Fetch course data only if _isLoading is true
     } // Fetch course data only if _isLoading is true
 
-  }
+  }*/
   Future<void> _getCertificate() async {
     try {
       // Set _isLoading to true before fetching data
@@ -51,9 +51,10 @@ class _ResultState extends State<Result> {
       setState(() {
 
         certificate = cert['data']['url'];
+        _downloadPDF((cert['data']['url'])!.trim());
         _isLoading = false; // Set _isLoading to false after data is fetched
       });
-      print('certificate = ${certificate}');
+      print('certificate 2= ${certificate}');
       //['data']['results']['url']
     } catch (e) {
       print('Error fetching certificate : $e');
@@ -154,7 +155,8 @@ class _ResultState extends State<Result> {
                 ElevatedButton(
                   onPressed: () {
                     print('certificate  =$certificate');
-                    _downloadPDF(certificate!.trim());
+
+                    _getCertificate();
 
                   },
                   child: Text(LocaleKeys.LearnResultDownloadPDF.tr()),

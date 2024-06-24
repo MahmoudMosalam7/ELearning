@@ -1,5 +1,6 @@
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:learning/Layout/MainBottomNavigationBar.dart';
@@ -55,15 +56,13 @@ class _LoginState extends State<Login> {
       // Fetch data and wait for it to complete
       await fetchData();
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomeLayout()));
+      await FirebaseAuth.instance.signInWithEmailAndPassword
+        (email: _emailContoller.text,
+          password:_passwordContoller.text)
+          .then((value) => print("Done login")).
+      onError((error, stackTrace) => ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(error.toString())) ));
 
-      // Now navigate to the appropriate screen based on the fetched data
-     // bool? onBoarding = CacheHelper.getBool(key: 'onBoarding');
-      /*if (onBoarding != null && onBoarding) {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomeLayout()));
-      } else {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Onboarding()));
-      }
-*/
       print('Login successful!');
     } catch (e) {
       // Handle validation errors or network errors

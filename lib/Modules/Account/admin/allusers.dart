@@ -216,13 +216,6 @@ class _AllUsersState extends State<AllUsers> {
                 ),
                 SizedBox(height: 5.0),
                 Text(
-                  userModel.phone,
-                  style: TextStyle(
-                    fontSize: 14.0,
-                  ),
-                ),
-                SizedBox(height: 5.0),
-                Text(
                   userModel.roles,
                   style: TextStyle(
                     fontSize: 12.0,

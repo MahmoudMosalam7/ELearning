@@ -91,7 +91,7 @@ class _InstructorHomeScreenState extends State<InstructorHomeScreen> {
 
             final List<Widget> _instructorScreens = [
               InstructorCourses(students: students, rating: rating),
-              ChatHomeScreen(email: getData!['data']['email']),
+              ChatHomeScreen()
             ];
 
             return IndexedStack(

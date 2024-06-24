@@ -10,6 +10,7 @@ class HttpServiceAdmin {
   Future<void> addUser(String name, String email, String status, String password,String cpassword,
       String token
       ) async {
+    print('status = ${status}');
     try {
       final response = await _dio.post(
         '/v1/users',

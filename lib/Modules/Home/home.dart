@@ -10,7 +10,6 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../../apis/courseInformation/http_service_courseInformation.dart';
 import '../../apis/user/http_service_get_user_data.dart';
-import '../../chat/firebase/fire_auth.dart';
 import '../../chat/home/chat_home_screen.dart';
 import '../../network/local/cache_helper.dart';
 import '../../shared/constant.dart';
@@ -169,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
         errorMessage = '';
         isLoading = false;
       });
-      await FirebaseAuth.instance.currentUser!.updateDisplayName(data['data']['name'])
+      /*await FirebaseAuth.instance.currentUser!.updateDisplayName(data['data']['name'])
           .then((value) {
         // تحديث اسم العرض ثم إعادة تحميل بيانات المستخدم
         FirebaseAuth.instance.currentUser!.reload().then((_) {
@@ -179,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
             FireAuth.createUser();
           }
         });
-      });
+      });*/
       // Print or use the fetched data as needed
       print('Fetched Data2: $getData');
     } catch (e) {
@@ -332,10 +331,12 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: (){
                 /* print()*/
                 print(" getData!['data']['email'] = ${ getData!['data']['email']} ");
-                Navigator.push(context, MaterialPageRoute(builder: (context){
+               /* Navigator.push(context, MaterialPageRoute(builder: (context){
                   return ChatHomeScreen(email: getData!['data']['email'],);
-                }));
-
+                }));*/
+              Navigator.push(context, MaterialPageRoute(builder: (context){
+                return ChatHomeScreen();
+              }));
               },
             ),
 

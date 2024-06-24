@@ -13,10 +13,13 @@ class HttpServiceCoursePriceAndPublishAndDeleteAndCompiler {
       print('id = $currency');
       print('id = $token');
       print('id = $courseId');
-
+     //['amount'] ['currency']
       final response = await _dio.put(
         '/v1/course/$courseId',
-        data: { 'price[amount]': amount,'price[currency]': currency},
+        data: { "price": {
+          "amount":amount,
+          "currency":currency
+        }},
         options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
       print(response);

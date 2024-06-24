@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../TColors.dart';
 import '../../apis/user/http_service_regstration.dart';
+import '../../chat/firebase/fire_auth.dart';
 import '../../network/local/cache_helper.dart';
 import '../../translations/locale_keys.g.dart';
 import 'Login.dart';
@@ -76,13 +77,22 @@ class _SignUpState extends State<SignUp> {
         backgroundColor: Colors.green,
         textColor: Colors.white,
         fontSize: 16.0,
-      );
+      );/*
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: _emailContoller.text,
           password:  _passwordContoller.text).then((value) => print("ok")).
       onError((error, stackTrace) => ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(error.toString())) ));
+*/
 
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emailContoller.text,
+          password:_passwordContoller.text).then((value) => print("ok")).
+      onError((error, stackTrace) => ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(error.toString())) ));
+      await FirebaseAuth.instance.currentUser!.updateDisplayName(_nameContoller.text).
+      then((value) => FireAuth.createUser());
+      FireAuth.createUser();
       Navigator.of(context).pushReplacement(MaterialPageRoute
         (builder: (context)=>Login()));
       print('Registration successful!');

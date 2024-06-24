@@ -46,7 +46,7 @@ class _TestScreenState extends State<TestScreen> {
   late Map<String, dynamic> serverData;
   String errorMessage = '';
   int score = 0;
-
+  Timer? _timer;
   Future<void> _getTest() async {
     try {
       // Fetch course data only if not already loading
@@ -162,7 +162,24 @@ class _TestScreenState extends State<TestScreen> {
   }
 
   void startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if(_seconds >0){
+        setState(() {
+          _seconds--;
+        });
+      }else{
+
+        timer?.cancel();
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+          return Result(
+            score: score,
+            courseID: widget.courseId,
+            colors: colors,
+          );
+        }));
+      }
   }
+    );}
 
   void nextCard() {
     setState(() {

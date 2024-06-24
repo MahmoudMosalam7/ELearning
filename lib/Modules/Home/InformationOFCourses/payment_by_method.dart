@@ -31,7 +31,7 @@ class _PaymentByMethodState extends State<PaymentByMethod> {
   FilePickerResult? _selectedImage;
   HttpServiceCourse httpServiceCourse = HttpServiceCourse();
   bool isLoading = false;
-
+  bool isWait = false;
   String errorMessage = '';
   void _paymentByMethod() async {
     // Reset error message and loading state
@@ -65,6 +65,9 @@ class _PaymentByMethodState extends State<PaymentByMethod> {
       );
 
       print('from payment');
+      setState(() {
+        isWait = true;
+      });
       errorMessage = "";
       Fluttertoast.showToast(
         msg: "Payment  Success",
@@ -208,39 +211,45 @@ class _PaymentByMethodState extends State<PaymentByMethod> {
                 ),
               ),
               SizedBox(height: 10.h),
-              MaterialButton(
-                child:  Text(
-                  LocaleKeys.PaymentByMethodEnrollNow.tr(),
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20.0,
+              Container(
+                color: Colors.green,
+                child: MaterialButton(
+                  child:  Text(
+                    LocaleKeys.PaymentByMethodEnrollNow.tr(),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                    ),
                   ),
+                  onPressed: () {
+                    print('payment = ${getData?['data']['_id']}');
+                    print('payment = ${_phoneContoller.text}');
+                    print('payment = ${widget.courseId}');
+                    _paymentByMethod();
+                    /*
+                    if (_formKey.currentState!.validate()) {
+                      print('from payment');
+                      if (_selectedImage != null) {
+
+                      } else {
+                        // Handle case where no image is selected
+                        Fluttertoast.showToast(
+                          msg: "Please upload an image",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 5,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0,
+                        );
+                      }
+                    }*/
+                  },
                 ),
-                onPressed: () {
-                  print('payment = ${getData?['data']['_id']}');
-                  print('payment = ${_phoneContoller.text}');
-                  print('payment = ${widget.courseId}');
-                  _paymentByMethod();
-                  /*
-                  if (_formKey.currentState!.validate()) {
-                    print('from payment');
-                    if (_selectedImage != null) {
-          
-                    } else {
-                      // Handle case where no image is selected
-                      Fluttertoast.showToast(
-                        msg: "Please upload an image",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.BOTTOM,
-                        timeInSecForIosWeb: 5,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                        fontSize: 16.0,
-                      );
-                    }
-                  }*/
-                },
-              )
+              ),
+              SizedBox(height: 10.h),
+              if(isWait)
+                Text(LocaleKeys.Pleasewait10minutestoverifyyourpurchase.tr())
           
             ],
           ),
